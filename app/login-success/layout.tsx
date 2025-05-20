@@ -16,8 +16,8 @@ export default function LoginSuccessLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full">
-      <section className="flex flex-1 items-center justify-center p-4">
+    <div className="flex min-h-screen w-full overflow-hidden">
+      <section className="flex flex-1 items-center justify-center p-4 m-0">
         {children}
       </section>
     </div>

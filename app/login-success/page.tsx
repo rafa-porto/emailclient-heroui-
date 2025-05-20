@@ -37,7 +37,7 @@ export default function LoginSuccessPage() {
   }, [currentMessageIndex, router]);
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto h-full">
       <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-default-50/50 shadow-xl rounded-lg w-full">
         <Spinner color="success" size="lg" />
         <h1 className={title({ color: "green", class: "mt-6 mb-4 leading-snug" })}>
