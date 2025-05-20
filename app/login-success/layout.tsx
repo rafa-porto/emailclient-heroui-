@@ -4,10 +4,10 @@ import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: {
-    default: "Login Success",
+    default: "Login Realizado",
     template: `%s - ${siteConfig.name}`,
   },
-  description: "Login successful, preparing your account.",
+  description: "Login realizado com sucesso, preparando sua conta.",
 };
 
 export default function LoginSuccessLayout({
@@ -16,10 +16,10 @@ export default function LoginSuccessLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full overflow-hidden">
-      <section className="flex flex-1 items-center justify-center p-4 m-0">
-        {children}
-      </section>
+    <div className="relative h-screen w-screen overflow-hidden bg-gradient-to-br from-default-50 to-default-100 dark:from-default-900 dark:to-default-950">
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">{children}</div>
+      </div>
     </div>
   );
 }

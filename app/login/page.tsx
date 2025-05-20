@@ -21,8 +21,20 @@ export default function LoginPage() {
     // Simulate connection process
     setTimeout(() => {
       setIsLoading(null);
-      // Redirect to the new login success page
-      router.push("/login-success");
+      // Redirect to the specific success page based on the provider
+      switch (service) {
+        case "gmail":
+          router.push("/login-success/gmail");
+          break;
+        case "outlook":
+          router.push("/login-success/outlook");
+          break;
+        case "apple":
+          router.push("/login-success/apple");
+          break;
+        default:
+          router.push("/login-success");
+      }
     }, 1500);
   };
 
