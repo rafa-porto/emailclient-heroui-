@@ -7,6 +7,7 @@ import {
   NavbarItem,
   NavbarMenuItem,
 } from "@heroui/navbar";
+import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
@@ -59,6 +60,21 @@ export const Navbar = () => {
             <GithubIcon className="text-default-500" />
           </Link>
           <ThemeSwitch />
+        </NavbarItem>
+        <NavbarItem className="hidden md:flex">
+          <Button
+            as={NextLink}
+            color="primary"
+            href="/login"
+            variant="bordered"
+          >
+            Login
+          </Button>
+        </NavbarItem>
+        <NavbarItem className="hidden md:flex">
+          <Button as={NextLink} color="primary" href="/signup" variant="solid">
+            Sign Up
+          </Button>
         </NavbarItem>
       </NavbarContent>
 
