@@ -3,43 +3,41 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Spinner } from "@heroui/spinner";
+import { Card, CardBody } from "@heroui/card";
+import { CheckCircle } from "lucide-react";
 
-import { title, subtitle } from "@/components/primitives";
-
+// Define loading messages for each provider
 const loadingMessages = {
   gmail: [
-    "Conectando à sua conta do Gmail...",
-    "Sincronizando suas mensagens...",
-    "Carregando suas pastas...",
-    "Pronto! Redirecionando...",
+    "Connecting to Gmail...",
+    "Synchronizing your messages...",
+    "Almost there! Organizing your inbox...",
   ],
   outlook: [
-    "Conectando à sua conta do Outlook...",
-    "Sincronizando seus e-mails...",
-    "Organizando sua caixa de entrada...",
-    "Pronto! Redirecionando...",
+    "Connecting to Outlook...",
+    "Synchronizing your emails...",
+    "Almost there! Organizing your inbox...",
   ],
   apple: [
-    "Conectando à sua conta da Apple...",
-    "Verificando suas credenciais...",
-    "Configurando sua caixa de entrada...",
-    "Pronto! Redirecionando...",
+    "Connecting to iCloud...",
+    "Synchronizing your messages...",
+    "Almost there! Organizing your inbox...",
   ],
   default: [
-    "Conectando à sua conta...",
-    "Carregando suas informações...",
-    "Quase lá...",
-    "Redirecionando...",
+    "Connecting to your account...",
+    "Synchronizing your data...",
+    "Almost there! Getting everything ready for you...",
   ],
-};
+} as const;
 
 export default function LoginSuccessPage() {
   const router = useRouter();
   const params = useParams();
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
-  // Obtém o provider da URL ou usa 'default' se não estiver definido
-  const provider = (params?.provider as keyof typeof loadingMessages) || "default";
+  // Get provider from URL or use 'default' if not defined
+  const provider = 
+    (params?.provider as keyof typeof loadingMessages) || "default";
   const messages = loadingMessages[provider] || loadingMessages.default;
 
   useEffect(() => {
@@ -67,40 +65,49 @@ export default function LoginSuccessPage() {
       case "outlook":
         return "Outlook";
       case "apple":
-        return "Apple Mail";
+        return "iCloud";
       default:
-        return "seu e-mail";
+        return "your account";
     }
   };
 
   return (
-    <div className="w-full">
-      <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-default-50/50 shadow-xl rounded-lg w-full">
-        <Spinner color="success" size="lg" />
-        <h1
-          className={title({
-            color: "green",
-            class: "mt-6 mb-4 leading-snug",
-          })}
-        >
-          Conectado ao {getProviderName()} com sucesso!
-        </h1>
-        <p
-          className={subtitle({
-            class: "mb-8 text-default-600 dark:text-default-400",
-          })}
-        >
-          {messages[currentMessageIndex]}
-        </p>
-        <div className="w-full bg-default-200 dark:bg-default-700 rounded-full h-2.5 mb-4">
-          <div
-            className="bg-success h-2.5 rounded-full transition-all duration-1500 ease-linear"
-            style={{
-              width: `${((currentMessageIndex + 1) / messages.length) * 100}%`,
-            }}
-          />
+    <Card className="w-full max-w-md mx-auto shadow-lg">
+      <CardBody className="p-6 text-center space-y-6">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="p-3 rounded-full bg-success-50 dark:bg-success-900/30 mx-auto">
+            <CheckCircle className="w-12 h-12 text-success-500" />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold text-foreground">
+              Successfully Connected!
+            </h1>
+            <p className="text-default-500">
+              Your {getProviderName()} account has been successfully connected.
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+
+        <div className="space-y-4 pt-4">
+          <div className="space-y-2">
+            <div className="h-2 w-full max-w-xs mx-auto bg-default-100 dark:bg-default-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary-500 transition-all duration-500 ease-in-out"
+                style={{
+                  width: `${((currentMessageIndex + 1) / messages.length) * 100}%`,
+                }}
+              />
+            </div>
+            <p className="text-sm text-default-500 text-center">
+              {messages[currentMessageIndex]}
+            </p>
+          </div>
+
+          <div className="flex justify-center pt-2">
+            <Spinner color="primary" size="sm" />
+          </div>
+        </div>
+      </CardBody>
+    </Card>
   );
 }
