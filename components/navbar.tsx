@@ -71,11 +71,6 @@ export const Navbar = () => {
             Login
           </Button>
         </NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button as={NextLink} color="primary" href="/signup" variant="solid">
-            Sign Up
-          </Button>
-        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
