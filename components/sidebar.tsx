@@ -10,6 +10,7 @@ import {
   AlertOctagonIcon,
   CalendarIcon,
   CheckIcon,
+  ChevronDownIcon,
   ClockIcon,
   DollarSignIcon,
   FileTextIcon,
@@ -27,13 +28,9 @@ import {
 import { useRouter } from "next/navigation";
 
 import { Avatar } from "@heroui/avatar";
-import {
-  AppleIcon,
-  GmailIcon,
-  MicrosoftIcon,
-  // OutlookIcon, // Commented out as MicrosoftIcon is used for outlook
-} from "@/components/icons";
-import { ThemeSwitch } from "@/components/theme-switch"; // Import ThemeSwitch
+
+import { ThemeSwitch } from "@/components/theme-switch";
+import { AppleIcon, GmailIcon, MicrosoftIcon } from "@/components/icons";
 
 interface SidebarProps {
   userEmail?: string;
@@ -86,7 +83,8 @@ const Sidebar = ({
       <Dropdown>
         <DropdownTrigger>
           <Button
-            className="flex items-center space-x-2 p-0 h-auto data-[hover=true]:bg-transparent"
+            className="w-full justify-start flex items-center space-x-2 data-[hover=true]:bg-transparent" // Modified for alignment
+            size="sm" // Added for consistent sizing
             variant="light"
           >
             <Avatar
@@ -97,9 +95,10 @@ const Sidebar = ({
             <div className="flex flex-col items-start">
               <div className="flex items-center">
                 <span className="text-xs font-medium">{userEmail}</span>
-                {renderProviderIcon()}
+                {/* {renderProviderIcon()} */}
               </div>
             </div>
+            <ChevronDownIcon className="ml-auto" size={16} />
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions">
