@@ -4,6 +4,8 @@ import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
 import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
 
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+
 // Mock data for emails - we'll refine this later
 const mockEmails = [
   {
@@ -63,6 +65,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   snippet,
   timestamp,
   read,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isBrand,
 }) => {
   return (
@@ -141,14 +144,16 @@ const Inbox = () => {
             type="search"
           />
         </div>
-        <Button
-          className="shadow-sm dark:shadow-primary/10"
-          color="primary"
+        <HoverBorderGradient
+          containerClassName="rounded-lg"
+          className="dark:bg-black bg-gray-100 text-black dark:text-neutral-200 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors flex items-center space-x-2"
+          as={Button}
+          variant="light"
           size="sm"
-          startContent={<Edit3Icon size={16} />}
         >
-          Compose
-        </Button>
+          <Edit3Icon size={16} className="mr-1" />
+          <span>Compose</span>
+        </HoverBorderGradient>
       </div>
 
       {/* Email List */}
