@@ -67,7 +67,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center p-3 border-b border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-850" : ""}`}
+      className={`flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-850" : "bg-white dark:bg-neutral-900"}`}
     >
       <Avatar
         src={avatarUrl}
@@ -108,7 +108,7 @@ const Inbox = () => {
           <Button
             size="sm"
             variant="light"
-            className="dark:text-neutral-300"
+            className="dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800"
             endContent={<ChevronDownIcon size={16} />}
           >
             Recent
@@ -116,7 +116,7 @@ const Inbox = () => {
           <Button
             size="sm"
             variant="light"
-            className="dark:text-neutral-300"
+            className="dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800"
             endContent={<ChevronDownIcon size={16} />}
           >
             Todos
