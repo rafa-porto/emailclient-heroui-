@@ -67,7 +67,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-850" : "bg-white dark:bg-neutral-900"}`}
+      className={`flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
     >
       <Avatar
         src={avatarUrl}
@@ -78,20 +78,20 @@ const EmailItem: React.FC<EmailItemProps> = ({
       <div className="flex-grow truncate">
         <div className="flex justify-between items-center">
           <span
-            className={`font-medium ${!read ? "text-black dark:text-white" : "text-gray-700 dark:text-neutral-300"}`}
+            className={`font-medium ${!read ? "text-black dark:text-white" : "text-gray-700 dark:text-neutral-400"}`}
           >
             {sender}
           </span>
-          <span className="text-xs text-gray-500 dark:text-neutral-400">
+          <span className="text-xs text-gray-500 dark:text-neutral-500">
             {timestamp}
           </span>
         </div>
         <p
-          className={`text-sm truncate ${!read ? "text-black dark:text-white font-semibold" : "text-gray-600 dark:text-neutral-400"}`}
+          className={`text-sm truncate ${!read ? "text-black dark:text-white font-semibold" : "text-gray-600 dark:text-neutral-500"}`}
         >
           {subject}
         </p>
-        <p className="text-xs text-gray-500 dark:text-neutral-500 truncate">
+        <p className="text-xs text-gray-500 dark:text-neutral-600 truncate">
           {snippet}
         </p>
       </div>
@@ -101,23 +101,23 @@ const EmailItem: React.FC<EmailItemProps> = ({
 
 const Inbox = () => {
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-black text-black dark:text-white">
+    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
       {/* Header */}
       <div className="flex items-center justify-between pt-0 pr-1 pb-1 pl-4 mb-4">
         <div className="flex items-center space-x-2">
           <Button
+            className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
+            endContent={<ChevronDownIcon size={16} />}
             size="sm"
             variant="light"
-            className="dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800"
-            endContent={<ChevronDownIcon size={16} />}
           >
             Recent
           </Button>
           <Button
+            className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
+            endContent={<ChevronDownIcon size={16} />}
             size="sm"
             variant="light"
-            className="dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800"
-            endContent={<ChevronDownIcon size={16} />}
           >
             Todos
           </Button>
@@ -127,14 +127,14 @@ const Inbox = () => {
             aria-label="Search"
             classNames={{
               inputWrapper:
-                "bg-transparent dark:bg-transparent border-2 border-gray-300 dark:border-neutral-700 hover:border-gray-400 dark:hover:border-neutral-600",
-              input: "text-sm",
+                "bg-transparent dark:bg-transparent border-2 border-gray-300 dark:border-neutral-800 hover:border-gray-400 dark:hover:border-neutral-700 focus-within:ring-2 focus-within:ring-primary/30 dark:focus-within:ring-primary/20",
+              input: "text-sm dark:text-neutral-300",
             }}
             labelPlacement="outside"
             placeholder="Search emails, contacts, labels"
             startContent={
               <SearchIcon
-                className="text-base text-gray-500 dark:text-neutral-400 pointer-events-none flex-shrink-0"
+                className="text-base text-gray-500 dark:text-neutral-500 pointer-events-none flex-shrink-0"
                 size={18}
               />
             }
@@ -142,6 +142,7 @@ const Inbox = () => {
           />
         </div>
         <Button
+          className="shadow-sm dark:shadow-primary/10"
           color="primary"
           size="sm"
           startContent={<Edit3Icon size={16} />}
@@ -151,7 +152,7 @@ const Inbox = () => {
       </div>
 
       {/* Email List */}
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto px-1">
         {mockEmails.map((email) => (
           <EmailItem key={email.id} {...email} />
         ))}
