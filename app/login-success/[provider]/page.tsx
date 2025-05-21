@@ -36,7 +36,7 @@ export default function LoginSuccessPage() {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   // Get provider from URL or use 'default' if not defined
-  const provider = 
+  const provider =
     (params?.provider as keyof typeof loadingMessages) || "default";
   const messages = loadingMessages[provider] || loadingMessages.default;
 
@@ -51,12 +51,12 @@ export default function LoginSuccessPage() {
 
     if (currentMessageIndex === messages.length - 1) {
       const timer = setTimeout(() => {
-        router.push("/");
+        router.push(`/dashboard?provider=${provider}`); // Append provider to redirect
       }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [currentMessageIndex, messages.length, router]);
+  }, [currentMessageIndex, messages.length, router, provider]);
 
   const getProviderName = () => {
     switch (provider) {

@@ -1,6 +1,12 @@
 import React from "react";
 import { Button } from "@heroui/button";
 import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@heroui/dropdown";
+import {
   AlertOctagonIcon,
   CalendarIcon,
   CheckIcon,
@@ -8,6 +14,7 @@ import {
   DollarSignIcon,
   FileTextIcon,
   InboxIcon,
+  LogOutIcon,
   NewspaperIcon,
   PlusIcon,
   SendIcon,
@@ -17,9 +24,49 @@ import {
   Trash2Icon,
   UsersIcon,
 } from "lucide-react";
-import { Avatar } from "@heroui/avatar";
+import { useRouter } from "next/navigation";
 
-const Sidebar = () => {
+import { Avatar } from "@heroui/avatar";
+import {
+  AppleIcon,
+  GmailIcon,
+  MicrosoftIcon,
+  // OutlookIcon, // Commented out as MicrosoftIcon is used for outlook
+} from "@/components/icons";
+
+interface SidebarProps {
+  userEmail?: string;
+  loginProvider?: "gmail" | "outlook" | "apple" | "microsoft";
+}
+
+const Sidebar = ({
+  userEmail = "user@example.com",
+  loginProvider,
+}: SidebarProps) => {
+  const userName = userEmail ? userEmail.split("@")[0] : "User";
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push("/");
+  };
+
+  const renderProviderIcon = () => {
+    if (!loginProvider) return null;
+    const iconProps = { size: 16, className: "ml-2" };
+    switch (loginProvider) {
+      case "gmail":
+        return <GmailIcon {...iconProps} />;
+      case "outlook":
+        return <MicrosoftIcon {...iconProps} />;
+      case "apple":
+        return <AppleIcon {...iconProps} />;
+      case "microsoft":
+        return <MicrosoftIcon {...iconProps} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="flex flex-col h-full w-64 bg-gray-100 dark:bg-gray-900 p-3 space-y-4">
       {/* Header */}
@@ -34,18 +81,36 @@ const Sidebar = () => {
         {/* Dropdown or similar for Dove */}
       </div>
 
-      {/* User Info */}
-      <div className="flex items-center space-x-2">
-        <Avatar
-          name="Emilie"
-          size="sm" // Smaller avatar
-          src="https://i.pravatar.cc/150?u=emilie@gmail.com"
-        />
-        <div className="flex flex-col">
-          <span className="text-xs font-medium">{"emilie@gmail.com"}</span>
-          {/* Dropdown or similar for user */}
-        </div>
-      </div>
+      {/* User Info with Dropdown */}
+      <Dropdown>
+        <DropdownTrigger>
+          <Button
+            className="flex items-center space-x-2 p-0 h-auto data-[hover=true]:bg-transparent"
+            variant="light"
+          >
+            <Avatar
+              name={userName}
+              size="sm"
+              src={`https://i.pravatar.cc/150?u=${userEmail}`}
+            />
+            <div className="flex flex-col items-start">
+              <div className="flex items-center">
+                <span className="text-xs font-medium">{userEmail}</span>
+                {renderProviderIcon()}
+              </div>
+            </div>
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu aria-label="User Actions">
+          <DropdownItem
+            key="logout"
+            startContent={<LogOutIcon size={16} />}
+            onPress={handleLogout}
+          >
+            Logout
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
 
       {/* Main Navigation */}
       <nav className="space-y-0.5">
