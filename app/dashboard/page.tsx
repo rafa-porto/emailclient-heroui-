@@ -1,11 +1,10 @@
 import React from "react";
+import Inbox from "@/components/inbox";
 
 const DashboardPage = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      {/* Add your dashboard content here */}
-      <p>Welcome to your dashboard!</p>
+    <div className="h-full w-full">
+      <Inbox />
     </div>
   );
 };
