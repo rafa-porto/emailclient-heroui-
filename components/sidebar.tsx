@@ -33,6 +33,7 @@ import {
   MicrosoftIcon,
   // OutlookIcon, // Commented out as MicrosoftIcon is used for outlook
 } from "@/components/icons";
+import { ThemeSwitch } from "@/components/theme-switch"; // Import ThemeSwitch
 
 interface SidebarProps {
   userEmail?: string;
@@ -78,7 +79,7 @@ const Sidebar = ({
           </div>
           <span className="font-semibold text-md">{"Dove"}</span>
         </div>
-        {/* Dropdown or similar for Dove */}
+        <ThemeSwitch /> {/* Add ThemeSwitch here */}
       </div>
 
       {/* User Info with Dropdown */}
