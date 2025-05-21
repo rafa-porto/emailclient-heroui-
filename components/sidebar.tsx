@@ -68,7 +68,7 @@ const Sidebar = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-64 bg-gray-100 dark:bg-gray-900 p-3 space-y-4">
+    <div className="flex flex-col h-full w-64 bg-gray-100 dark:bg-neutral-900 p-3 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
@@ -121,7 +121,7 @@ const Sidebar = ({
           variant="flat"
         >
           Inbox
-          <span className="ml-auto text-xs bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded-full">
+          <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
             12
           </span>
         </Button>
@@ -194,7 +194,7 @@ const Sidebar = ({
       {/* Labels */}
       <div className="space-y-1">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
+          <h3 className="text-xs font-semibold uppercase text-gray-500 dark:text-neutral-400">
             Labels
           </h3>
           <Button isIconOnly size="sm" variant="light">
