@@ -127,7 +127,7 @@ const Inbox = () => {
             aria-label="Search"
             classNames={{
               inputWrapper:
-                "bg-gray-100 dark:bg-neutral-800 border-transparent hover:border-gray-300 dark:hover:border-neutral-700",
+                "bg-transparent dark:bg-transparent border-2 border-gray-300 dark:border-neutral-700 hover:border-gray-400 dark:hover:border-neutral-600",
               input: "text-sm",
             }}
             labelPlacement="outside"
