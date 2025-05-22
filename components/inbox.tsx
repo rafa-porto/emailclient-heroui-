@@ -4,8 +4,6 @@ import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
 import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
 
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-
 // Mock data for emails - we'll refine this later
 const mockEmails = [
   {
@@ -106,7 +104,8 @@ const Inbox = () => {
   return (
     <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
       {/* Header - Now floating and sticky at the top of the inbox */}
-      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pr-2 pb-2 pl-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90  dark:border-neutral-800">
+      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pb-2 px-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90 dark:border-neutral-800">
+        {/* Left buttons */}
         <div className="flex items-center space-x-2">
           <Button
             className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
@@ -125,25 +124,45 @@ const Inbox = () => {
             Filter
           </Button>
         </div>
+
+        {/* Search input centered */}
+        <div className="flex-1 max-w-md mx-4">
+          <div className="relative">
+            <Input
+              classNames={{
+                base: "h-10",
+                mainWrapper: "h-10",
+                input: "pl-10 text-sm",
+                inputWrapper:
+                  "h-10 bg-gray-50 dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-800 rounded-lg shadow-sm",
+              }}
+              placeholder="Search emails, contacts, labels"
+              radius="lg"
+              size="sm"
+              startContent={
+                <div className="ml-3">
+                  <SearchIcon
+                    className="text-gray-400 dark:text-neutral-500"
+                    size={18}
+                  />
+                </div>
+              }
+              type="search"
+              variant="flat"
+            />
+          </div>
+        </div>
+
+        {/* Right buttons */}
         <div className="flex items-center gap-2">
           <Button
-            isIconOnly
+            className="bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 text-black dark:text-neutral-200 transition-colors flex items-center space-x-2"
             size="sm"
             variant="light"
-            className="text-default-500"
           >
-            <SearchIcon size={18} />
-          </Button>
-          <HoverBorderGradient
-            containerClassName="rounded-lg"
-            className="dark:bg-black bg-gray-100 text-black dark:text-neutral-200 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors flex items-center space-x-2"
-            as={Button}
-            variant="light"
-            size="sm"
-          >
-            <Edit3Icon size={16} className="mr-1" />
+            <Edit3Icon className="mr-1" size={16} />
             <span>Compose</span>
-          </HoverBorderGradient>
+          </Button>
         </div>
       </div>
 
