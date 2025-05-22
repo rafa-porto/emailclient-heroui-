@@ -147,20 +147,6 @@ export default function LoginPage() {
                 Continue with Apple Mail
               </Button>
             </CardBody>
-
-            <CardFooter className="px-8 py-4 flex flex-col items-center justify-center">
-              <p className="text-default-600 text-sm">
-                Don&apos;t have an account?{" "}
-                <Link
-                  as={NextLink}
-                  className="font-medium"
-                  color="primary"
-                  href="/signup"
-                >
-                  Sign up
-                </Link>
-              </p>
-            </CardFooter>
           </Card>
         </div>
       </div>
