@@ -72,8 +72,8 @@ export default function LoginSuccessPage() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto shadow-lg">
-      <CardBody className="p-6 text-center space-y-6">
+    <Card className="border-none shadow-md bg-background/95 dark:bg-background/95 backdrop-blur-md backdrop-saturate-150 rounded-xl overflow-hidden">
+      <CardBody className="p-8 text-center space-y-6">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="p-3 rounded-full bg-success-50 dark:bg-success-900/30 mx-auto">
             <CheckCircle className="w-12 h-12 text-success-500" />
@@ -82,29 +82,29 @@ export default function LoginSuccessPage() {
             <h1 className="text-2xl font-bold text-foreground">
               Successfully Connected!
             </h1>
-            <p className="text-default-500">
+            <p className="text-default-600 text-sm">
               Your {getProviderName()} account has been successfully connected.
             </p>
           </div>
         </div>
 
-        <div className="space-y-4 pt-4">
+        <div className="space-y-4 pt-2">
           <div className="space-y-2">
             <div className="h-2 w-full max-w-xs mx-auto bg-default-100 dark:bg-default-800 rounded-full overflow-hidden">
               <div
-                className="h-full bg-primary-500 transition-all duration-500 ease-in-out"
+                className="h-full bg-success-500 transition-all duration-500 ease-in-out"
                 style={{
                   width: `${((currentMessageIndex + 1) / messages.length) * 100}%`,
                 }}
               />
             </div>
-            <p className="text-sm text-default-500 text-center">
+            <p className="text-sm text-default-600 text-center">
               {messages[currentMessageIndex]}
             </p>
           </div>
 
           <div className="flex justify-center pt-2">
-            <Spinner color="primary" size="sm" />
+            <Spinner color="success" size="sm" />
           </div>
         </div>
       </CardBody>

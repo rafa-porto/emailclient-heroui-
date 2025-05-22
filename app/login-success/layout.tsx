@@ -13,8 +13,9 @@ export default function LoginSuccessLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-default-50 to-default-100 dark:from-default-900 dark:to-default-950 overflow-hidden">
+    <section className="fixed inset-0 flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background dark:from-primary/20 dark:via-background dark:to-background">
+      <div className="absolute inset-0 bg-grid-small-white/[0.2] dark:bg-grid-small-white/[0.05] -z-10" />
       <div className="w-full max-w-md p-4">{children}</div>
-    </div>
+    </section>
   );
 }
