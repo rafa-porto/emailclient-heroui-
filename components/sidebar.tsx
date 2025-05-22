@@ -31,6 +31,7 @@ import { Avatar } from "@heroui/avatar";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import { AppleIcon, GmailIcon, MicrosoftIcon } from "@/components/icons";
+import { siteConfig } from "@/config/site";
 
 interface SidebarProps {
   userEmail?: string;
@@ -66,17 +67,17 @@ const Sidebar = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-64 bg-gray-100 dark:bg-neutral-900 p-3 space-y-4">
+    <div className="flex flex-col h-full w-64 bg-gray-100 dark:bg-neutral-900 p-3 space-y-4 border-r border-gray-200 dark:border-neutral-800">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          {/* Replace with actual logo */}
-          <div className="w-7 h-7 bg-black rounded flex items-center justify-center text-white font-bold">
+          {/* Updated logo to match navbar */}
+          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">
             D
           </div>
-          <span className="font-semibold text-md">{"Dove"}</span>
+          <span className="font-semibold text-md">{siteConfig.name}</span>
         </div>
-        <ThemeSwitch /> {/* Add ThemeSwitch here */}
+        <ThemeSwitch />
       </div>
 
       {/* User Info with Dropdown */}

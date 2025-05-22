@@ -105,8 +105,8 @@ const EmailItem: React.FC<EmailItemProps> = ({
 const Inbox = () => {
   return (
     <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
-      {/* Header */}
-      <div className="flex items-center justify-between pt-0 pr-1 pb-1 pl-4 mb-4">
+      {/* Header - Now floating and sticky at the top of the inbox */}
+      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pr-2 pb-2 pl-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90 border-b border-gray-200 dark:border-neutral-800">
         <div className="flex items-center space-x-2">
           <Button
             className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
@@ -114,7 +114,7 @@ const Inbox = () => {
             size="sm"
             variant="light"
           >
-            Recent
+            All Mail
           </Button>
           <Button
             className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
@@ -122,38 +122,29 @@ const Inbox = () => {
             size="sm"
             variant="light"
           >
-            Todos
+            Filter
           </Button>
         </div>
-        <div className="flex-grow max-w-xl mx-2">
-          <Input
-            aria-label="Search"
-            classNames={{
-              inputWrapper:
-                "bg-transparent dark:bg-transparent border-2 border-gray-300 dark:border-neutral-800 hover:border-gray-400 dark:hover:border-neutral-700 focus-within:ring-2 focus-within:ring-primary/30 dark:focus-within:ring-primary/20",
-              input: "text-sm dark:text-neutral-300",
-            }}
-            labelPlacement="outside"
-            placeholder="Search emails, contacts, labels"
-            startContent={
-              <SearchIcon
-                className="text-base text-gray-500 dark:text-neutral-500 pointer-events-none flex-shrink-0"
-                size={18}
-              />
-            }
-            type="search"
-          />
+        <div className="flex items-center gap-2">
+          <Button
+            isIconOnly
+            size="sm"
+            variant="light"
+            className="text-default-500"
+          >
+            <SearchIcon size={18} />
+          </Button>
+          <HoverBorderGradient
+            containerClassName="rounded-lg"
+            className="dark:bg-black bg-gray-100 text-black dark:text-neutral-200 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors flex items-center space-x-2"
+            as={Button}
+            variant="light"
+            size="sm"
+          >
+            <Edit3Icon size={16} className="mr-1" />
+            <span>Compose</span>
+          </HoverBorderGradient>
         </div>
-        <HoverBorderGradient
-          containerClassName="rounded-lg"
-          className="dark:bg-black bg-gray-100 text-black dark:text-neutral-200 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors flex items-center space-x-2"
-          as={Button}
-          variant="light"
-          size="sm"
-        >
-          <Edit3Icon size={16} className="mr-1" />
-          <span>Compose</span>
-        </HoverBorderGradient>
       </div>
 
       {/* Email List */}

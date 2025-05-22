@@ -46,7 +46,7 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen w-full">
       <Sidebar loginProvider={loginProvider} userEmail={userEmail} />
-      <main className="flex-1 p-4 bg-white dark:bg-black w-full">
+      <main className="flex-1 bg-white dark:bg-black w-full overflow-hidden">
         {children}
       </main>
     </div>

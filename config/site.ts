@@ -1,62 +1,58 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Next.js + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Dove Mail",
+  description: "Modern email client for all your communication needs",
   navItems: [
     {
-      label: "Home",
-      href: "/",
-    },
-    {
-      label: "Docs",
-      href: "/docs",
+      label: "Features",
+      href: "#features",
     },
     {
       label: "Pricing",
       href: "/pricing",
     },
     {
+      label: "About",
+      href: "/about",
+    },
+    {
       label: "Blog",
       href: "/blog",
+    },
+    {
+      label: "Support",
+      href: "/support",
+    },
+  ],
+  navMenuItems: [
+    {
+      label: "Features",
+      href: "#features",
+    },
+    {
+      label: "Pricing",
+      href: "/pricing",
     },
     {
       label: "About",
       href: "/about",
     },
-  ],
-  navMenuItems: [
     {
-      label: "Profile",
-      href: "/profile",
+      label: "Blog",
+      href: "/blog",
     },
     {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Support",
+      href: "/support",
     },
     {
-      label: "Projects",
-      href: "/projects",
+      label: "Login",
+      href: "/login",
     },
     {
-      label: "Team",
-      href: "/team",
-    },
-    {
-      label: "Calendar",
-      href: "/calendar",
-    },
-    {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
+      label: "Sign Up",
+      href: "/signup",
     },
   ],
   links: {
