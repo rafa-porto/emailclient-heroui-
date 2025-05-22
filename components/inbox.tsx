@@ -4,6 +4,8 @@ import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
 import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
 
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+
 // Mock data for emails - we'll refine this later
 const mockEmails = [
   {
@@ -71,10 +73,10 @@ const EmailItem: React.FC<EmailItemProps> = ({
       className={`flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
     >
       <Avatar
-        src={avatarUrl}
+        className="mr-3 flex-shrink-0"
         name={sender}
         size="md"
-        className="mr-3 flex-shrink-0"
+        src={avatarUrl}
       />
       <div className="flex-grow truncate">
         <div className="flex justify-between items-center">
@@ -155,14 +157,17 @@ const Inbox = () => {
 
         {/* Right buttons */}
         <div className="flex items-center gap-2">
-          <Button
-            className="bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 text-black dark:text-neutral-200 transition-colors flex items-center space-x-2"
-            size="sm"
-            variant="light"
-          >
-            <Edit3Icon className="mr-1" size={16} />
-            <span>Compose</span>
-          </Button>
+          <div className="border-0 overflow-hidden">
+            <HoverBorderGradient
+              className="dark:bg-neutral-800/60 bg-gray-100 text-black dark:text-neutral-200 hover:dark:bg-neutral-800 transition-colors flex items-center h-8"
+              containerClassName="rounded-lg !border-0 dark:!border-0 border-transparent"
+            >
+              <div className="flex items-center px-3 text-sm">
+                <Edit3Icon className="mr-1.5" size={16} />
+                <span>Compose</span>
+              </div>
+            </HoverBorderGradient>
+          </div>
         </div>
       </div>
 
