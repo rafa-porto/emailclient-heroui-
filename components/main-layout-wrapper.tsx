@@ -9,10 +9,10 @@ import { siteConfig } from "@/config/site";
 export function MainLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isDashboardRoute = pathname.startsWith("/dashboard");
+  const isLoginRoute = pathname.startsWith("/login");
 
-  if (isDashboardRoute) {
-    // Para rotas do dashboard, renderiza os filhos diretamente.
-    // O layout próprio do dashboard (app/dashboard/layout.tsx) fornecerá sua estrutura.
+  // Para rotas do dashboard ou login, renderiza os filhos diretamente sem header/footer
+  if (isDashboardRoute || isLoginRoute) {
     return <>{children}</>;
   }
 
