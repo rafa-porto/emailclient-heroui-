@@ -106,7 +106,7 @@ const Inbox = () => {
   return (
     <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
       {/* Header - Now floating and sticky at the top of the inbox */}
-      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pr-2 pb-2 pl-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90 border-b border-gray-200 dark:border-neutral-800">
+      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pr-2 pb-2 pl-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90  dark:border-neutral-800">
         <div className="flex items-center space-x-2">
           <Button
             className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
