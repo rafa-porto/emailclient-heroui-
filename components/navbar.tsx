@@ -65,16 +65,6 @@ export const Navbar = () => {
           >
             Login
           </Button>
-          <HoverBorderGradient
-            containerClassName="rounded-full"
-            className="bg-primary text-white flex items-center space-x-2"
-            as={Button}
-            variant="solid"
-            size="md"
-          >
-            <span>Get Started</span>
-            <ArrowRightIcon size={16} className="ml-1" />
-          </HoverBorderGradient>
         </NavbarItem>
       </NavbarContent>
 

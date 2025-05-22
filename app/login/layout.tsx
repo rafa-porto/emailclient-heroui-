@@ -10,7 +10,7 @@ export default function LoginLayout({
   const { theme } = useTheme();
   const bgClass =
     theme === "dark"
-      ? "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background"
+      ? "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-black to-black"
       : "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background";
 
   return (

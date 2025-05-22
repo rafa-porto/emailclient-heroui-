@@ -96,7 +96,7 @@ export default function LoginPage() {
 
         {/* Right Column - Login Card */}
         <div className="w-full md:w-1/2 max-w-md">
-          <Card className="border-none shadow-md bg-background/95 dark:bg-background/95 backdrop-blur-md backdrop-saturate-150 rounded-xl overflow-hidden">
+          <Card className="border-none shadow-md bg-background/95 dark:bg-black/90 backdrop-blur-md backdrop-saturate-150 rounded-xl overflow-hidden">
             <CardHeader className="flex flex-col items-center justify-center text-center p-8 pb-4">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                 <LockIcon className="text-primary" size={24} />
@@ -109,7 +109,7 @@ export default function LoginPage() {
 
             <CardBody className="px-8 py-8 gap-4">
               <Button
-                className="w-full font-medium justify-start px-4 bg-white dark:bg-default-50/5 border border-default-200 dark:border-default-800 hover:bg-default-100 dark:hover:bg-default-50/10"
+                className="w-full font-medium justify-start px-4 bg-white dark:bg-black border border-default-200 dark:border-none hover:bg-default-100 dark:hover:bg-black/80"
                 color="default"
                 isLoading={isLoading === "gmail"}
                 radius="md"
@@ -122,7 +122,7 @@ export default function LoginPage() {
               </Button>
 
               <Button
-                className="w-full font-medium justify-start px-4 bg-white dark:bg-default-50/5 border border-default-200 dark:border-default-800 hover:bg-default-100 dark:hover:bg-default-50/10"
+                className="w-full font-medium justify-start px-4 bg-white dark:bg-black border border-default-200 dark:border-none hover:bg-default-100 dark:hover:bg-black/80"
                 color="default"
                 isLoading={isLoading === "outlook"}
                 radius="md"
@@ -135,7 +135,7 @@ export default function LoginPage() {
               </Button>
 
               <Button
-                className="w-full font-medium justify-start px-4 bg-white dark:bg-default-50/5 border border-default-200 dark:border-default-800 hover:bg-default-100 dark:hover:bg-default-50/10"
+                className="w-full font-medium justify-start px-4 bg-white dark:bg-black border border-default-200 dark:border-none hover:bg-default-100 dark:hover:bg-black/80"
                 color="default"
                 isLoading={isLoading === "apple"}
                 radius="md"
