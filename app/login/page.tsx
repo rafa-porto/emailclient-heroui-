@@ -96,26 +96,25 @@ export default function LoginPage() {
 
         {/* Right Column - Login Card */}
         <div className="w-full md:w-1/2 max-w-md">
-          <Card className="border-none shadow-2xl bg-background/90 dark:bg-background/80 backdrop-blur-md backdrop-saturate-150 rounded-xl overflow-hidden border border-divider/30">
-            <CardHeader className="flex flex-col items-center justify-center text-center p-8 pb-6 border-b border-divider/50">
+          <Card className="border-none shadow-md bg-background/95 dark:bg-background/95 backdrop-blur-md backdrop-saturate-150 rounded-xl overflow-hidden">
+            <CardHeader className="flex flex-col items-center justify-center text-center p-8 pb-4">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                 <LockIcon className="text-primary" size={24} />
               </div>
-              <h2 className="text-2xl font-semibold">
-                Sign in to your account
-              </h2>
-              <p className="text-default-600 mt-2">
+              <h2 className="text-xl font-semibold">Sign in to your account</h2>
+              <p className="text-default-600 mt-2 text-sm">
                 Choose your email provider to continue
               </p>
             </CardHeader>
 
-            <CardBody className="px-8 py-6 gap-4">
+            <CardBody className="px-8 py-8 gap-4">
               <Button
-                className="w-full font-medium text-default-700 dark:text-default-200 bg-white dark:bg-black"
+                className="w-full font-medium justify-start px-4 bg-white dark:bg-default-50/5 border border-default-200 dark:border-default-800 hover:bg-default-100 dark:hover:bg-default-50/10"
+                color="default"
                 isLoading={isLoading === "gmail"}
-                radius="lg"
+                radius="md"
                 size="lg"
-                startContent={<GmailIcon className="h-5 w-5" />}
+                startContent={<GmailIcon className="h-5 w-5 mr-3" />}
                 variant="flat"
                 onPress={() => handleEmailConnect("gmail")}
               >
@@ -123,11 +122,12 @@ export default function LoginPage() {
               </Button>
 
               <Button
-                className="w-full font-medium text-default-700 dark:text-default-200 bg-white dark:bg-black"
+                className="w-full font-medium justify-start px-4 bg-white dark:bg-default-50/5 border border-default-200 dark:border-default-800 hover:bg-default-100 dark:hover:bg-default-50/10"
+                color="default"
                 isLoading={isLoading === "outlook"}
-                radius="lg"
+                radius="md"
                 size="lg"
-                startContent={<OutlookIcon className="h-5 w-5" />}
+                startContent={<OutlookIcon className="h-5 w-5 mr-3" />}
                 variant="flat"
                 onPress={() => handleEmailConnect("outlook")}
               >
@@ -135,38 +135,20 @@ export default function LoginPage() {
               </Button>
 
               <Button
-                className="w-full font-medium text-default-700 dark:text-default-200 bg-white dark:bg-black"
+                className="w-full font-medium justify-start px-4 bg-white dark:bg-default-50/5 border border-default-200 dark:border-default-800 hover:bg-default-100 dark:hover:bg-default-50/10"
+                color="default"
                 isLoading={isLoading === "apple"}
-                radius="lg"
+                radius="md"
                 size="lg"
-                startContent={<AppleIcon className="h-5 w-5" />}
+                startContent={<AppleIcon className="h-5 w-5 mr-3" />}
                 variant="flat"
                 onPress={() => handleEmailConnect("apple")}
               >
                 Continue with Apple Mail
               </Button>
-
-              <div className="relative flex items-center mt-2 mb-2">
-                <div className="flex-grow border-t border-divider" />
-                <span className="flex-shrink mx-4 text-default-500 text-sm">
-                  or
-                </span>
-                <div className="flex-grow border-t border-divider" />
-              </div>
-
-              <Button
-                as={NextLink}
-                className="w-full font-medium"
-                href="/login-form"
-                radius="lg"
-                size="lg"
-                variant="bordered"
-              >
-                Sign in with Email and Password
-              </Button>
             </CardBody>
 
-            <CardFooter className="px-8 py-6 flex flex-col items-center justify-center border-t border-divider">
+            <CardFooter className="px-8 py-4 flex flex-col items-center justify-center">
               <p className="text-default-600 text-sm">
                 Don&apos;t have an account?{" "}
                 <Link
