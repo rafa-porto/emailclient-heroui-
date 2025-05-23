@@ -183,91 +183,93 @@ const Inbox = () => {
   };
 
   return (
-    <div className="flex h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
-      {/* Email List Section */}
-      <div
-        className={`flex flex-col ${selectedEmail ? "w-1/2" : "w-full"} transition-all duration-300`}
-      >
-        {/* Header - Now floating and sticky at the top of the inbox */}
-        <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pb-2 px-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90 dark:border-neutral-800">
-          {/* Left buttons */}
-          <div className="flex items-center space-x-2">
-            <Button
-              className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
-              endContent={<ChevronDownIcon size={16} />}
-              size="sm"
-              variant="light"
-            >
-              All Mail
-            </Button>
-            <Button
-              className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
-              endContent={<ChevronDownIcon size={16} />}
-              size="sm"
-              variant="light"
-            >
-              Filter
-            </Button>
-          </div>
+    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
+      {/* Header - Fixed at the top */}
+      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pb-2 px-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90">
+        {/* Left buttons */}
+        <div className="flex items-center space-x-2">
+          <Button
+            className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
+            endContent={<ChevronDownIcon size={16} />}
+            size="sm"
+            variant="light"
+          >
+            All Mail
+          </Button>
+          <Button
+            className="dark:text-neutral-200 bg-gray-100 dark:bg-neutral-800/60 hover:dark:bg-neutral-800 transition-colors"
+            endContent={<ChevronDownIcon size={16} />}
+            size="sm"
+            variant="light"
+          >
+            Filter
+          </Button>
+        </div>
 
-          {/* Search input centered */}
-          <div className="flex-1 max-w-md mx-4">
-            <div className="relative">
-              <Input
-                classNames={{
-                  base: "h-10",
-                  mainWrapper: "h-10",
-                  input: "pl-10 text-sm",
-                  inputWrapper:
-                    "h-10 bg-gray-50 dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-800 rounded-lg shadow-sm",
-                }}
-                placeholder="Search emails, contacts, labels"
-                radius="lg"
-                size="sm"
-                startContent={
-                  <div className="ml-3">
-                    <SearchIcon
-                      className="text-gray-400 dark:text-neutral-500"
-                      size={18}
-                    />
-                  </div>
-                }
-                type="search"
-                variant="flat"
-              />
-            </div>
-          </div>
-
-          {/* Right buttons */}
-          <div className="flex items-center gap-2">
-            <div className="border-0 overflow-hidden">
-              <HoverBorderGradient
-                className="dark:bg-neutral-800/60 bg-gray-100 text-black dark:text-neutral-200 hover:dark:bg-neutral-800 transition-colors flex items-center h-8"
-                containerClassName="rounded-lg !border-0 dark:!border-0 border-transparent"
-              >
-                <div className="flex items-center px-3 text-sm">
-                  <Edit3Icon className="mr-1.5" size={16} />
-                  <span>Compose</span>
+        {/* Search input centered */}
+        <div className="flex-1 max-w-md mx-4">
+          <div className="relative">
+            <Input
+              classNames={{
+                base: "h-10",
+                mainWrapper: "h-10",
+                input: "pl-10 text-sm",
+                inputWrapper:
+                  "h-10 bg-gray-50 dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-800 rounded-lg shadow-sm",
+              }}
+              placeholder="Search emails, contacts, labels"
+              radius="lg"
+              size="sm"
+              startContent={
+                <div className="ml-3">
+                  <SearchIcon
+                    className="text-gray-400 dark:text-neutral-500"
+                    size={18}
+                  />
                 </div>
-              </HoverBorderGradient>
-            </div>
+              }
+              type="search"
+              variant="flat"
+            />
           </div>
         </div>
 
-        {/* Email List */}
-        <div className="flex-grow overflow-y-auto px-1">
-          {mockEmails.map((email) => (
-            <EmailItem key={email.id} {...email} onClick={handleEmailClick} />
-          ))}
+        {/* Right buttons */}
+        <div className="flex items-center gap-2">
+          <div className="border-0 overflow-hidden">
+            <HoverBorderGradient
+              className="dark:bg-neutral-800/60 bg-gray-100 text-black dark:text-neutral-200 hover:dark:bg-neutral-800 transition-colors flex items-center h-8"
+              containerClassName="rounded-lg !border-0 dark:!border-0 border-transparent"
+            >
+              <div className="flex items-center px-3 text-sm">
+                <Edit3Icon className="mr-1.5" size={16} />
+                <span>Compose</span>
+              </div>
+            </HoverBorderGradient>
+          </div>
         </div>
       </div>
 
-      {/* Email View Section */}
-      {selectedEmail && (
-        <div className="w-1/2">
-          <EmailView email={selectedEmail} onClose={handleCloseEmailView} />
+      {/* Content Area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Email List Section */}
+        <div
+          className={`flex flex-col ${selectedEmail ? "w-1/2" : "w-full"} transition-all duration-300`}
+        >
+          <div className="flex-grow overflow-y-auto px-1">
+            {mockEmails.map((email) => (
+              <EmailItem key={email.id} {...email} onClick={handleEmailClick} />
+            ))}
+          </div>
         </div>
-      )}
+
+        {/* Email View Section */}
+        {selectedEmail && (
+          <div className="w-1/2">
+            <EmailView email={selectedEmail} onClose={handleCloseEmailView} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

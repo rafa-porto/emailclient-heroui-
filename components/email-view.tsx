@@ -58,9 +58,9 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 border-l border-gray-200 dark:border-neutral-800">
+    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 rounded-xl mt-1 mr-4 ml-4 mb-4 shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 dark:border-neutral-800 px-4 py-3">
+      <div className="flex items-center justify-between bg-gray-50 dark:bg-neutral-900/50 px-4 py-3">
         <div className="flex items-center gap-2">
           <Button
             isIconOnly
@@ -103,14 +103,14 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
       {/* Content */}
       <div className="flex-1 overflow-y-auto px-4">
         {/* Email Subject */}
-        <div className="py-4 border-b border-gray-200 dark:border-neutral-800">
+        <div className="py-4">
           <h2 className="text-xl font-semibold text-black dark:text-white">
             {email.subject}
           </h2>
         </div>
 
         {/* Sender Info */}
-        <div className="py-4 flex items-center">
+        <div className="py-3 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-3 mb-4">
           <Avatar
             className="mr-3"
             name={email.sender}
@@ -167,7 +167,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         </div>
 
         {/* Reply Composer */}
-        <div className="bg-gray-50 dark:bg-neutral-900 rounded-lg p-4 mb-4">
+        <div className="bg-gray-50/80 dark:bg-neutral-900/60 rounded-xl p-4 mb-4 mx-2 backdrop-blur-sm">
           <div className="flex items-start">
             <Avatar className="mr-3 mt-1" name="E" size="sm" color="primary" />
             <div className="flex-1">
@@ -179,7 +179,8 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                 radius="lg"
                 size="sm"
                 classNames={{
-                  inputWrapper: "bg-transparent border-none shadow-none",
+                  inputWrapper:
+                    "bg-white/50 dark:bg-neutral-800/50 border-none shadow-none rounded-lg",
                   input: "min-h-[80px] resize-y",
                 }}
                 fullWidth
