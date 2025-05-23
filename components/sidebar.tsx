@@ -26,44 +26,21 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-
 import { Avatar } from "@heroui/avatar";
 
 import { ThemeSwitch } from "@/components/theme-switch";
-import { AppleIcon, GmailIcon, MicrosoftIcon } from "@/components/icons";
 import { siteConfig } from "@/config/site";
 
 interface SidebarProps {
   userEmail?: string;
-  loginProvider?: "gmail" | "outlook" | "apple" | "microsoft";
 }
 
-const Sidebar = ({
-  userEmail = "user@example.com",
-  loginProvider,
-}: SidebarProps) => {
+const Sidebar = ({ userEmail = "user@example.com" }: SidebarProps) => {
   const userName = userEmail ? userEmail.split("@")[0] : "User";
   const router = useRouter();
 
   const handleLogout = () => {
     router.push("/");
-  };
-
-  const renderProviderIcon = () => {
-    if (!loginProvider) return null;
-    const iconProps = { size: 16, className: "ml-2" };
-    switch (loginProvider) {
-      case "gmail":
-        return <GmailIcon {...iconProps} />;
-      case "outlook":
-        return <MicrosoftIcon {...iconProps} />;
-      case "apple":
-        return <AppleIcon {...iconProps} />;
-      case "microsoft":
-        return <MicrosoftIcon {...iconProps} />;
-      default:
-        return null;
-    }
   };
 
   return (
@@ -80,45 +57,56 @@ const Sidebar = ({
         <ThemeSwitch />
       </div>
 
-      {/* User Info with Dropdown */}
-      <Dropdown>
-        <DropdownTrigger>
-          <Button
-            className="w-full justify-start flex items-center space-x-2 data-[hover=true]:bg-transparent" // Modified for alignment
-            size="sm" // Added for consistent sizing
-            variant="light"
-          >
-            <Avatar
-              name={userName}
-              size="sm"
-              src={`https://i.pravatar.cc/150?u=${userEmail}`}
-            />
-            <div className="flex flex-col items-start">
-              <div className="flex items-center">
-                <span className="text-xs font-medium">{userEmail}</span>
-                {/* {renderProviderIcon()} */}
+      {/* User Info with Enhanced Dropdown */}
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 shadow-sm border border-gray-200 dark:border-neutral-700">
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              className="w-full justify-start p-1.5 h-auto data-[hover=true]:bg-gray-50 dark:data-[hover=true]:bg-neutral-700/50 rounded-lg transition-colors"
+              variant="light"
+            >
+              <div className="flex items-center space-x-2 w-full">
+                <Avatar
+                  className="ring-1 ring-primary/20"
+                  name={userName}
+                  size="sm"
+                  src={`https://i.pravatar.cc/150?u=${userEmail}`}
+                />
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white truncate text-left">
+                    {userName}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-neutral-400 truncate text-left">
+                    {userEmail}
+                  </span>
+                </div>
+                <ChevronDownIcon
+                  className="ml-2 flex-shrink-0 text-gray-400"
+                  size={16}
+                />
               </div>
-            </div>
-            <ChevronDownIcon className="ml-auto" size={16} />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu aria-label="User Actions">
-          <DropdownItem
-            key="logout"
-            startContent={<LogOutIcon size={16} />}
-            onPress={handleLogout}
-          >
-            Logout
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu aria-label="User Actions" className="w-48">
+            <DropdownItem
+              key="logout"
+              className="text-danger"
+              color="danger"
+              startContent={<LogOutIcon size={16} />}
+              onPress={handleLogout}
+            >
+              Logout
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
 
       {/* Main Navigation */}
       <nav className="space-y-0.5">
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<InboxIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<InboxIcon size={16} />}
           variant="flat"
         >
           Inbox
@@ -128,64 +116,64 @@ const Sidebar = ({
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<FileTextIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<FileTextIcon size={16} />}
           variant="light"
         >
           Todos
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<StarIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<StarIcon size={16} />}
           variant="light"
         >
           Starred
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<ClockIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<ClockIcon size={16} />}
           variant="light"
         >
           Snoozed
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<CheckIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<CheckIcon size={16} />}
           variant="light"
         >
           Done
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<FileTextIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<FileTextIcon size={16} />}
           variant="light"
         >
           Drafts
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<SendIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<SendIcon size={16} />}
           variant="light"
         >
           Sent
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<Trash2Icon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<Trash2Icon size={16} />}
           variant="light"
         >
           Trash
         </Button>
         <Button
           className="w-full justify-start"
-          size="sm" // Smaller button
-          startContent={<AlertOctagonIcon size={16} />} // Smaller icon
+          size="sm"
+          startContent={<AlertOctagonIcon size={16} />}
           variant="light"
         >
           Spam
@@ -205,48 +193,48 @@ const Sidebar = ({
         <nav className="space-y-0.5">
           <Button
             className="w-full justify-start"
-            size="sm" // Smaller button
-            startContent={<CalendarIcon size={16} />} // Smaller icon
+            size="sm"
+            startContent={<CalendarIcon size={16} />}
             variant="light"
           >
             Calendar
           </Button>
           <Button
             className="w-full justify-start"
-            size="sm" // Smaller button
-            startContent={<DollarSignIcon size={16} />} // Smaller icon
+            size="sm"
+            startContent={<DollarSignIcon size={16} />}
             variant="light"
           >
             Finance
           </Button>
           <Button
             className="w-full justify-start"
-            size="sm" // Smaller button
-            startContent={<UsersIcon size={16} />} // Smaller icon
+            size="sm"
+            startContent={<UsersIcon size={16} />}
             variant="light"
           >
             Forums
           </Button>
           <Button
             className="w-full justify-start"
-            size="sm" // Smaller button
-            startContent={<NewspaperIcon size={16} />} // Smaller icon
+            size="sm"
+            startContent={<NewspaperIcon size={16} />}
             variant="light"
           >
             Newsletters
           </Button>
           <Button
             className="w-full justify-start"
-            size="sm" // Smaller button
-            startContent={<TagIcon size={16} />} // Smaller icon
+            size="sm"
+            startContent={<TagIcon size={16} />}
             variant="light"
           >
             Promotions
           </Button>
           <Button
             className="w-full justify-start"
-            size="sm" // Smaller button
-            startContent={<ShoppingCartIcon size={16} />} // Smaller icon
+            size="sm"
+            startContent={<ShoppingCartIcon size={16} />}
             variant="light"
           >
             Purchases
