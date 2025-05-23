@@ -58,7 +58,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 rounded-xl mt-1 mr-4 ml-4 mb-4 shadow-lg overflow-hidden">
+    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 rounded-xl shadow-lg overflow-hidden border-l border-gray-200 dark:border-neutral-800">
       {/* Header */}
       <div className="flex items-center justify-between bg-gray-50 dark:bg-neutral-900/50 px-4 py-3">
         <div className="flex items-center gap-2">

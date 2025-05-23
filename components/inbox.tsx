@@ -303,7 +303,7 @@ const Inbox = () => {
           <div
             className={`${selectedEmail ? "w-1/3" : "w-1/2"} transition-all duration-300`}
           >
-            <div className="h-full bg-white dark:bg-neutral-900 rounded-xl shadow-lg m-2 p-6 border border-gray-200 dark:border-neutral-800 flex flex-col">
+            <div className="h-full bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-6 border-l border-gray-200 dark:border-neutral-800 flex flex-col">
               {/* AI Panel Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
