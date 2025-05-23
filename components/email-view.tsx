@@ -14,6 +14,7 @@ import {
   SendIcon,
   XIcon,
 } from "lucide-react";
+
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 
 interface EmailViewProps {
@@ -40,20 +41,18 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
 
   // Função para lidar com resposta rápida
   const handleQuickReply = (replyText: string) => {
-    console.log("Quick reply:", replyText);
     // Implementar lógica de resposta rápida
+    setReplyText(replyText);
   };
 
   // Função para enviar resposta
   const handleSendReply = () => {
-    console.log("Sending reply:", replyText);
     // Implementar lógica de envio de resposta
     setReplyText("");
   };
 
   // Função para sugerir resposta
   const handleSuggestReply = () => {
-    console.log("Suggesting reply");
     // Implementar lógica de sugestão de resposta
   };
 
@@ -139,13 +138,11 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           <HoverBorderGradient
             containerClassName="rounded-full"
             className="bg-gray-100 dark:bg-neutral-800 text-black dark:text-white flex items-center"
+            onClick={() =>
+              handleQuickReply("Thank you for sharing the great news")
+            }
           >
-            <div
-              className="flex items-center px-3 py-1 text-sm cursor-pointer"
-              onClick={() =>
-                handleQuickReply("Thank you for sharing the great news")
-              }
-            >
+            <div className="flex items-center px-3 py-1 text-sm">
               <PlusIcon size={14} className="mr-1" />
               <span>Thank you for sharing the great news</span>
             </div>
@@ -153,15 +150,13 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           <HoverBorderGradient
             containerClassName="rounded-full"
             className="bg-gray-100 dark:bg-neutral-800 text-black dark:text-white flex items-center"
+            onClick={() =>
+              handleQuickReply("I&apos;m available tomorrow at 1pm PST")
+            }
           >
-            <div
-              className="flex items-center px-3 py-1 text-sm cursor-pointer"
-              onClick={() =>
-                handleQuickReply("I'm available tomorrow at 1pm PST")
-              }
-            >
+            <div className="flex items-center px-3 py-1 text-sm">
               <PlusIcon size={14} className="mr-1" />
-              <span>I'm available tomorrow at 1pm PST</span>
+              <span>I&apos;m available tomorrow at 1pm PST</span>
             </div>
           </HoverBorderGradient>
         </div>
@@ -181,10 +176,9 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                 classNames={{
                   inputWrapper:
                     "bg-white/50 dark:bg-neutral-800/50 border-none shadow-none rounded-lg",
-                  input: "min-h-[80px] resize-y",
+                  input: "min-h-[80px]",
                 }}
                 fullWidth
-                multiline
               />
             </div>
           </div>
