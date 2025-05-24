@@ -6,7 +6,6 @@ import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
 import { SearchIcon, Edit3Icon, ChevronDownIcon, BotIcon } from "lucide-react";
 
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import EmailView from "@/components/email-view";
 import AiPanel from "@/components/ai-panel";
 
@@ -238,29 +237,29 @@ const Inbox = () => {
 
         {/* Right buttons */}
         <div className="flex items-center gap-2">
-          <div className="border-0 overflow-hidden">
-            <HoverBorderGradient
-              className="dark:bg-neutral-800/60 bg-gray-100 text-black dark:text-neutral-200 hover:dark:bg-neutral-800 transition-colors flex items-center h-8"
-              containerClassName="rounded-lg !border-0 dark:!border-0 border-transparent"
-            >
-              <div className="flex items-center px-3 text-sm">
-                <Edit3Icon className="mr-1.5" size={16} />
-                <span>Compose</span>
-              </div>
-            </HoverBorderGradient>
-          </div>
-          <div className="border-0 overflow-hidden">
-            <HoverBorderGradient
-              className="dark:bg-neutral-800/60 bg-gray-100 text-black dark:text-neutral-200 hover:dark:bg-neutral-800 transition-colors flex items-center h-8"
-              containerClassName="rounded-lg !border-0 dark:!border-0 border-transparent"
-              onClick={() => setIsAiPanelOpen(!isAiPanelOpen)}
-            >
-              <div className="flex items-center px-3 text-sm">
-                <BotIcon className="mr-1.5" size={16} />
-                <span>AI</span>
-              </div>
-            </HoverBorderGradient>
-          </div>
+          <Button
+            className="bg-gray-100 dark:bg-neutral-800/60 text-black dark:text-neutral-200 hover:bg-gray-200 dark:hover:bg-neutral-800 transition-colors"
+            radius="lg"
+            size="sm"
+            startContent={<Edit3Icon size={16} />}
+            variant="flat"
+          >
+            Compose
+          </Button>
+          <Button
+            className={`${
+              isAiPanelOpen
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                : "bg-gray-100 dark:bg-neutral-800/60 text-black dark:text-neutral-200 hover:bg-gray-200 dark:hover:bg-neutral-800"
+            } transition-colors`}
+            radius="lg"
+            size="sm"
+            startContent={<BotIcon size={16} />}
+            variant="flat"
+            onPress={() => setIsAiPanelOpen(!isAiPanelOpen)}
+          >
+            AI
+          </Button>
         </div>
       </div>
 
