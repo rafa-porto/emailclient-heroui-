@@ -4,16 +4,11 @@ import React, { useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
-import {
-  SearchIcon,
-  Edit3Icon,
-  ChevronDownIcon,
-  BotIcon,
-  Send,
-} from "lucide-react";
+import { SearchIcon, Edit3Icon, ChevronDownIcon, BotIcon } from "lucide-react";
 
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import EmailView from "@/components/email-view";
+import AiPanel from "@/components/ai-panel";
 
 // Mock data for emails - we'll refine this later
 const mockEmails = [
@@ -180,7 +175,6 @@ const Inbox = () => {
     "onClick"
   > | null>(null);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
-  const [aiInput, setAiInput] = useState("");
 
   const handleEmailClick = (email: Omit<EmailItemProps, "onClick">) => {
     setSelectedEmail(email);
@@ -303,79 +297,7 @@ const Inbox = () => {
           <div
             className={`${selectedEmail ? "w-1/3" : "w-1/2"} transition-all duration-300`}
           >
-            <div className="h-full bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-6 border-l border-gray-200 dark:border-neutral-800 flex flex-col">
-              {/* AI Panel Header */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-                    <BotIcon className="text-white" size={16} />
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    AI Assistant
-                  </h3>
-                </div>
-                <Button
-                  isIconOnly
-                  className="text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-200"
-                  size="sm"
-                  variant="light"
-                  onClick={() => setIsAiPanelOpen(false)}
-                >
-                  ×
-                </Button>
-              </div>
-
-              {/* AI Content */}
-              <div className="flex-1 flex flex-col">
-                <div className="flex-1 mb-4">
-                  <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <BotIcon className="text-white" size={24} />
-                    </div>
-                    <h4 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
-                      How can I help you today?
-                    </h4>
-                    <p className="text-gray-600 dark:text-neutral-400 text-sm">
-                      Ask me anything about your emails, or let me help you
-                      compose a response.
-                    </p>
-                  </div>
-                </div>
-
-                {/* AI Input */}
-                <div className="border-t border-gray-200 dark:border-neutral-700 pt-4">
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      className="flex-1"
-                      placeholder="Type your message..."
-                      value={aiInput}
-                      classNames={{
-                        inputWrapper:
-                          "bg-gray-50 dark:bg-neutral-800 border-gray-200 dark:border-neutral-700",
-                      }}
-                      onChange={(e) => setAiInput(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          // Handle AI message send
-                          setAiInput("");
-                        }
-                      }}
-                    />
-                    <Button
-                      isIconOnly
-                      className="bg-gradient-to-r from-blue-500 to-purple-600"
-                      color="primary"
-                      onClick={() => {
-                        // Handle AI message send
-                        setAiInput("");
-                      }}
-                    >
-                      <Send size={16} />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AiPanel onClose={() => setIsAiPanelOpen(false)} />
           </div>
         )}
       </div>
