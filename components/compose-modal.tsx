@@ -75,13 +75,33 @@ Best regards,`;
   return (
     <Modal
       isOpen={isOpen}
-      placement="center"
+      placement="bottom"
       scrollBehavior="inside"
       hideCloseButton
       classNames={{
-        base: "max-w-4xl rounded-2xl",
+        base: "max-w-4xl rounded-t-2xl rounded-b-none !mb-0 !pb-0",
         backdrop: "bg-black/50 backdrop-blur-sm",
-        wrapper: "z-50",
+        wrapper: "z-50 items-end !pb-0 !mb-0 !bottom-0",
+      }}
+      motionProps={{
+        variants: {
+          enter: {
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          },
+          exit: {
+            y: "100%",
+            opacity: 0,
+            transition: {
+              duration: 0.2,
+              ease: "easeIn",
+            },
+          },
+        },
       }}
       onClose={onClose}
     >
@@ -109,7 +129,7 @@ Best regards,`;
               </div>
             </ModalHeader>
 
-            <ModalBody className="p-0 rounded-b-2xl overflow-hidden">
+            <ModalBody className="p-0 overflow-hidden">
               <div className="flex flex-col h-[600px]">
                 {/* Recipients Section */}
                 <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-800">
