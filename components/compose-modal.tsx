@@ -5,7 +5,13 @@ import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { Input, Textarea } from "@heroui/input";
 import { Chip } from "@heroui/chip";
-import { SendIcon, PaperclipIcon, XIcon } from "lucide-react";
+import {
+  SendIcon,
+  PaperclipIcon,
+  XIcon,
+  MaximizeIcon,
+  MinimizeIcon,
+} from "lucide-react";
 
 import { AIIcon } from "@/components/icons";
 
@@ -23,6 +29,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
   const [showCc, setShowCc] = useState(false);
   const [showBcc, setShowBcc] = useState(false);
   const [recipients, setRecipients] = useState<string[]>([]);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Função para enviar email
   const handleSendEmail = () => {
@@ -37,6 +44,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
     setRecipients([]);
     setShowCc(false);
     setShowBcc(false);
+    setIsExpanded(false);
   };
 
   // Função para adicionar destinatário
@@ -72,6 +80,12 @@ Best regards,`;
     setContent(generatedContent);
   };
 
+  // Função para fechar modal e resetar estado
+  const handleClose = () => {
+    setIsExpanded(false);
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -79,9 +93,9 @@ Best regards,`;
       scrollBehavior="inside"
       hideCloseButton
       classNames={{
-        base: "max-w-4xl rounded-t-2xl rounded-b-none !mb-0 !pb-0",
+        base: `${isExpanded ? "max-w-full max-h-full rounded-none" : "max-w-4xl rounded-t-2xl rounded-b-none"} !mb-0 !pb-0`,
         backdrop: "bg-black/50 backdrop-blur-sm",
-        wrapper: "z-50 items-end !pb-0 !mb-0 !bottom-0",
+        wrapper: `z-50 ${isExpanded ? "items-center justify-center !pb-0 !mb-0" : "items-end !pb-0 !mb-0 !bottom-0"}`,
       }}
       motionProps={{
         variants: {
@@ -103,7 +117,7 @@ Best regards,`;
           },
         },
       }}
-      onClose={onClose}
+      onClose={handleClose}
     >
       <ModalContent>
         {() => (
@@ -112,7 +126,12 @@ Best regards,`;
             <ModalHeader className="flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4 rounded-t-2xl">
               <div className="flex items-center gap-3">
                 <span className="text-lg font-semibold text-gray-800 dark:text-white">
-                  New Message
+                  New Message{" "}
+                  {isExpanded && (
+                    <span className="text-sm font-normal text-gray-500 dark:text-neutral-400">
+                      (Expanded)
+                    </span>
+                  )}
                 </span>
               </div>
 
@@ -121,7 +140,20 @@ Best regards,`;
                   isIconOnly
                   size="sm"
                   variant="light"
-                  onPress={onClose}
+                  onPress={() => setIsExpanded(!isExpanded)}
+                  className="text-gray-500 hover:bg-gray-200 dark:hover:bg-neutral-700 hover:text-gray-700 dark:hover:text-white"
+                >
+                  {isExpanded ? (
+                    <MinimizeIcon size={18} />
+                  ) : (
+                    <MaximizeIcon size={18} />
+                  )}
+                </Button>
+                <Button
+                  isIconOnly
+                  size="sm"
+                  variant="light"
+                  onPress={handleClose}
                   className="text-gray-500 hover:bg-gray-200 dark:hover:bg-neutral-700 hover:text-gray-700 dark:hover:text-white"
                 >
                   <XIcon size={18} />
@@ -130,7 +162,9 @@ Best regards,`;
             </ModalHeader>
 
             <ModalBody className="p-0 overflow-hidden">
-              <div className="flex flex-col h-[600px]">
+              <div
+                className={`flex flex-col ${isExpanded ? "h-[calc(100vh-120px)]" : "h-[600px]"}`}
+              >
                 {/* Recipients Section */}
                 <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-800">
                   {/* To Field */}
