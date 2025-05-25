@@ -8,6 +8,7 @@ import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
 
 import EmailView from "@/components/email-view";
 import AiPanel from "@/components/ai-panel";
+import ComposeModal from "@/components/compose-modal";
 import { AIIcon } from "@/components/icons";
 
 // Mock data for emails - we'll refine this later
@@ -175,6 +176,7 @@ const Inbox = () => {
     "onClick"
   > | null>(null);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
+  const [isComposeModalOpen, setIsComposeModalOpen] = useState(false);
 
   const handleEmailClick = (email: Omit<EmailItemProps, "onClick">) => {
     setSelectedEmail(email);
@@ -244,6 +246,7 @@ const Inbox = () => {
             size="sm"
             startContent={<Edit3Icon size={16} />}
             variant="flat"
+            onPress={() => setIsComposeModalOpen(true)}
           >
             Compose
           </Button>
@@ -301,6 +304,12 @@ const Inbox = () => {
           </div>
         )}
       </div>
+
+      {/* Compose Modal */}
+      <ComposeModal
+        isOpen={isComposeModalOpen}
+        onClose={() => setIsComposeModalOpen(false)}
+      />
     </div>
   );
 };
