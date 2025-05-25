@@ -237,7 +237,7 @@ Best regards,`;
                     classNames={{
                       base: "h-full",
                       inputWrapper:
-                        "bg-transparent border-none shadow-none h-full",
+                        "bg-transparent border-none shadow-none h-full hover:bg-transparent focus:bg-transparent data-[hover=true]:bg-transparent data-[focus=true]:bg-transparent",
                       input: "h-full resize-none text-sm leading-relaxed",
                     }}
                     minRows={15}

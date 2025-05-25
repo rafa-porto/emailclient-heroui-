@@ -74,7 +74,7 @@ const mockEmails = [
   {
     id: "4",
     sender: "Slack",
-    avatarUrl: "https://i.pravatar.cc/150?u=slack", // Replace with actual Slack icon if available
+    avatarUrl: "/slack.svg", // Using the Slack SVG icon
     isBrand: true, // To handle brand icons differently if needed
     subject: "You've got 5 unread messages",
     snippet: "Your teams has sent you new messages...",

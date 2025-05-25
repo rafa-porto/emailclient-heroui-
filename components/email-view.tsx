@@ -15,8 +15,6 @@ import {
   XIcon,
 } from "lucide-react";
 
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-
 interface EmailViewProps {
   email: {
     id: string;
@@ -134,31 +132,43 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         </div>
 
         {/* Quick Reply Options */}
-        <div className="flex flex-wrap gap-2 py-4">
-          <HoverBorderGradient
-            containerClassName="rounded-full"
-            className="bg-gray-100 dark:bg-neutral-800 text-black dark:text-white flex items-center"
+        <div className="flex flex-wrap gap-3 py-4 px-1">
+          <Button
+            className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200/50 dark:border-blue-700/30 text-blue-700 dark:text-blue-300 hover:bg-gradient-to-r hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-800/30 dark:hover:to-indigo-800/30 transition-all duration-200 shadow-sm hover:shadow-md"
+            radius="full"
+            size="sm"
+            startContent={<PlusIcon size={14} />}
+            variant="flat"
             onClick={() =>
               handleQuickReply("Thank you for sharing the great news")
             }
           >
-            <div className="flex items-center px-3 py-1 text-sm">
-              <PlusIcon size={14} className="mr-1" />
-              <span>Thank you for sharing the great news</span>
-            </div>
-          </HoverBorderGradient>
-          <HoverBorderGradient
-            containerClassName="rounded-full"
-            className="bg-gray-100 dark:bg-neutral-800 text-black dark:text-white flex items-center"
+            Thank you for sharing the great news
+          </Button>
+
+          <Button
+            className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200/50 dark:border-green-700/30 text-green-700 dark:text-green-300 hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-800/30 dark:hover:to-emerald-800/30 transition-all duration-200 shadow-sm hover:shadow-md"
+            radius="full"
+            size="sm"
+            startContent={<PlusIcon size={14} />}
+            variant="flat"
             onClick={() =>
               handleQuickReply("I&apos;m available tomorrow at 1pm PST")
             }
           >
-            <div className="flex items-center px-3 py-1 text-sm">
-              <PlusIcon size={14} className="mr-1" />
-              <span>I&apos;m available tomorrow at 1pm PST</span>
-            </div>
-          </HoverBorderGradient>
+            I&apos;m available tomorrow at 1pm PST
+          </Button>
+
+          <Button
+            className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 border border-purple-200/50 dark:border-purple-700/30 text-purple-700 dark:text-purple-300 hover:bg-gradient-to-r hover:from-purple-100 hover:to-violet-100 dark:hover:from-purple-800/30 dark:hover:to-violet-800/30 transition-all duration-200 shadow-sm hover:shadow-md"
+            radius="full"
+            size="sm"
+            startContent={<PlusIcon size={14} />}
+            variant="flat"
+            onClick={() => handleQuickReply("Let me get back to you on this")}
+          >
+            Let me get back to you on this
+          </Button>
         </div>
 
         {/* Reply Composer */}
