@@ -206,6 +206,18 @@ Best regards,`;
                           input: "text-sm",
                         }}
                       />
+                      <Button
+                        isIconOnly
+                        size="sm"
+                        variant="light"
+                        onPress={() => {
+                          setShowCc(false);
+                          setCc("");
+                        }}
+                        className="text-gray-500 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-neutral-700 dark:hover:text-white"
+                      >
+                        <XIcon size={14} />
+                      </Button>
                     </div>
                   )}
 
@@ -226,6 +238,18 @@ Best regards,`;
                           input: "text-sm",
                         }}
                       />
+                      <Button
+                        isIconOnly
+                        size="sm"
+                        variant="light"
+                        onPress={() => {
+                          setShowBcc(false);
+                          setBcc("");
+                        }}
+                        className="text-gray-500 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-neutral-700 dark:hover:text-white"
+                      >
+                        <XIcon size={14} />
+                      </Button>
                     </div>
                   )}
 
