@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
+import { Textarea } from "@heroui/input";
 import { PaperclipIcon, MicIcon } from "lucide-react";
 
 interface AiPanelProps {
@@ -56,26 +56,27 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose }) => {
         {/* Input Field */}
         <div className="w-full max-w-lg mb-8">
           <div className="relative">
-            <Input
+            <Textarea
               placeholder="Type your message..."
               value={aiInput}
               onChange={(e) => setAiInput(e.target.value)}
               onKeyPress={handleKeyPress}
               variant="flat"
-              radius="full"
-              size="lg"
+              radius="lg"
+              minRows={3}
+              maxRows={8}
               classNames={{
-                base: "h-12",
-                mainWrapper: "h-12",
+                base: "min-h-[100px]",
+                mainWrapper: "min-h-[100px]",
                 inputWrapper:
-                  "h-12 bg-gray-100 dark:bg-neutral-800 border-0 shadow-sm",
-                input: "text-base h-full px-4",
+                  "min-h-[100px] bg-gray-100 dark:bg-neutral-800 border-0 shadow-sm py-3",
+                input: "text-base px-4 py-2 resize-none",
               }}
               startContent={
-                <div className="flex items-center justify-center w-8 h-8 ml-1">
+                <div className="flex items-start justify-center w-8 h-8 ml-1 mt-2">
                   <button
-                    type="button"
                     className="cursor-pointer hover:opacity-70 transition-opacity p-1 rounded-full"
+                    type="button"
                     onClick={handleAttachmentClick}
                   >
                     <PaperclipIcon
@@ -86,10 +87,10 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose }) => {
                 </div>
               }
               endContent={
-                <div className="flex items-center justify-center w-8 h-8 mr-1">
+                <div className="flex items-end justify-center w-8 h-8 mr-1 mb-2">
                   <button
-                    type="button"
                     className="cursor-pointer hover:opacity-70 transition-opacity p-1 rounded-full"
+                    type="button"
                     onClick={handleMicrophoneClick}
                   >
                     <MicIcon
