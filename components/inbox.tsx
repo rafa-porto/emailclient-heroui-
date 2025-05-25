@@ -1,10 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
-import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
+import {
+  SearchIcon,
+  Edit3Icon,
+  ChevronDownIcon,
+  StarIcon,
+  ArchiveIcon,
+  TrashIcon,
+  MoreVerticalIcon,
+} from "lucide-react";
 
 import EmailPanel from "@/components/email-panel";
 import AiPanel from "@/components/ai-panel";
@@ -90,6 +98,9 @@ const mockEmails = [
 
 interface EmailItemProps extends EmailData {
   onClick: (email: EmailData) => void;
+  onStar?: (id: string) => void;
+  onArchive?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 const EmailItem: React.FC<EmailItemProps> = ({
@@ -103,7 +114,32 @@ const EmailItem: React.FC<EmailItemProps> = ({
   read,
   isBrand,
   onClick,
+  onStar,
+  onArchive,
+  onDelete,
 }) => {
+  const [showActionPopup, setShowActionPopup] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        setShowActionPopup(false);
+      }
+    };
+
+    if (showActionPopup) {
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showActionPopup]);
+
   const handleClick = () => {
     onClick({
       id,
@@ -118,10 +154,16 @@ const EmailItem: React.FC<EmailItemProps> = ({
     });
   };
 
+  const handleActionClick = (e: React.MouseEvent, action: () => void) => {
+    e.stopPropagation();
+    action();
+    setShowActionPopup(false);
+  };
+
   return (
     <div
       aria-label={`Email from ${sender}: ${subject}`}
-      className={`flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
+      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
       role="button"
       tabIndex={0}
       onClick={handleClick}
@@ -145,9 +187,33 @@ const EmailItem: React.FC<EmailItemProps> = ({
           >
             {sender}
           </span>
-          <span className="text-xs text-gray-500 dark:text-neutral-500">
-            {timestamp}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500 dark:text-neutral-500">
+              {timestamp}
+            </span>
+            {/* Action Button */}
+            <div
+              role="button"
+              tabIndex={0}
+              className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-200 dark:hover:bg-neutral-700 transition-opacity cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowActionPopup(!showActionPopup);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowActionPopup(!showActionPopup);
+                }
+              }}
+            >
+              <MoreVerticalIcon
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                size={16}
+              />
+            </div>
+          </div>
         </div>
         <p
           className={`text-sm truncate ${!read ? "text-black dark:text-white font-semibold" : "text-gray-600 dark:text-neutral-500"}`}
@@ -158,6 +224,60 @@ const EmailItem: React.FC<EmailItemProps> = ({
           {snippet}
         </p>
       </div>
+
+      {/* Action Popup */}
+      {showActionPopup && (
+        <div
+          ref={popupRef}
+          className="absolute right-2 top-12 z-50 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg p-1 min-w-[120px]"
+        >
+          <div
+            role="button"
+            tabIndex={0}
+            className="flex items-center gap-2 w-full p-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded cursor-pointer"
+            onClick={(e) => handleActionClick(e, () => onStar?.(id))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleActionClick(e as any, () => onStar?.(id));
+              }
+            }}
+          >
+            <StarIcon size={16} />
+            Star
+          </div>
+          <div
+            role="button"
+            tabIndex={0}
+            className="flex items-center gap-2 w-full p-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded cursor-pointer"
+            onClick={(e) => handleActionClick(e, () => onArchive?.(id))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleActionClick(e as any, () => onArchive?.(id));
+              }
+            }}
+          >
+            <ArchiveIcon size={16} />
+            Archive
+          </div>
+          <div
+            role="button"
+            tabIndex={0}
+            className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
+            onClick={(e) => handleActionClick(e, () => onDelete?.(id))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleActionClick(e as any, () => onDelete?.(id));
+              }
+            }}
+          >
+            <TrashIcon size={16} />
+            Delete
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -173,6 +293,18 @@ const Inbox = () => {
 
   const handleCloseEmailView = () => {
     setSelectedEmail(null);
+  };
+
+  const handleStarEmail = (_id: string) => {
+    // Implementar lógica para favoritar
+  };
+
+  const handleArchiveEmail = (_id: string) => {
+    // Implementar lógica para arquivar
+  };
+
+  const handleDeleteEmail = (_id: string) => {
+    // Implementar lógica para excluir
   };
 
   return (
@@ -270,7 +402,14 @@ const Inbox = () => {
         >
           <div className="flex-grow overflow-y-auto px-1">
             {mockEmails.map((email) => (
-              <EmailItem key={email.id} {...email} onClick={handleEmailClick} />
+              <EmailItem
+                key={email.id}
+                {...email}
+                onArchive={handleArchiveEmail}
+                onClick={handleEmailClick}
+                onDelete={handleDeleteEmail}
+                onStar={handleStarEmail}
+              />
             ))}
           </div>
         </div>
