@@ -308,9 +308,9 @@ const Inbox = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white">
+    <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white p-4">
       {/* Header - Fixed at the top */}
-      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pb-2 px-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90">
+      <div className="sticky top-0 z-10 flex items-center justify-between pt-2 pb-2 px-4 mb-4 backdrop-blur-sm bg-white/90 dark:bg-neutral-950/90 rounded-lg">
         {/* Left buttons */}
         <div className="flex items-center space-x-2">
           <Button
@@ -389,7 +389,7 @@ const Inbox = () => {
       </div>
 
       {/* Content Area */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden px-2">
         {/* Email List Section */}
         <div
           className={`flex flex-col ${
@@ -400,7 +400,7 @@ const Inbox = () => {
                 : "w-full"
           } transition-all duration-300`}
         >
-          <div className="flex-grow overflow-y-auto px-1">
+          <div className="flex-grow overflow-y-auto px-2">
             {mockEmails.map((email) => (
               <EmailItem
                 key={email.id}

@@ -33,9 +33,13 @@ import { siteConfig } from "@/config/site";
 
 interface SidebarProps {
   userEmail?: string;
+  loginProvider?: "gmail" | "outlook" | "apple" | "microsoft";
 }
 
-const Sidebar = ({ userEmail = "user@example.com" }: SidebarProps) => {
+const Sidebar = ({
+  userEmail = "user@example.com",
+  loginProvider: _loginProvider,
+}: SidebarProps) => {
   const userName = userEmail ? userEmail.split("@")[0] : "User";
   const router = useRouter();
 
@@ -44,7 +48,7 @@ const Sidebar = ({ userEmail = "user@example.com" }: SidebarProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full w-64 bg-gray-100 dark:bg-neutral-900 p-3 space-y-4 border-r border-gray-200 dark:border-neutral-800">
+    <div className="flex flex-col h-full w-64 bg-gray-50 dark:bg-neutral-900 p-4 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">

@@ -44,11 +44,13 @@ export default function DashboardLayout({
   }, [searchParams]);
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="h-screen w-full bg-gray-50 dark:bg-neutral-900 flex">
       <Sidebar loginProvider={loginProvider} userEmail={userEmail} />
-      <main className="flex-1 bg-white dark:bg-black w-full overflow-hidden">
-        {children}
-      </main>
+      <div className="flex-1 p-4">
+        <main className="h-full w-full bg-white dark:bg-black rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-neutral-800">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
