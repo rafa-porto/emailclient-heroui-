@@ -6,10 +6,11 @@ import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
 import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
 
-import EmailView from "@/components/email-view";
+import EmailPanel from "@/components/email-panel";
 import AiPanel from "@/components/ai-panel";
 import ComposeModal from "@/components/compose-modal";
 import { AIIcon } from "@/components/icons";
+import { EmailData } from "@/types";
 
 // Mock data for emails - we'll refine this later
 const mockEmails = [
@@ -87,17 +88,8 @@ const mockEmails = [
   },
 ];
 
-interface EmailItemProps {
-  id: string;
-  sender: string;
-  avatarUrl: string;
-  subject: string;
-  snippet: string;
-  content: string;
-  timestamp: string;
-  read: boolean;
-  isBrand?: boolean;
-  onClick: (email: Omit<EmailItemProps, "onClick">) => void;
+interface EmailItemProps extends EmailData {
+  onClick: (email: EmailData) => void;
 }
 
 const EmailItem: React.FC<EmailItemProps> = ({
@@ -171,14 +163,11 @@ const EmailItem: React.FC<EmailItemProps> = ({
 };
 
 const Inbox = () => {
-  const [selectedEmail, setSelectedEmail] = useState<Omit<
-    EmailItemProps,
-    "onClick"
-  > | null>(null);
+  const [selectedEmail, setSelectedEmail] = useState<EmailData | null>(null);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false);
 
-  const handleEmailClick = (email: Omit<EmailItemProps, "onClick">) => {
+  const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
   };
 
@@ -286,14 +275,12 @@ const Inbox = () => {
           </div>
         </div>
 
-        {/* Email View Section */}
-        {selectedEmail && (
-          <div
-            className={`${isAiPanelOpen ? "w-1/3" : "w-1/2"} transition-all duration-300`}
-          >
-            <EmailView email={selectedEmail} onClose={handleCloseEmailView} />
-          </div>
-        )}
+        {/* Email Panel */}
+        <EmailPanel
+          isAiPanelOpen={isAiPanelOpen}
+          selectedEmail={selectedEmail}
+          onClose={handleCloseEmailView}
+        />
 
         {/* AI Panel */}
         {isAiPanelOpen && (

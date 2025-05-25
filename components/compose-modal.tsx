@@ -7,6 +7,8 @@ import { Input, Textarea } from "@heroui/input";
 import { Chip } from "@heroui/chip";
 import { SendIcon, PaperclipIcon, XIcon } from "lucide-react";
 
+import { AIIcon } from "@/components/icons";
+
 interface ComposeModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -56,6 +58,18 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
       e.preventDefault();
       handleAddRecipient(to.trim());
     }
+  };
+
+  // Função para gerar conteúdo com AI
+  const handleGenerateContent = () => {
+    // Implementar lógica de geração de conteúdo com AI
+    // Por exemplo, baseado no assunto ou recipient
+    const generatedContent = `Hello,
+
+I hope this email finds you well.
+
+Best regards,`;
+    setContent(generatedContent);
   };
 
   return (
@@ -249,6 +263,15 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       className="text-gray-600 dark:text-neutral-400"
                     >
                       Save Draft
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="light"
+                      startContent={<AIIcon size={16} />}
+                      onPress={handleGenerateContent}
+                      className="text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                    >
+                      Generate
                     </Button>
                   </div>
 
