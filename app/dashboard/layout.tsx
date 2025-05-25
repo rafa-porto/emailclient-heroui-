@@ -46,7 +46,7 @@ export default function DashboardLayout({
   return (
     <div className="h-screen w-full bg-gray-50 dark:bg-neutral-900 flex">
       <Sidebar loginProvider={loginProvider} userEmail={userEmail} />
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-2">
         <main className="h-full w-full bg-white dark:bg-black rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-neutral-800">
           {children}
         </main>

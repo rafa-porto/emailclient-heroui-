@@ -48,7 +48,7 @@ const Sidebar = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-64 bg-gray-50 dark:bg-neutral-900 p-4 space-y-4">
+    <div className="flex flex-col h-full w-64 bg-gray-50 dark:bg-neutral-900 p-3 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
