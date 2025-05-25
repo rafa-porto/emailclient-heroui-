@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
-import { SearchIcon, Edit3Icon, ChevronDownIcon, BotIcon } from "lucide-react";
+import { SearchIcon, Edit3Icon, ChevronDownIcon } from "lucide-react";
 
 import EmailView from "@/components/email-view";
 import AiPanel from "@/components/ai-panel";
+import { AIIcon } from "@/components/icons";
 
 // Mock data for emails - we'll refine this later
 const mockEmails = [
@@ -247,6 +248,7 @@ const Inbox = () => {
             Compose
           </Button>
           <Button
+            isIconOnly
             className={`${
               isAiPanelOpen
                 ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50"
@@ -254,11 +256,10 @@ const Inbox = () => {
             } transition-colors`}
             radius="lg"
             size="sm"
-            startContent={<BotIcon size={16} />}
             variant="flat"
             onPress={() => setIsAiPanelOpen(!isAiPanelOpen)}
           >
-            AI
+            <AIIcon size={16} />
           </Button>
         </div>
       </div>
