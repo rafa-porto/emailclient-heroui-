@@ -174,6 +174,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
     >
       <Avatar
         className="mr-3 flex-shrink-0"
+        classNames={{
+          base: "bg-transparent",
+        }}
         name={sender}
         size="md"
         src={avatarUrl}

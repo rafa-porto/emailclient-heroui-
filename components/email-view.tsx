@@ -110,6 +110,9 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         <div className="py-3 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-3 mb-4">
           <Avatar
             className="mr-3"
+            classNames={{
+              base: "bg-transparent",
+            }}
             name={email.sender}
             size="md"
             src={email.avatarUrl}
@@ -175,7 +178,15 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
       {/* Reply Composer - Fixed Footer */}
       <div className="bg-gray-50/80 dark:bg-neutral-900/60 rounded-xl p-4 m-4 backdrop-blur-sm flex-shrink-0">
         <div className="flex items-start">
-          <Avatar className="mr-3 mt-1" color="primary" name="E" size="sm" />
+          <Avatar
+            className="mr-3 mt-1"
+            classNames={{
+              base: "bg-transparent",
+            }}
+            color="primary"
+            name="E"
+            size="sm"
+          />
           <div className="flex-1">
             <Input
               fullWidth
