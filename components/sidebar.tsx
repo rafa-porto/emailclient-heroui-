@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@heroui/button";
+import { Card, CardBody } from "@heroui/card";
 import {
   Dropdown,
   DropdownItem,
@@ -8,22 +9,19 @@ import {
 } from "@heroui/dropdown";
 import {
   AlertOctagonIcon,
-  CalendarIcon,
   CheckIcon,
   ChevronDownIcon,
   ClockIcon,
-  DollarSignIcon,
+  CrownIcon,
+  DatabaseIcon,
   FileTextIcon,
+  HardDriveIcon,
   InboxIcon,
   LogOutIcon,
-  NewspaperIcon,
-  PlusIcon,
   SendIcon,
-  ShoppingCartIcon,
   StarIcon,
-  TagIcon,
   Trash2Icon,
-  UsersIcon,
+  ZapIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Avatar } from "@heroui/avatar";
@@ -48,9 +46,9 @@ const Sidebar = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-64 bg-gray-50 dark:bg-neutral-900 p-3 space-y-3 overflow-hidden flex-shrink-0">
+    <div className="flex flex-col h-full w-64 bg-gray-50 dark:bg-neutral-900 p-3 space-y-3 overflow-y-auto flex-shrink-0">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-shrink-0">
         <div className="flex items-center space-x-2">
           {/* Updated logo to match navbar */}
           <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold">
@@ -62,7 +60,7 @@ const Sidebar = ({
       </div>
 
       {/* User Info with Enhanced Dropdown */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 shadow-sm border border-gray-200 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 shadow-sm border border-gray-200 dark:border-neutral-700 flex-shrink-0">
         <Dropdown>
           <DropdownTrigger>
             <Button
@@ -106,7 +104,7 @@ const Sidebar = ({
       </div>
 
       {/* Main Navigation */}
-      <nav className="space-y-0.5">
+      <nav className="space-y-0.5 flex-shrink-0">
         <Button
           className="w-full justify-start"
           size="sm"
@@ -184,67 +182,86 @@ const Sidebar = ({
         </Button>
       </nav>
 
-      {/* Labels */}
-      <div className="space-y-1">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold uppercase text-gray-500 dark:text-neutral-400">
-            Labels
-          </h3>
-          <Button isIconOnly size="sm" variant="light">
-            <PlusIcon size={16} />
-          </Button>
-        </div>
-        <nav className="space-y-0.5">
-          <Button
-            className="w-full justify-start"
-            size="sm"
-            startContent={<CalendarIcon size={16} />}
-            variant="light"
-          >
-            Calendar
-          </Button>
-          <Button
-            className="w-full justify-start"
-            size="sm"
-            startContent={<DollarSignIcon size={16} />}
-            variant="light"
-          >
-            Finance
-          </Button>
-          <Button
-            className="w-full justify-start"
-            size="sm"
-            startContent={<UsersIcon size={16} />}
-            variant="light"
-          >
-            Forums
-          </Button>
-          <Button
-            className="w-full justify-start"
-            size="sm"
-            startContent={<NewspaperIcon size={16} />}
-            variant="light"
-          >
-            Newsletters
-          </Button>
-          <Button
-            className="w-full justify-start"
-            size="sm"
-            startContent={<TagIcon size={16} />}
-            variant="light"
-          >
-            Promotions
-          </Button>
-          <Button
-            className="w-full justify-start"
-            size="sm"
-            startContent={<ShoppingCartIcon size={16} />}
-            variant="light"
-          >
-            Purchases
-          </Button>
-        </nav>
-      </div>
+      {/* Spacer to push cards to bottom */}
+      <div className="flex-1"></div>
+
+      {/* Upgrade Card */}
+      <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border border-purple-200/50 dark:border-purple-800/50">
+        <CardBody className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <div className="p-2 bg-gradient-to-br from-purple-500/10 to-pink-500/10 dark:from-purple-400/10 dark:to-pink-400/10 rounded-lg">
+                <CrownIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-purple-900 dark:text-purple-100">
+                  Upgrade
+                </h3>
+                <p className="text-xs text-purple-600 dark:text-purple-300">
+                  Get Pro features
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-1 text-xs text-purple-700 dark:text-purple-200">
+              <ZapIcon className="w-3 h-3" />
+              <span>AI-powered organization</span>
+            </div>
+            <div className="flex items-center space-x-1 text-xs text-purple-700 dark:text-purple-200">
+              <DatabaseIcon className="w-3 h-3" />
+              <span>100 GB storage</span>
+            </div>
+            <Button
+              className="w-full mt-3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20 text-purple-700 dark:text-purple-300 border-0"
+              size="sm"
+              variant="flat"
+            >
+              Upgrade Now
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
+
+      {/* Storage Card */}
+      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/50 border border-blue-200/50 dark:border-blue-800/50">
+        <CardBody className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <div className="p-2 bg-blue-500/10 dark:bg-blue-400/10 rounded-lg">
+                <HardDriveIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-100">
+                  Storage
+                </h3>
+                <p className="text-xs text-blue-600 dark:text-blue-300">
+                  4.2 GB used
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs text-blue-700 dark:text-blue-200">
+              <span>4.2 GB of 15 GB used</span>
+              <span>28%</span>
+            </div>
+            <div className="w-full bg-blue-200/50 dark:bg-blue-800/30 rounded-full h-2">
+              <div
+                className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: "28%" }}
+              />
+            </div>
+            <Button
+              className="w-full mt-3 bg-blue-500/10 hover:bg-blue-500/20 text-blue-700 dark:text-blue-300 border-0"
+              size="sm"
+              variant="flat"
+            >
+              Manage Storage
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
     </div>
   );
 };
