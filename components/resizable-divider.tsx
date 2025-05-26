@@ -84,18 +84,6 @@ const ResizableDivider: React.FC<ResizableDividerProps> = ({
       onDoubleClick={onDoubleClick}
       onMouseDown={handleMouseDown}
     >
-      {/* Visual indicator line */}
-      <div
-        className={`
-          ${
-            orientation === "vertical"
-              ? "absolute top-0 left-1/2 transform -translate-x-1/2 w-px h-full"
-              : "absolute left-0 top-1/2 transform -translate-y-1/2 h-px w-full"
-          }
-          bg-gray-300 dark:bg-neutral-600 group-hover:bg-blue-500 transition-colors duration-150
-        `}
-      />
-
       {/* Hover indicator */}
       <div
         className={`

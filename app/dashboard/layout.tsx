@@ -93,7 +93,7 @@ function DashboardContent({
               onResize={handleEmailPanelResize}
             />
             <div
-              className="bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0 ml-2 min-w-0"
+              className="bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0 ml-1 min-w-0"
               style={{
                 width: `${emailPanelWidth}px`,
                 minWidth: `${Math.max(280, window.innerWidth * 0.2)}px`,
@@ -116,7 +116,7 @@ function DashboardContent({
               onResize={handleAiPanelResize}
             />
             <div
-              className="bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0 ml-2 min-w-0"
+              className="bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0 ml-1 min-w-0"
               style={{
                 width: `${aiPanelWidth}px`,
                 minWidth: `${Math.max(280, window.innerWidth * 0.2)}px`,
