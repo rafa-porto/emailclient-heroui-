@@ -14,9 +14,7 @@ import {
   MoreVerticalIcon,
 } from "lucide-react";
 
-import EmailPanel from "@/components/email-panel";
-import AiPanel from "@/components/ai-panel";
-import ComposeModal from "@/components/compose-modal";
+import { useEmailContext } from "@/components/email-context";
 import { AIIcon } from "@/components/icons";
 import { EmailData } from "@/types";
 
@@ -193,9 +191,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
             </span>
             {/* Action Button */}
             <div
+              className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-200 dark:hover:bg-neutral-700 transition-opacity cursor-pointer"
               role="button"
               tabIndex={0}
-              className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-200 dark:hover:bg-neutral-700 transition-opacity cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowActionPopup(!showActionPopup);
@@ -232,9 +230,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
           className="absolute right-2 top-12 z-50 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg p-1 min-w-[120px]"
         >
           <div
+            className="flex items-center gap-2 w-full p-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded cursor-pointer"
             role="button"
             tabIndex={0}
-            className="flex items-center gap-2 w-full p-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded cursor-pointer"
             onClick={(e) => handleActionClick(e, () => onStar?.(id))}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -247,9 +245,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
             Star
           </div>
           <div
+            className="flex items-center gap-2 w-full p-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded cursor-pointer"
             role="button"
             tabIndex={0}
-            className="flex items-center gap-2 w-full p-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-700 rounded cursor-pointer"
             onClick={(e) => handleActionClick(e, () => onArchive?.(id))}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -262,9 +260,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
             Archive
           </div>
           <div
+            className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
             role="button"
             tabIndex={0}
-            className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
             onClick={(e) => handleActionClick(e, () => onDelete?.(id))}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -283,16 +281,15 @@ const EmailItem: React.FC<EmailItemProps> = ({
 };
 
 const Inbox = () => {
-  const [selectedEmail, setSelectedEmail] = useState<EmailData | null>(null);
-  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
-  const [isComposeModalOpen, setIsComposeModalOpen] = useState(false);
+  const {
+    setSelectedEmail,
+    isAiPanelOpen,
+    setIsAiPanelOpen,
+    setIsComposeModalOpen,
+  } = useEmailContext();
 
   const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
-  };
-
-  const handleCloseEmailView = () => {
-    setSelectedEmail(null);
   };
 
   const handleStarEmail = (_id: string) => {
@@ -340,27 +337,19 @@ const Inbox = () => {
                 mainWrapper: "h-10",
                 input: "pl-10 text-sm",
                 inputWrapper:
-                  "h-10 bg-gray-50 dark:bg-neutral-900 border-2 border-gray-200 dark:border-neutral-800 rounded-lg shadow-sm",
+                  "bg-gray-100 dark:bg-neutral-800/60 hover:bg-gray-200 dark:hover:bg-neutral-800/80 border-0 focus-within:border-1 focus-within:border-blue-500",
               }}
-              placeholder="Search emails, contacts, labels"
+              placeholder="Search..."
               radius="lg"
-              size="sm"
-              startContent={
-                <div className="ml-3">
-                  <SearchIcon
-                    className="text-gray-400 dark:text-neutral-500"
-                    size={18}
-                  />
-                </div>
-              }
+              startContent={<SearchIcon className="text-gray-400" size={20} />}
               type="search"
               variant="flat"
             />
           </div>
         </div>
 
-        {/* Right buttons */}
-        <div className="flex items-center gap-2">
+        {/* Right action buttons */}
+        <div className="flex items-center space-x-2">
           <Button
             className="bg-gray-100 dark:bg-neutral-800/60 text-black dark:text-neutral-200 hover:bg-gray-200 dark:hover:bg-neutral-800 transition-colors"
             radius="lg"
@@ -388,54 +377,21 @@ const Inbox = () => {
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="flex flex-1 overflow-hidden px-2">
-        {/* Email List Section */}
-        <div
-          className={`flex flex-col ${
-            selectedEmail && isAiPanelOpen
-              ? "w-1/3"
-              : selectedEmail || isAiPanelOpen
-                ? "w-1/2"
-                : "w-full"
-          } transition-all duration-300`}
-        >
-          <div className="flex-grow overflow-y-auto px-2">
-            {mockEmails.map((email) => (
-              <EmailItem
-                key={email.id}
-                {...email}
-                onArchive={handleArchiveEmail}
-                onClick={handleEmailClick}
-                onDelete={handleDeleteEmail}
-                onStar={handleStarEmail}
-              />
-            ))}
-          </div>
+      {/* Email List - Full width */}
+      <div className="flex-1 overflow-hidden px-2">
+        <div className="h-full overflow-y-auto px-2">
+          {mockEmails.map((email) => (
+            <EmailItem
+              key={email.id}
+              {...email}
+              onArchive={handleArchiveEmail}
+              onClick={handleEmailClick}
+              onDelete={handleDeleteEmail}
+              onStar={handleStarEmail}
+            />
+          ))}
         </div>
-
-        {/* Email Panel */}
-        <EmailPanel
-          isAiPanelOpen={isAiPanelOpen}
-          selectedEmail={selectedEmail}
-          onClose={handleCloseEmailView}
-        />
-
-        {/* AI Panel */}
-        {isAiPanelOpen && (
-          <div
-            className={`${selectedEmail ? "w-1/3" : "w-1/2"} transition-all duration-300`}
-          >
-            <AiPanel onClose={() => setIsAiPanelOpen(false)} />
-          </div>
-        )}
       </div>
-
-      {/* Compose Modal */}
-      <ComposeModal
-        isOpen={isComposeModalOpen}
-        onClose={() => setIsComposeModalOpen(false)}
-      />
     </div>
   );
 };

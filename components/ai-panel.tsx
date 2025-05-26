@@ -9,7 +9,7 @@ interface AiPanelProps {
   onClose: () => void;
 }
 
-const AiPanel: React.FC<AiPanelProps> = ({ onClose }) => {
+const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
   const [aiInput, setAiInput] = useState("");
 
   const handleSendMessage = () => {
@@ -40,7 +40,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="h-full bg-white dark:bg-neutral-950 flex flex-col border-l border-gray-200 dark:border-neutral-800 rounded-xl">
+    <div className="h-full flex flex-col">
       {/* Content */}
       <div className="flex-1 flex flex-col justify-center items-center px-6 py-12">
         {/* Main Question */}
@@ -57,35 +57,13 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose }) => {
         <div className="w-full max-w-lg mb-8">
           <div className="relative">
             <Textarea
-              placeholder="Type your message..."
-              value={aiInput}
-              onChange={(e) => setAiInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              variant="flat"
-              radius="lg"
-              minRows={3}
-              maxRows={8}
               classNames={{
                 base: "min-h-[100px]",
-                mainWrapper: "min-h-[100px]",
+                input: "text-base px-4 py-2 resize-none",
                 inputWrapper:
                   "min-h-[100px] bg-gray-100 dark:bg-neutral-800 border-0 shadow-sm py-3",
-                input: "text-base px-4 py-2 resize-none",
+                mainWrapper: "min-h-[100px]",
               }}
-              startContent={
-                <div className="flex items-start justify-center w-8 h-8 ml-1 mt-2">
-                  <button
-                    className="cursor-pointer hover:opacity-70 transition-opacity p-1 rounded-full"
-                    type="button"
-                    onClick={handleAttachmentClick}
-                  >
-                    <PaperclipIcon
-                      className="text-gray-400 dark:text-neutral-500"
-                      size={16}
-                    />
-                  </button>
-                </div>
-              }
               endContent={
                 <div className="flex items-end justify-center w-8 h-8 mr-1 mb-2">
                   <button
@@ -100,6 +78,28 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose }) => {
                   </button>
                 </div>
               }
+              maxRows={8}
+              minRows={3}
+              placeholder="Type your message..."
+              radius="lg"
+              startContent={
+                <div className="flex items-start justify-center w-8 h-8 ml-1 mt-2">
+                  <button
+                    className="cursor-pointer hover:opacity-70 transition-opacity p-1 rounded-full"
+                    type="button"
+                    onClick={handleAttachmentClick}
+                  >
+                    <PaperclipIcon
+                      className="text-gray-400 dark:text-neutral-500"
+                      size={16}
+                    />
+                  </button>
+                </div>
+              }
+              value={aiInput}
+              variant="flat"
+              onChange={(e) => setAiInput(e.target.value)}
+              onKeyPress={handleKeyPress}
             />
           </div>
         </div>

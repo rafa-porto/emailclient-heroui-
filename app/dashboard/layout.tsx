@@ -4,6 +4,86 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import Sidebar from "@/components/sidebar";
+import EmailPanel from "@/components/email-panel";
+import AiPanel from "@/components/ai-panel";
+import ComposeModal from "@/components/compose-modal";
+import { EmailProvider, useEmailContext } from "@/components/email-context";
+
+function DashboardContent({
+  children,
+  userEmail,
+  loginProvider,
+}: {
+  children: React.ReactNode;
+  userEmail: string;
+  loginProvider: "gmail" | "outlook" | "apple" | "microsoft" | undefined;
+}) {
+  const {
+    selectedEmail,
+    isAiPanelOpen,
+    setSelectedEmail,
+    setIsAiPanelOpen,
+    isComposeModalOpen,
+    setIsComposeModalOpen,
+  } = useEmailContext();
+
+  const handleCloseEmailView = () => {
+    setSelectedEmail(null);
+  };
+
+  return (
+    <div className="h-screen w-full bg-gray-50 dark:bg-neutral-900 flex">
+      <Sidebar loginProvider={loginProvider} userEmail={userEmail} />
+
+      {/* Main Content Area */}
+      <div className="flex-1 p-2 flex gap-2 h-full">
+        {/* Inbox Container */}
+        <div
+          className={`bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden transition-all duration-300 h-full ${
+            selectedEmail && isAiPanelOpen
+              ? "flex-1"
+              : selectedEmail || isAiPanelOpen
+                ? "flex-1"
+                : "w-full"
+          }`}
+        >
+          {children}
+        </div>
+
+        {/* Email Panel */}
+        {selectedEmail && (
+          <div
+            className={`${
+              isAiPanelOpen ? "w-80" : "w-96"
+            } transition-all duration-300 bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0`}
+          >
+            <EmailPanel
+              selectedEmail={selectedEmail}
+              onClose={handleCloseEmailView}
+            />
+          </div>
+        )}
+
+        {/* AI Panel */}
+        {isAiPanelOpen && (
+          <div
+            className={`${
+              selectedEmail ? "w-80" : "w-96"
+            } transition-all duration-300 bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0`}
+          >
+            <AiPanel onClose={() => setIsAiPanelOpen(false)} />
+          </div>
+        )}
+      </div>
+
+      {/* Compose Modal */}
+      <ComposeModal
+        isOpen={isComposeModalOpen}
+        onClose={() => setIsComposeModalOpen(false)}
+      />
+    </div>
+  );
+}
 
 export default function DashboardLayout({
   children,
@@ -44,13 +124,10 @@ export default function DashboardLayout({
   }, [searchParams]);
 
   return (
-    <div className="h-screen w-full bg-gray-50 dark:bg-neutral-900 flex">
-      <Sidebar loginProvider={loginProvider} userEmail={userEmail} />
-      <div className="flex-1 p-2">
-        <main className="h-full w-full bg-white dark:bg-black rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-neutral-800">
-          {children}
-        </main>
-      </div>
-    </div>
+    <EmailProvider>
+      <DashboardContent loginProvider={loginProvider} userEmail={userEmail}>
+        {children}
+      </DashboardContent>
+    </EmailProvider>
   );
 }
