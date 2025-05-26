@@ -55,9 +55,9 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between bg-gray-50 dark:bg-neutral-900/50 px-4 py-3">
+      <div className="flex items-center justify-between bg-gray-50 dark:bg-neutral-900/50 px-4 py-3 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Button
             isIconOnly
@@ -98,7 +98,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4">
+      <div className="flex-1 overflow-y-auto px-4 min-h-0">
         {/* Email Subject */}
         <div className="py-4">
           <h2 className="text-xl font-semibold text-black dark:text-white">
@@ -170,66 +170,66 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
             Let me get back to you on this
           </Button>
         </div>
+      </div>
 
-        {/* Reply Composer */}
-        <div className="bg-gray-50/80 dark:bg-neutral-900/60 rounded-xl p-4 mb-4 mx-2 backdrop-blur-sm">
-          <div className="flex items-start">
-            <Avatar className="mr-3 mt-1" color="primary" name="E" size="sm" />
-            <div className="flex-1">
-              <Input
-                fullWidth
-                classNames={{
-                  inputWrapper:
-                    "bg-white/50 dark:bg-neutral-800/50 border-none shadow-none rounded-lg",
-                  input: "min-h-[80px]",
-                }}
-                placeholder="Compose a draft and ask me to improve it..."
-                radius="lg"
-                size="sm"
-                value={replyText}
-                variant="flat"
-                onChange={(e) => setReplyText(e.target.value)}
-              />
-            </div>
+      {/* Reply Composer - Fixed Footer */}
+      <div className="bg-gray-50/80 dark:bg-neutral-900/60 rounded-xl p-4 m-4 backdrop-blur-sm flex-shrink-0">
+        <div className="flex items-start">
+          <Avatar className="mr-3 mt-1" color="primary" name="E" size="sm" />
+          <div className="flex-1">
+            <Input
+              fullWidth
+              classNames={{
+                inputWrapper:
+                  "bg-white/50 dark:bg-neutral-800/50 border-none shadow-none rounded-lg",
+                input: "min-h-[80px]",
+              }}
+              placeholder="Compose a draft and ask me to improve it..."
+              radius="lg"
+              size="sm"
+              value={replyText}
+              variant="flat"
+              onChange={(e) => setReplyText(e.target.value)}
+            />
           </div>
-          <div className="flex justify-between mt-2">
-            <div className="flex items-center gap-2">
-              <Button
-                isIconOnly
-                className="text-gray-500 dark:text-neutral-400"
-                size="sm"
-                variant="light"
-              >
-                <PaperclipIcon size={16} />
-              </Button>
-              <Button
-                isIconOnly
-                className="text-gray-500 dark:text-neutral-400"
-                size="sm"
-                variant="light"
-              >
-                <MicIcon size={16} />
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                className="text-primary"
-                size="sm"
-                variant="light"
-                onPress={handleSuggestReply}
-              >
-                Suggest a reply
-              </Button>
-              <Button
-                color="primary"
-                endContent={<SendIcon size={14} />}
-                isDisabled={!replyText.trim()}
-                size="sm"
-                onPress={handleSendReply}
-              >
-                Send
-              </Button>
-            </div>
+        </div>
+        <div className="flex justify-between mt-2">
+          <div className="flex items-center gap-2">
+            <Button
+              isIconOnly
+              className="text-gray-500 dark:text-neutral-400"
+              size="sm"
+              variant="light"
+            >
+              <PaperclipIcon size={16} />
+            </Button>
+            <Button
+              isIconOnly
+              className="text-gray-500 dark:text-neutral-400"
+              size="sm"
+              variant="light"
+            >
+              <MicIcon size={16} />
+            </Button>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              className="text-primary"
+              size="sm"
+              variant="light"
+              onPress={handleSuggestReply}
+            >
+              Suggest a reply
+            </Button>
+            <Button
+              color="primary"
+              endContent={<SendIcon size={14} />}
+              isDisabled={!replyText.trim()}
+              size="sm"
+              onPress={handleSendReply}
+            >
+              Send
+            </Button>
           </div>
         </div>
       </div>

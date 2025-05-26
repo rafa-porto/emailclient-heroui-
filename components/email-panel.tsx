@@ -23,14 +23,16 @@ const EmailPanel: React.FC<EmailPanelProps> = ({
   }
 
   return (
-    <div className={`h-full transition-all duration-300 ${className}`}>
+    <div className={`h-full overflow-hidden ${className}`}>
       <div className="h-full flex flex-col">
         {isLoading ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
           </div>
         ) : (
-          <EmailView email={selectedEmail} onClose={onClose} />
+          <div className="flex-1 overflow-hidden">
+            <EmailView email={selectedEmail} onClose={onClose} />
+          </div>
         )}
       </div>
     </div>

@@ -40,9 +40,9 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Content */}
-      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12">
+      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 overflow-y-auto min-h-0">
         {/* Main Question */}
         <div className="text-center mb-12">
           <h4 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
