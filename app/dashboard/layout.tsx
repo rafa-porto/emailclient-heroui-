@@ -39,12 +39,10 @@ function DashboardContent({
       <div className="flex-1 p-2 flex gap-2 h-full">
         {/* Inbox Container */}
         <div
-          className={`bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden transition-all duration-300 h-full ${
-            selectedEmail && isAiPanelOpen
+          className={`bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden transition-width duration-300 ease-in-out h-full ${
+            selectedEmail || isAiPanelOpen // Simplified condition
               ? "flex-1"
-              : selectedEmail || isAiPanelOpen
-                ? "flex-1"
-                : "w-full"
+              : "w-full"
           }`}
         >
           {children}
@@ -55,7 +53,7 @@ function DashboardContent({
           <div
             className={`${
               isAiPanelOpen ? "w-80" : "w-96"
-            } transition-all duration-300 bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0`}
+            } transition-width duration-300 ease-in-out bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0`}
           >
             <EmailPanel
               selectedEmail={selectedEmail}
@@ -69,7 +67,7 @@ function DashboardContent({
           <div
             className={`${
               selectedEmail ? "w-80" : "w-96"
-            } transition-all duration-300 bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0`}
+            } transition-width duration-300 ease-in-out bg-white dark:bg-black rounded-2xl shadow-xl border border-gray-200 dark:border-neutral-800 overflow-hidden h-full flex-shrink-0`}
           >
             <AiPanel onClose={() => setIsAiPanelOpen(false)} />
           </div>
