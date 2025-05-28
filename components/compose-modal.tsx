@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 import { Button } from "@heroui/button";
-import { Input, Textarea } from "@heroui/input";
+import { Input } from "@heroui/input";
 import { Chip } from "@heroui/chip";
 import {
   SendIcon,
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { AIIcon } from "@/components/icons";
+import RichTextEditor from "@/components/rich-text-editor";
 
 interface ComposeModalProps {
   isOpen: boolean;
@@ -72,11 +73,8 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
   const handleGenerateContent = () => {
     // Implementar lógica de geração de conteúdo com AI
     // Por exemplo, baseado no assunto ou recipient
-    const generatedContent = `Hello,
+    const generatedContent = `<p>Hello,</p><p><br></p><p>I hope this email finds you well.</p><p><br></p><p>Best regards,</p>`;
 
-I hope this email finds you well.
-
-Best regards,`;
     setContent(generatedContent);
   };
 
@@ -307,18 +305,12 @@ Best regards,`;
 
                 {/* Message Content */}
                 <div className="flex-1 flex flex-col">
-                  <Textarea
-                    placeholder="Compose your message..."
+                  <RichTextEditor
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    variant="flat"
-                    classNames={{
-                      base: "h-full",
-                      inputWrapper:
-                        "bg-transparent border-none shadow-none h-full hover:bg-transparent focus:bg-transparent data-[hover=true]:bg-transparent data-[focus=true]:bg-transparent",
-                      input: "h-full resize-none text-sm leading-relaxed",
-                    }}
-                    minRows={15}
+                    onChange={setContent}
+                    placeholder="Compose your message..."
+                    height={isExpanded ? "calc(100vh - 400px)" : "350px"}
+                    className="h-full"
                   />
                 </div>
 
