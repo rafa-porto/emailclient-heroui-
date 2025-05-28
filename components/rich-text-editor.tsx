@@ -53,6 +53,29 @@ export const RichTextEditor = forwardRef<
     ref
   ) => {
     const editorRef = useRef<HTMLDivElement>(null);
+    const [activeFormats, setActiveFormats] = useState<Set<string>>(new Set());
+
+    // Função para verificar formatação ativa
+    const checkActiveFormats = useCallback(() => {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+
+      const formats = new Set<string>();
+
+      if (document.queryCommandState("bold")) formats.add("bold");
+      if (document.queryCommandState("italic")) formats.add("italic");
+      if (document.queryCommandState("underline")) formats.add("underline");
+      if (document.queryCommandState("insertUnorderedList"))
+        formats.add("bulletList");
+      if (document.queryCommandState("insertOrderedList"))
+        formats.add("numberedList");
+      if (document.queryCommandState("justifyLeft")) formats.add("alignLeft");
+      if (document.queryCommandState("justifyCenter"))
+        formats.add("alignCenter");
+      if (document.queryCommandState("justifyRight")) formats.add("alignRight");
+
+      setActiveFormats(formats);
+    }, []);
 
     // Exposição de métodos através da ref
     useImperativeHandle(ref, () => ({
@@ -89,13 +112,18 @@ export const RichTextEditor = forwardRef<
       if (editorRef.current) {
         onChange(editorRef.current.innerHTML);
       }
-    }, [onChange]);
+      checkActiveFormats();
+    }, [onChange, checkActiveFormats]);
 
     // Comandos de formatação
-    const execCommand = useCallback((command: string, value?: string) => {
-      document.execCommand(command, false, value);
-      editorRef.current?.focus();
-    }, []);
+    const execCommand = useCallback(
+      (command: string, value?: string) => {
+        document.execCommand(command, false, value);
+        editorRef.current?.focus();
+        setTimeout(checkActiveFormats, 10); // Pequeno delay para garantir que o comando foi executado
+      },
+      [checkActiveFormats]
+    );
 
     const handleBold = () => execCommand("bold");
     const handleItalic = () => execCommand("italic");
@@ -133,6 +161,19 @@ export const RichTextEditor = forwardRef<
       }
     }, [value]);
 
+    // Listener para mudanças na seleção
+    React.useEffect(() => {
+      const handleSelectionChange = () => {
+        checkActiveFormats();
+      };
+
+      document.addEventListener("selectionchange", handleSelectionChange);
+
+      return () => {
+        document.removeEventListener("selectionchange", handleSelectionChange);
+      };
+    }, [checkActiveFormats]);
+
     return (
       <div
         className={`rich-text-editor border border-gray-200 rounded-lg overflow-hidden flex flex-col ${className}`}
@@ -145,7 +186,11 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleBold}
-            className="min-w-8 h-8 flex-shrink-0"
+            className={`min-w-8 h-8 flex-shrink-0 ${
+              activeFormats.has("bold")
+                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                : ""
+            }`}
           >
             <Bold size={14} />
           </Button>
@@ -154,7 +199,11 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleItalic}
-            className="min-w-8 h-8 flex-shrink-0"
+            className={`min-w-8 h-8 flex-shrink-0 ${
+              activeFormats.has("italic")
+                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                : ""
+            }`}
           >
             <Italic size={14} />
           </Button>
@@ -163,7 +212,11 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleUnderline}
-            className="min-w-8 h-8 flex-shrink-0"
+            className={`min-w-8 h-8 flex-shrink-0 ${
+              activeFormats.has("underline")
+                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                : ""
+            }`}
           >
             <Underline size={14} />
           </Button>
@@ -176,7 +229,11 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleBulletList}
-            className="min-w-8 h-8"
+            className={`min-w-8 h-8 ${
+              activeFormats.has("bulletList")
+                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                : ""
+            }`}
           >
             <List size={14} />
           </Button>
@@ -185,7 +242,11 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleNumberedList}
-            className="min-w-8 h-8"
+            className={`min-w-8 h-8 ${
+              activeFormats.has("numberedList")
+                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                : ""
+            }`}
           >
             <ListOrdered size={14} />
           </Button>
