@@ -91,9 +91,10 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
       scrollBehavior="inside"
       hideCloseButton
       classNames={{
-        base: `${isExpanded ? "max-w-full max-h-full rounded-none" : "max-w-4xl rounded-t-2xl rounded-b-none"} !mb-0 !pb-0`,
+        base: `${isExpanded ? "max-w-full max-h-full rounded-t-xl rounded-b-none" : "max-w-4xl rounded-t-2xl rounded-b-none"} !mb-0 !pb-0`,
         backdrop: "bg-black/50 backdrop-blur-sm",
         wrapper: `z-50 ${isExpanded ? "items-center justify-center !pb-0 !mb-0" : "items-end !pb-0 !mb-0 !bottom-0"}`,
+        body: "p-0",
       }}
       motionProps={{
         variants: {
@@ -121,7 +122,9 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
         {() => (
           <>
             {/* Custom Header */}
-            <ModalHeader className="flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4 rounded-t-2xl">
+            <ModalHeader
+              className={`flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4 ${isExpanded ? "rounded-t-xl" : "rounded-t-2xl"}`}
+            >
               <div className="flex items-center gap-3">
                 <span className="text-lg font-semibold text-gray-800 dark:text-white">
                   New Message{" "}
@@ -159,9 +162,9 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
               </div>
             </ModalHeader>
 
-            <ModalBody className="p-0 overflow-hidden">
+            <ModalBody className="p-0 overflow-hidden flex flex-col">
               <div
-                className={`flex flex-col ${isExpanded ? "h-[calc(100vh-120px)]" : "h-[600px]"}`}
+                className={`flex flex-col ${isExpanded ? "h-[calc(100vh-180px)]" : "h-[550px]"}`}
               >
                 {/* Recipients Section */}
                 <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-800">
@@ -304,18 +307,18 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Message Content */}
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col min-h-0">
                   <RichTextEditor
                     value={content}
                     onChange={setContent}
                     placeholder="Compose your message..."
-                    height={isExpanded ? "calc(100vh - 400px)" : "350px"}
-                    className="h-full"
+                    height={isExpanded ? "calc(100vh - 500px)" : "220px"}
+                    className="h-full flex-1"
                   />
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800 bg-gray-50/50 dark:bg-neutral-900/50">
+                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800 bg-gray-50/50 dark:bg-neutral-900/50 flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"

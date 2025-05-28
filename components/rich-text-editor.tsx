@@ -135,17 +135,17 @@ export const RichTextEditor = forwardRef<
 
     return (
       <div
-        className={`rich-text-editor border border-gray-200 rounded-lg overflow-hidden ${className}`}
+        className={`rich-text-editor border border-gray-200 rounded-lg overflow-hidden flex flex-col ${className}`}
       >
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center gap-1 p-2 bg-gray-50 border-b border-gray-200">
+        <div className="flex flex-wrap items-center gap-1 p-3 bg-gray-50 border-b border-gray-200 min-h-fit">
           {/* Formatação básica */}
           <Button
             size="sm"
             variant="light"
             isIconOnly
             onClick={handleBold}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 flex-shrink-0"
           >
             <Bold size={14} />
           </Button>
@@ -154,7 +154,7 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleItalic}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 flex-shrink-0"
           >
             <Italic size={14} />
           </Button>
@@ -163,7 +163,7 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleUnderline}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 flex-shrink-0"
           >
             <Underline size={14} />
           </Button>
@@ -264,7 +264,7 @@ export const RichTextEditor = forwardRef<
           ref={editorRef}
           contentEditable
           onInput={handleInput}
-          className="p-4 focus:outline-none"
+          className="p-4 focus:outline-none flex-1"
           style={{
             minHeight: height,
             maxHeight: "400px",
