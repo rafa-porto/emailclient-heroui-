@@ -224,7 +224,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         {/* Important Email Badge */}
         {email.isImportant && (
           <div className="mb-4 mx-2">
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/40 dark:to-purple-950/40 border border-blue-200/60 dark:border-blue-700/40">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-700/40">
               <InfoIcon
                 size={16}
                 className="text-blue-600 dark:text-blue-400"
