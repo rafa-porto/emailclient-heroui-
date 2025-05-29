@@ -25,7 +25,7 @@ import {
   Trash2Icon,
   ZapIcon,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Avatar } from "@heroui/avatar";
 
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -45,19 +45,23 @@ const Sidebar = ({
 }: SidebarProps) => {
   const userName = userEmail ? userEmail.split("@")[0] : "User";
   const router = useRouter();
-  const { starredEmails, deletedEmails, archivedEmails } = useEmailContext();
+  const pathname = usePathname();
+  const { starredEmails, deletedEmails, archivedEmails, isEmailRead } =
+    useEmailContext();
 
   // Calculate email counts
   const activeEmails = mockEmails.filter(
     (email) =>
       !deletedEmails.includes(email.id) && !archivedEmails.includes(email.id)
   );
+  const unreadInboxCount = activeEmails.filter(
+    (email) => !isEmailRead(email.id)
+  ).length;
   const starredCount = starredEmails.filter(
     (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id)
   ).length;
   const trashCount = deletedEmails.length;
   const archivedCount = archivedEmails.length;
-  const inboxCount = activeEmails.length;
   const allCount = mockEmails.length;
 
   const handleLogout = () => {
@@ -125,22 +129,33 @@ const Sidebar = ({
       {/* Main Navigation */}
       <nav className="space-y-0.5 flex-shrink-0">
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard"
+              ? "bg-primary/10 text-primary border-primary/20 border"
+              : ""
+          }`}
           size="sm"
           startContent={<InboxIcon size={16} />}
-          variant="flat"
+          variant={pathname === "/dashboard" ? "flat" : "light"}
           onClick={() => router.push("/dashboard")}
         >
           Inbox
-          <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
-            {inboxCount}
-          </span>
+          {unreadInboxCount > 0 && (
+            <span className="ml-auto text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-medium">
+              {unreadInboxCount}
+            </span>
+          )}
         </Button>
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard/all"
+              ? "bg-primary/10 text-primary border-primary/20 border"
+              : ""
+          }`}
           size="sm"
           startContent={<MailIcon size={16} />}
-          variant="light"
+          variant={pathname === "/dashboard/all" ? "flat" : "light"}
+          onClick={() => router.push("/dashboard/all")}
         >
           All
           <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
@@ -148,10 +163,14 @@ const Sidebar = ({
           </span>
         </Button>
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard/starred"
+              ? "bg-primary/10 text-primary border-primary/20 border"
+              : ""
+          }`}
           size="sm"
           startContent={<StarIcon size={16} />}
-          variant="light"
+          variant={pathname === "/dashboard/starred" ? "flat" : "light"}
           onClick={() => router.push("/dashboard/starred")}
         >
           Starred
@@ -162,10 +181,14 @@ const Sidebar = ({
           )}
         </Button>
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard/archived"
+              ? "bg-primary/10 text-primary border-primary/20 border"
+              : ""
+          }`}
           size="sm"
           startContent={<ArchiveIcon size={16} />}
-          variant="light"
+          variant={pathname === "/dashboard/archived" ? "flat" : "light"}
           onClick={() => router.push("/dashboard/archived")}
         >
           Archive
@@ -208,10 +231,14 @@ const Sidebar = ({
           Sent
         </Button>
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard/trash"
+              ? "bg-primary/10 text-primary border-primary/20 border"
+              : ""
+          }`}
           size="sm"
           startContent={<Trash2Icon size={16} />}
-          variant="light"
+          variant={pathname === "/dashboard/trash" ? "flat" : "light"}
           onClick={() => router.push("/dashboard/trash")}
         >
           Trash
