@@ -18,9 +18,12 @@ import {
   CheckIcon,
   DownloadIcon,
   FileIcon,
+  ArchiveIcon,
+  TrashIcon,
 } from "lucide-react";
 
 import { EmailAttachment } from "@/types";
+import { useEmailContext } from "@/components/email-context";
 
 interface EmailViewProps {
   email: {
@@ -44,6 +47,27 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(
     null
   );
+
+  // Get context functions
+  const { toggleStarEmail, archiveEmail, deleteEmail, isEmailStarred } =
+    useEmailContext();
+
+  const isStarred = isEmailStarred(email.id);
+
+  // Handler functions
+  const handleStarToggle = () => {
+    toggleStarEmail(email.id);
+  };
+
+  const handleArchive = () => {
+    archiveEmail(email.id);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    deleteEmail(email.id);
+    onClose();
+  };
 
   // Generate AI-powered response suggestions based on email content
   const generateSuggestions = (email: any) => {
@@ -181,18 +205,18 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         <div className="flex items-center gap-2">
           <Button
             isIconOnly
+            className="text-gray-500 dark:text-neutral-400"
             size="sm"
             variant="light"
-            className="text-gray-500 dark:text-neutral-400"
             onPress={onClose}
           >
             <XIcon size={18} />
           </Button>
           <Button
             isIconOnly
+            className="text-gray-500 dark:text-neutral-400"
             size="sm"
             variant="light"
-            className="text-gray-500 dark:text-neutral-400"
           >
             <PrinterIcon size={18} />
           </Button>
@@ -200,19 +224,45 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         <div className="flex items-center gap-2">
           <Button
             isIconOnly
+            className="text-gray-500 dark:text-neutral-400"
             size="sm"
             variant="light"
-            className="text-gray-500 dark:text-neutral-400"
           >
             <InfoIcon size={18} />
           </Button>
           <Button
             isIconOnly
+            className={`${
+              isStarred
+                ? "text-yellow-500"
+                : "text-gray-500 dark:text-neutral-400"
+            }`}
             size="sm"
             variant="light"
-            className="text-gray-500 dark:text-neutral-400"
+            onPress={handleStarToggle}
           >
-            <StarIcon size={18} />
+            <StarIcon
+              className={isStarred ? "fill-yellow-500" : ""}
+              size={18}
+            />
+          </Button>
+          <Button
+            isIconOnly
+            className="text-gray-500 dark:text-neutral-400"
+            size="sm"
+            variant="light"
+            onPress={handleArchive}
+          >
+            <ArchiveIcon size={18} />
+          </Button>
+          <Button
+            isIconOnly
+            className="text-gray-500 dark:text-neutral-400"
+            size="sm"
+            variant="light"
+            onPress={handleDelete}
+          >
+            <TrashIcon size={18} />
           </Button>
         </div>
       </div>
@@ -231,8 +281,8 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           <div className="mb-4 mx-2">
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-700/40">
               <InfoIcon
-                size={16}
                 className="text-blue-600 dark:text-blue-400"
+                size={16}
               />
               <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
                 This email is considered as very important
@@ -331,8 +381,8 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                     </p>
                   </div>
                   <Button
-                    className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
                     isIconOnly
+                    className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
                     size="sm"
                     variant="light"
                   >

@@ -27,19 +27,34 @@ import { useRouter } from "next/navigation";
 import { Avatar } from "@heroui/avatar";
 
 import { ThemeSwitch } from "@/components/theme-switch";
+import { useEmailContext } from "@/components/email-context";
 import { siteConfig } from "@/config/site";
 
 interface SidebarProps {
   userEmail?: string;
   loginProvider?: "gmail" | "outlook" | "apple" | "microsoft";
+  mockEmails?: any[]; // Add mockEmails prop to get email counts
 }
 
 const Sidebar = ({
   userEmail = "user@example.com",
   loginProvider: _loginProvider,
+  mockEmails = [],
 }: SidebarProps) => {
   const userName = userEmail ? userEmail.split("@")[0] : "User";
   const router = useRouter();
+  const { starredEmails, deletedEmails, archivedEmails } = useEmailContext();
+
+  // Calculate email counts
+  const activeEmails = mockEmails.filter(
+    (email) =>
+      !deletedEmails.includes(email.id) && !archivedEmails.includes(email.id)
+  );
+  const starredCount = starredEmails.filter(
+    (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id)
+  ).length;
+  const trashCount = deletedEmails.length;
+  const inboxCount = activeEmails.length;
 
   const handleLogout = () => {
     router.push("/");
@@ -110,10 +125,11 @@ const Sidebar = ({
           size="sm"
           startContent={<InboxIcon size={16} />}
           variant="flat"
+          onClick={() => router.push("/dashboard")}
         >
           Inbox
           <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
-            12
+            {inboxCount}
           </span>
         </Button>
         <Button
@@ -129,8 +145,14 @@ const Sidebar = ({
           size="sm"
           startContent={<StarIcon size={16} />}
           variant="light"
+          onClick={() => router.push("/dashboard/starred")}
         >
           Starred
+          {starredCount > 0 && (
+            <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+              {starredCount}
+            </span>
+          )}
         </Button>
         <Button
           className="w-full justify-start"
@@ -169,8 +191,14 @@ const Sidebar = ({
           size="sm"
           startContent={<Trash2Icon size={16} />}
           variant="light"
+          onClick={() => router.push("/dashboard/trash")}
         >
           Trash
+          {trashCount > 0 && (
+            <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+              {trashCount}
+            </span>
+          )}
         </Button>
         <Button
           className="w-full justify-start"

@@ -9,6 +9,7 @@ import AiPanel from "@/components/ai-panel";
 import ComposeModal from "@/components/compose-modal";
 import ResizableDivider from "@/components/resizable-divider";
 import { EmailProvider, useEmailContext } from "@/components/email-context";
+import { mockEmails } from "@/data/mockEmails";
 
 function DashboardContent({
   children,
@@ -70,7 +71,11 @@ function DashboardContent({
 
   return (
     <div className="h-screen w-full bg-gray-50 dark:bg-neutral-900 flex overflow-hidden">
-      <Sidebar loginProvider={loginProvider} userEmail={userEmail} />
+      <Sidebar
+        loginProvider={loginProvider}
+        mockEmails={mockEmails}
+        userEmail={userEmail}
+      />
 
       {/* Main Content Area */}
       <div className="flex-1 p-2 flex gap-0 h-full min-w-0">
