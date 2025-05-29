@@ -16,7 +16,11 @@ import {
   XIcon,
   SparklesIcon,
   CheckIcon,
+  DownloadIcon,
+  FileIcon,
 } from "lucide-react";
+
+import { EmailAttachment } from "@/types";
 
 interface EmailViewProps {
   email: {
@@ -30,6 +34,7 @@ interface EmailViewProps {
     isBrand?: boolean;
     isAIGenerated?: boolean;
     isImportant?: boolean;
+    attachments?: EmailAttachment[];
   };
   onClose: () => void;
 }
@@ -292,6 +297,52 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         <div className="py-4 text-black dark:text-white">
           <div dangerouslySetInnerHTML={{ __html: email.content }} />
         </div>
+
+        {/* Attachments */}
+        {email.attachments && email.attachments.length > 0 && (
+          <div className="py-4 px-2">
+            <div className="flex items-center gap-2 mb-3">
+              <PaperclipIcon
+                className="text-gray-600 dark:text-gray-400"
+                size={16}
+              />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Attachments ({email.attachments.length})
+              </span>
+            </div>
+            <div className="space-y-2">
+              {email.attachments.map((attachment) => (
+                <div
+                  key={attachment.id}
+                  className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-neutral-700 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                >
+                  <div className="flex-shrink-0">
+                    <FileIcon
+                      className="text-blue-600 dark:text-blue-400"
+                      size={20}
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                      {attachment.name}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {attachment.size}
+                    </p>
+                  </div>
+                  <Button
+                    className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
+                    isIconOnly
+                    size="sm"
+                    variant="light"
+                  >
+                    <DownloadIcon size={16} />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* AI Response Suggestions */}
         <div className="py-4 px-1">

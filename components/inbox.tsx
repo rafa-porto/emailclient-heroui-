@@ -14,6 +14,7 @@ import {
   TrashIcon,
   MoreVerticalIcon,
   SparklesIcon,
+  PaperclipIcon,
 } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -42,6 +43,20 @@ const mockEmails = [
     read: false,
     isAIGenerated: true,
     isImportant: true,
+    attachments: [
+      {
+        id: "att1",
+        name: "Job_Offer_Details.pdf",
+        size: "234 KB",
+        type: "application/pdf",
+      },
+      {
+        id: "att2",
+        name: "Benefits_Package.pdf",
+        size: "156 KB",
+        type: "application/pdf",
+      },
+    ],
   },
   {
     id: "2",
@@ -108,6 +123,20 @@ const mockEmails = [
     `,
     timestamp: "Yesterday",
     read: true,
+    attachments: [
+      {
+        id: "att3",
+        name: "Order_Receipt.pdf",
+        size: "89 KB",
+        type: "application/pdf",
+      },
+      {
+        id: "att4",
+        name: "Tracking_Info.pdf",
+        size: "45 KB",
+        type: "application/pdf",
+      },
+    ],
   },
   {
     id: "5",
@@ -264,6 +293,26 @@ const mockEmails = [
     `,
     timestamp: "Tuesday",
     read: true,
+    attachments: [
+      {
+        id: "att5",
+        name: "Design_System_Guidelines.figma",
+        size: "2.1 MB",
+        type: "application/figma",
+      },
+      {
+        id: "att6",
+        name: "Component_Library.figma",
+        size: "1.8 MB",
+        type: "application/figma",
+      },
+      {
+        id: "att7",
+        name: "Brand_Assets.zip",
+        size: "5.2 MB",
+        type: "application/zip",
+      },
+    ],
   },
   {
     id: "11",
@@ -434,6 +483,20 @@ const mockEmails = [
     `,
     timestamp: "Friday",
     read: true,
+    attachments: [
+      {
+        id: "att8",
+        name: "Position_Details.pdf",
+        size: "245 KB",
+        type: "application/pdf",
+      },
+      {
+        id: "att9",
+        name: "Company_Overview.docx",
+        size: "180 KB",
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      },
+    ],
   },
   {
     id: "18",
@@ -471,6 +534,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   isBrand,
   isAIGenerated,
   isImportant,
+  attachments,
   onClick,
   onStar,
   onArchive,
@@ -511,6 +575,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
       isBrand,
       isAIGenerated,
       isImportant,
+      attachments,
     });
   };
 
@@ -582,6 +647,12 @@ const EmailItem: React.FC<EmailItemProps> = ({
             )}
           </div>
           <div className="flex items-center gap-2">
+            {attachments && attachments.length > 0 && (
+              <PaperclipIcon
+                className="text-gray-400 dark:text-neutral-500"
+                size={12}
+              />
+            )}
             <span className="text-xs text-gray-500 dark:text-neutral-500">
               {timestamp}
             </span>

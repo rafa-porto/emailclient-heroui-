@@ -5,6 +5,14 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 // Email Types
+export interface EmailAttachment {
+  id: string;
+  name: string;
+  size: string;
+  type: string;
+  url?: string;
+}
+
 export interface EmailData {
   id: string;
   sender: string;
@@ -17,4 +25,5 @@ export interface EmailData {
   isBrand?: boolean;
   isAIGenerated?: boolean;
   isImportant?: boolean;
+  attachments?: EmailAttachment[];
 }
