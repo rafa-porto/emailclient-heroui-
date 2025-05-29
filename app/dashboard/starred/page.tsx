@@ -35,7 +35,7 @@ const StarredPage = () => {
     (email) =>
       starredEmails.includes(email.id) &&
       !deletedEmails.includes(email.id) &&
-      !archivedEmails.includes(email.id),
+      !archivedEmails.includes(email.id)
   );
 
   const handleEmailClick = (email: EmailData) => {

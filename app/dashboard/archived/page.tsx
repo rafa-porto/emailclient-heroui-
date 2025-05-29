@@ -7,9 +7,9 @@ import {
   SearchIcon,
   Edit3Icon,
   ChevronDownIcon,
-  TrashIcon,
-  RotateCcwIcon,
+  ArchiveIcon,
   Trash2Icon,
+  StarIcon,
   MoreVerticalIcon,
   PaperclipIcon,
 } from "lucide-react";
@@ -18,27 +18,36 @@ import { useEmailContext } from "@/components/email-context";
 import { EmailData } from "@/types";
 import { mockEmails } from "@/data/mockEmails";
 
-const TrashPage = () => {
-  const { deletedEmails, restoreEmail, permanentlyDeleteEmail, isEmailRead } =
-    useEmailContext();
+const ArchivedPage = () => {
+  const {
+    setSelectedEmail,
+    archivedEmails,
+    unarchiveEmail,
+    deleteEmail,
+    isEmailRead,
+    isEmailStarred,
+    toggleStarEmail,
+  } = useEmailContext();
 
-  // Filter deleted emails
-  const deletedEmailsData = mockEmails.filter((email) =>
-    deletedEmails.includes(email.id)
+  // Filter archived emails
+  const archivedEmailsData = mockEmails.filter((email) =>
+    archivedEmails.includes(email.id),
   );
 
-  const handleRestoreEmail = (id: string) => {
-    restoreEmail(id);
+  const handleEmailClick = (email: EmailData) => {
+    setSelectedEmail(email);
   };
 
-  const handlePermanentlyDeleteEmail = (id: string) => {
-    permanentlyDeleteEmail(id);
+  const handleUnarchiveEmail = (id: string) => {
+    unarchiveEmail(id);
   };
 
-  const handleEmptyTrash = () => {
-    deletedEmails.forEach((id) => {
-      permanentlyDeleteEmail(id);
-    });
+  const handleDeleteEmail = (id: string) => {
+    deleteEmail(id);
+  };
+
+  const handleToggleStarEmail = (id: string) => {
+    toggleStarEmail(id);
   };
 
   return (
@@ -52,18 +61,8 @@ const TrashPage = () => {
             size="sm"
             variant="light"
           >
-            Trash
+            Archive
           </Button>
-          {deletedEmailsData.length > 0 && (
-            <Button
-              className="text-red-600 dark:text-red-400"
-              size="sm"
-              variant="light"
-              onClick={handleEmptyTrash}
-            >
-              Empty Trash
-            </Button>
-          )}
         </div>
 
         <div className="flex-1 max-w-md mx-4">
@@ -71,7 +70,7 @@ const TrashPage = () => {
             classNames={{
               inputWrapper: "bg-gray-100 dark:bg-neutral-800",
             }}
-            placeholder="Search trash..."
+            placeholder="Search archived emails..."
             size="sm"
             startContent={<SearchIcon size={16} />}
             variant="flat"
@@ -92,20 +91,23 @@ const TrashPage = () => {
 
       {/* Email List */}
       <div className="flex-1 overflow-y-auto space-y-2">
-        {deletedEmailsData.length === 0 ? (
+        {archivedEmailsData.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-gray-500 dark:text-neutral-400">
-            <TrashIcon className="mb-4" size={48} />
-            <h3 className="text-lg font-medium mb-2">Trash is empty</h3>
-            <p className="text-sm">Deleted emails will appear here</p>
+            <ArchiveIcon className="mb-4" size={48} />
+            <h3 className="text-lg font-medium mb-2">No archived emails</h3>
+            <p className="text-sm">Archived emails will appear here</p>
           </div>
         ) : (
-          deletedEmailsData.map((email) => (
+          archivedEmailsData.map((email) => (
             <EmailItem
               key={email.id}
               email={email}
               isRead={isEmailRead(email.id)}
-              onPermanentlyDelete={handlePermanentlyDeleteEmail}
-              onRestore={handleRestoreEmail}
+              isStarred={isEmailStarred(email.id)}
+              onClick={handleEmailClick}
+              onDelete={handleDeleteEmail}
+              onStar={handleToggleStarEmail}
+              onUnarchive={handleUnarchiveEmail}
             />
           ))
         )}
@@ -118,15 +120,21 @@ const TrashPage = () => {
 interface EmailItemProps {
   email: EmailData;
   isRead: boolean;
-  onRestore: (id: string) => void;
-  onPermanentlyDelete: (id: string) => void;
+  isStarred: boolean;
+  onClick: (email: EmailData) => void;
+  onUnarchive: (id: string) => void;
+  onDelete: (id: string) => void;
+  onStar: (id: string) => void;
 }
 
 const EmailItem: React.FC<EmailItemProps> = ({
   email,
   isRead,
-  onRestore,
-  onPermanentlyDelete,
+  isStarred,
+  onClick,
+  onUnarchive,
+  onDelete,
+  onStar,
 }) => {
   const [showActionPopup, setShowActionPopup] = React.useState(false);
 
@@ -136,10 +144,11 @@ const EmailItem: React.FC<EmailItemProps> = ({
         !isRead
           ? "bg-gray-100 dark:bg-neutral-800"
           : "bg-white dark:bg-neutral-900"
-      } opacity-60`}
+      }`}
+      onClick={() => onClick(email)}
     >
       <div className="mr-3 flex-shrink-0">
-        <div className="w-9 h-9 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+        <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
           {email.sender.charAt(0).toUpperCase()}
         </div>
       </div>
@@ -147,10 +156,10 @@ const EmailItem: React.FC<EmailItemProps> = ({
       <div className="flex-grow truncate">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <span className="font-medium text-gray-500 dark:text-neutral-500">
+            <span className="font-medium text-gray-900 dark:text-neutral-100">
               {email.sender}
             </span>
-            <TrashIcon className="text-red-500" size={14} />
+            <ArchiveIcon className="text-gray-500" size={14} />
           </div>
           <div className="flex items-center gap-2">
             {email.attachments && email.attachments.length > 0 && (
@@ -176,10 +185,10 @@ const EmailItem: React.FC<EmailItemProps> = ({
             </div>
           </div>
         </div>
-        <p className="text-sm truncate text-gray-500 dark:text-neutral-500">
+        <p className="text-sm font-medium truncate text-gray-900 dark:text-neutral-100">
           {email.subject}
         </p>
-        <p className="text-xs text-gray-400 dark:text-neutral-600 truncate">
+        <p className="text-xs text-gray-600 dark:text-neutral-400 truncate">
           {email.snippet}
         </p>
       </div>
@@ -191,23 +200,38 @@ const EmailItem: React.FC<EmailItemProps> = ({
             className="flex items-center gap-2 w-full p-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
-              onRestore(email.id);
+              onUnarchive(email.id);
               setShowActionPopup(false);
             }}
           >
-            <RotateCcwIcon size={16} />
-            Restore
+            <ArchiveIcon size={16} />
+            Unarchive
+          </div>
+          <div
+            className={`flex items-center gap-2 w-full p-2 text-sm hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded cursor-pointer ${
+              isStarred
+                ? "text-yellow-600 dark:text-yellow-400"
+                : "text-gray-600 dark:text-gray-400"
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onStar(email.id);
+              setShowActionPopup(false);
+            }}
+          >
+            <StarIcon className={isStarred ? "fill-current" : ""} size={16} />
+            {isStarred ? "Unstar" : "Star"}
           </div>
           <div
             className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
-              onPermanentlyDelete(email.id);
+              onDelete(email.id);
               setShowActionPopup(false);
             }}
           >
             <Trash2Icon size={16} />
-            Delete Forever
+            Delete
           </div>
         </div>
       )}
@@ -215,4 +239,4 @@ const EmailItem: React.FC<EmailItemProps> = ({
   );
 };
 
-export default TrashPage;
+export default ArchivedPage;

@@ -9,6 +9,7 @@ import {
 } from "@heroui/dropdown";
 import {
   AlertOctagonIcon,
+  ArchiveIcon,
   CheckIcon,
   ChevronDownIcon,
   ClockIcon,
@@ -18,6 +19,7 @@ import {
   HardDriveIcon,
   InboxIcon,
   LogOutIcon,
+  MailIcon,
   SendIcon,
   StarIcon,
   Trash2Icon,
@@ -54,7 +56,9 @@ const Sidebar = ({
     (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id)
   ).length;
   const trashCount = deletedEmails.length;
+  const archivedCount = archivedEmails.length;
   const inboxCount = activeEmails.length;
+  const allCount = mockEmails.length;
 
   const handleLogout = () => {
     router.push("/");
@@ -135,10 +139,13 @@ const Sidebar = ({
         <Button
           className="w-full justify-start"
           size="sm"
-          startContent={<FileTextIcon size={16} />}
+          startContent={<MailIcon size={16} />}
           variant="light"
         >
-          Todos
+          All
+          <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+            {allCount}
+          </span>
         </Button>
         <Button
           className="w-full justify-start"
@@ -151,6 +158,20 @@ const Sidebar = ({
           {starredCount > 0 && (
             <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
               {starredCount}
+            </span>
+          )}
+        </Button>
+        <Button
+          className="w-full justify-start"
+          size="sm"
+          startContent={<ArchiveIcon size={16} />}
+          variant="light"
+          onClick={() => router.push("/dashboard/archived")}
+        >
+          Archive
+          {archivedCount > 0 && (
+            <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+              {archivedCount}
             </span>
           )}
         </Button>
@@ -211,7 +232,7 @@ const Sidebar = ({
       </nav>
 
       {/* Spacer to push cards to bottom */}
-      <div className="flex-1"></div>
+      <div className="flex-1" />
 
       {/* Upgrade Card */}
       <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 border border-purple-200/50 dark:border-purple-800/50">
