@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 
-interface UsePersistentStateOptions {
+interface UsePersistentStateOptions<T> {
   key: string;
-  defaultValue: number;
+  defaultValue: T;
 }
 
-export const usePersistentState = ({
+export const usePersistentState = <T,>({
   key,
   defaultValue,
-}: UsePersistentStateOptions): [number, (value: number) => void] => {
-  const [state, setState] = useState<number>(defaultValue);
+}: UsePersistentStateOptions<T>): [
+  T,
+  (value: T | ((prev: T) => T)) => void,
+] => {
+  const [state, setState] = useState<T>(defaultValue);
 
   useEffect(() => {
     try {
@@ -19,20 +22,19 @@ export const usePersistentState = ({
 
       if (stored !== null) {
         const parsedValue = JSON.parse(stored);
-
-        if (typeof parsedValue === "number") {
-          setState(parsedValue);
-        }
+        setState(parsedValue);
       }
     } catch {
       // Silently handle localStorage errors - fallback to default value
     }
   }, [key]);
 
-  const setValue = (value: number) => {
+  const setValue = (value: T | ((prev: T) => T)) => {
     try {
-      setState(value);
-      localStorage.setItem(key, JSON.stringify(value));
+      const newValue =
+        typeof value === "function" ? (value as (prev: T) => T)(state) : value;
+      setState(newValue);
+      localStorage.setItem(key, JSON.stringify(newValue));
     } catch {
       // Silently handle localStorage errors - state will be updated but not persisted
     }

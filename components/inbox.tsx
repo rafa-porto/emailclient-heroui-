@@ -542,6 +542,11 @@ const EmailItem: React.FC<EmailItemProps> = ({
 }) => {
   const [showActionPopup, setShowActionPopup] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
+  const { isEmailStarred, isEmailRead } = useEmailContext();
+
+  // Use context state to determine read status
+  const isReadFromContext = isEmailRead(id);
+  const isStarredFromContext = isEmailStarred(id);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -588,7 +593,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   return (
     <div
       aria-label={`Email from ${sender}: ${subject}`}
-      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!read ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
+      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!isReadFromContext ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
       role="button"
       tabIndex={0}
       onClick={handleClick}
@@ -635,10 +640,13 @@ const EmailItem: React.FC<EmailItemProps> = ({
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <span
-              className={`font-medium ${!read ? "text-black dark:text-white" : "text-gray-700 dark:text-neutral-400"}`}
+              className={`font-medium ${!isReadFromContext ? "text-black dark:text-white" : "text-gray-700 dark:text-neutral-400"}`}
             >
               {sender}
             </span>
+            {isStarredFromContext && (
+              <StarIcon className="text-yellow-500 fill-yellow-500" size={14} />
+            )}
             {isAIGenerated && !isImportant && (
               <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium">
                 <SparklesIcon size={8} />
@@ -681,7 +689,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
           </div>
         </div>
         <p
-          className={`text-sm truncate ${!read ? "text-black dark:text-white font-semibold" : "text-gray-600 dark:text-neutral-500"}`}
+          className={`text-sm truncate ${!isReadFromContext ? "text-black dark:text-white font-semibold" : "text-gray-600 dark:text-neutral-500"}`}
         >
           {subject}
         </p>
@@ -753,23 +761,36 @@ const Inbox = () => {
     isAiPanelOpen,
     setIsAiPanelOpen,
     setIsComposeModalOpen,
+    toggleStarEmail,
+    archiveEmail,
+    deleteEmail,
+    markAsRead,
+    isEmailArchived,
+    isEmailDeleted,
   } = useEmailContext();
 
   const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
+    // Mark email as read when clicked
+    markAsRead(email.id);
   };
 
-  const handleStarEmail = (_id: string) => {
-    // Implementar lógica para favoritar
+  const handleStarEmail = (id: string) => {
+    toggleStarEmail(id);
   };
 
-  const handleArchiveEmail = (_id: string) => {
-    // Implementar lógica para arquivar
+  const handleArchiveEmail = (id: string) => {
+    archiveEmail(id);
   };
 
-  const handleDeleteEmail = (_id: string) => {
-    // Implementar lógica para excluir
+  const handleDeleteEmail = (id: string) => {
+    deleteEmail(id);
   };
+
+  // Filter emails based on their state
+  const visibleEmails = mockEmails.filter(
+    (email) => !isEmailDeleted(email.id) && !isEmailArchived(email.id)
+  );
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white p-4">
@@ -847,7 +868,7 @@ const Inbox = () => {
       {/* Email List - Full width */}
       <div className="flex-1 overflow-hidden px-2">
         <div className="h-full overflow-y-auto px-2">
-          {mockEmails.map((email) => (
+          {visibleEmails.map((email) => (
             <EmailItem
               key={email.id}
               {...email}
