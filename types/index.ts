@@ -15,4 +15,6 @@ export interface EmailData {
   timestamp: string;
   read: boolean;
   isBrand?: boolean;
+  isAIGenerated?: boolean;
+  isImportant?: boolean;
 }

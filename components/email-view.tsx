@@ -28,6 +28,8 @@ interface EmailViewProps {
     timestamp: string;
     read: boolean;
     isBrand?: boolean;
+    isAIGenerated?: boolean;
+    isImportant?: boolean;
   };
   onClose: () => void;
 }
@@ -219,6 +221,21 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           </h2>
         </div>
 
+        {/* Important Email Badge */}
+        {email.isImportant && (
+          <div className="mb-4 mx-2">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/40 dark:to-purple-950/40 border border-blue-200/60 dark:border-blue-700/40">
+              <InfoIcon
+                size={16}
+                className="text-blue-600 dark:text-blue-400"
+              />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                This email is considered as very important
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Sender Info */}
         <div className="py-3 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-3 mb-4">
           {email.isBrand ? (
@@ -253,12 +270,18 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
               src={email.avatarUrl}
             />
           )}
-          <div>
-            <div className="flex items-center">
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
               <span className="font-medium text-black dark:text-white">
                 {email.sender}
               </span>
-              <span className="text-xs text-gray-500 dark:text-neutral-500 ml-2">
+              {email.isAIGenerated && !email.isImportant && (
+                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium">
+                  <SparklesIcon size={10} />
+                  AI
+                </div>
+              )}
+              <span className="text-xs text-gray-500 dark:text-neutral-500 ml-auto">
                 {formatTimestamp(email.timestamp)}
               </span>
             </div>

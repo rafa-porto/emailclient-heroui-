@@ -13,6 +13,7 @@ import {
   ArchiveIcon,
   TrashIcon,
   MoreVerticalIcon,
+  SparklesIcon,
 } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -39,6 +40,8 @@ const mockEmails = [
     `,
     timestamp: "9:59AM",
     read: false,
+    isAIGenerated: true,
+    isImportant: true,
   },
   {
     id: "2",
@@ -128,6 +131,8 @@ const mockEmails = [
     `,
     timestamp: "Yesterday",
     read: true,
+    isAIGenerated: true,
+    isImportant: true,
   },
   {
     id: "6",
@@ -179,6 +184,7 @@ const mockEmails = [
     `,
     timestamp: "3 hours ago",
     read: true,
+    isImportant: true,
   },
   {
     id: "8",
@@ -203,6 +209,7 @@ const mockEmails = [
     `,
     timestamp: "Yesterday",
     read: true,
+    isAIGenerated: true,
   },
   {
     id: "9",
@@ -309,6 +316,7 @@ const mockEmails = [
     `,
     timestamp: "Monday",
     read: true,
+    isImportant: true,
   },
   {
     id: "13",
@@ -462,6 +470,8 @@ const EmailItem: React.FC<EmailItemProps> = ({
   timestamp,
   read,
   isBrand,
+  isAIGenerated,
+  isImportant,
   onClick,
   onStar,
   onArchive,
@@ -500,6 +510,8 @@ const EmailItem: React.FC<EmailItemProps> = ({
       timestamp,
       read,
       isBrand,
+      isAIGenerated,
+      isImportant,
     });
   };
 
@@ -557,11 +569,19 @@ const EmailItem: React.FC<EmailItemProps> = ({
       )}
       <div className="flex-grow truncate">
         <div className="flex justify-between items-center">
-          <span
-            className={`font-medium ${!read ? "text-black dark:text-white" : "text-gray-700 dark:text-neutral-400"}`}
-          >
-            {sender}
-          </span>
+          <div className="flex items-center gap-2">
+            <span
+              className={`font-medium ${!read ? "text-black dark:text-white" : "text-gray-700 dark:text-neutral-400"}`}
+            >
+              {sender}
+            </span>
+            {isAIGenerated && !isImportant && (
+              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium">
+                <SparklesIcon size={8} />
+                AI
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-500 dark:text-neutral-500">
               {timestamp}
