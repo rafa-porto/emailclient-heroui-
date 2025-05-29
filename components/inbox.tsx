@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
+import Image from "next/image";
 import {
   SearchIcon,
   Edit3Icon,
@@ -41,6 +42,356 @@ const mockEmails = [
   },
   {
     id: "2",
+    sender: "Netflix",
+    avatarUrl: "/netflix.svg",
+    isBrand: true,
+    subject: "Your subscription expires in 3 days",
+    snippet: "Don't lose access to your favorite shows...",
+    content: `
+      <p>Hi there,</p>
+      <br/>
+      <p>Your Netflix subscription will expire in 3 days. To continue watching your favorite shows and movies, please update your payment method.</p>
+      <br/>
+      <p>Click here to update your billing information and keep your subscription active.</p>
+      <br/>
+      <p>Thanks,</p>
+      <p>The Netflix Team</p>
+    `,
+    timestamp: "10:15AM",
+    read: false,
+  },
+  {
+    id: "3",
+    sender: "GitHub",
+    avatarUrl: "/github.svg",
+    isBrand: true,
+    subject: "Security alert: New sign-in from San Francisco",
+    snippet: "We detected a new sign-in to your account...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>We detected a new sign-in to your GitHub account from a device in San Francisco, CA.</p>
+      <br/>
+      <p><strong>Device:</strong> Chrome on macOS<br/>
+      <strong>Time:</strong> May 28, 2025 at 9:42 AM PST<br/>
+      <strong>Location:</strong> San Francisco, CA, US</p>
+      <br/>
+      <p>If this was you, you can safely ignore this email. If not, please secure your account immediately.</p>
+      <br/>
+      <p>GitHub Security Team</p>
+    `,
+    timestamp: "9:42AM",
+    read: false,
+  },
+  {
+    id: "4",
+    sender: "Apple",
+    avatarUrl: "/apple.svg",
+    isBrand: true,
+    subject: "Your order has been shipped",
+    snippet: "Great news! Your order is on its way...",
+    content: `
+      <p>Thank you for your order!</p>
+      <br/>
+      <p>Great news! Your order #W123456789 has been shipped and is on its way to you.</p>
+      <br/>
+      <p><strong>Order Details:</strong><br/>
+      iPhone 15 Pro - Natural Titanium - 256GB<br/>
+      Estimated delivery: May 30, 2025</p>
+      <br/>
+      <p>Track your package: TR123456789</p>
+      <br/>
+      <p>Apple Store Team</p>
+    `,
+    timestamp: "Yesterday",
+    read: true,
+  },
+  {
+    id: "5",
+    sender: "Dr. Sarah Johnson",
+    avatarUrl: "https://i.pravatar.cc/150?u=dr.sarah",
+    subject: "Appointment Reminder - Tomorrow at 2:00 PM",
+    snippet: "This is a reminder for your upcoming appointment...",
+    content: `
+      <p>Dear Emilie,</p>
+      <br/>
+      <p>This is a reminder for your upcoming appointment:</p>
+      <br/>
+      <p><strong>Date:</strong> May 29, 2025<br/>
+      <strong>Time:</strong> 2:00 PM<br/>
+      <strong>Location:</strong> 123 Medical Center Dr, Suite 200</p>
+      <br/>
+      <p>Please arrive 15 minutes early. If you need to reschedule, please call us at (555) 123-4567.</p>
+      <br/>
+      <p>Best regards,</p>
+      <p>Dr. Sarah Johnson's Office</p>
+    `,
+    timestamp: "Yesterday",
+    read: true,
+  },
+  {
+    id: "6",
+    sender: "Stripe",
+    avatarUrl: "/stripe.svg",
+    isBrand: true,
+    subject: "Payment successful - $299.00",
+    snippet: "Your payment has been processed successfully...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>Your payment has been processed successfully.</p>
+      <br/>
+      <p><strong>Payment Details:</strong><br/>
+      Amount: $299.00<br/>
+      Date: May 28, 2025<br/>
+      Description: Annual Pro Subscription<br/>
+      Payment Method: •••• 4242</p>
+      <br/>
+      <p>Receipt ID: ch_3N1234567890</p>
+      <br/>
+      <p>Thanks for your business!</p>
+      <p>Stripe</p>
+    `,
+    timestamp: "2 hours ago",
+    read: false,
+  },
+  {
+    id: "7",
+    sender: "Zoom",
+    avatarUrl: "/zoom.svg",
+    isBrand: true,
+    subject: "Meeting scheduled: Team Standup - May 29, 10:00 AM",
+    snippet: "You're invited to join a Zoom meeting...",
+    content: `
+      <p>You're invited to a Zoom meeting.</p>
+      <br/>
+      <p><strong>Topic:</strong> Team Standup<br/>
+      <strong>Time:</strong> May 29, 2025 10:00 AM Pacific Time<br/>
+      <strong>Duration:</strong> 30 minutes</p>
+      <br/>
+      <p><strong>Join Zoom Meeting:</strong><br/>
+      https://zoom.us/j/1234567890</p>
+      <br/>
+      <p><strong>Meeting ID:</strong> 123 456 7890<br/>
+      <strong>Passcode:</strong> standup</p>
+      <br/>
+      <p>Zoom</p>
+    `,
+    timestamp: "3 hours ago",
+    read: true,
+  },
+  {
+    id: "8",
+    sender: "LinkedIn",
+    avatarUrl: "/linkedin.svg",
+    isBrand: true,
+    subject: "You have 3 new profile views",
+    snippet: "People are checking out your profile...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>You have 3 new profile views this week! People are interested in your professional background.</p>
+      <br/>
+      <p>Here's who viewed your profile:<br/>
+      • John Smith - Senior Developer at TechCorp<br/>
+      • Sarah Williams - HR Manager at StartupX<br/>
+      • Mike Brown - CTO at InnovateLab</p>
+      <br/>
+      <p>Upgrade to LinkedIn Premium to see who's viewing your profile and get insights.</p>
+      <br/>
+      <p>LinkedIn Team</p>
+    `,
+    timestamp: "Yesterday",
+    read: true,
+  },
+  {
+    id: "9",
+    sender: "Amazon Web Services",
+    avatarUrl: "/aws.svg",
+    isBrand: true,
+    subject: "AWS Bill: Your May 2025 invoice is ready",
+    snippet: "Your monthly AWS bill is now available...",
+    content: `
+      <p>Hello,</p>
+      <br/>
+      <p>Your AWS bill for May 2025 is now available.</p>
+      <br/>
+      <p><strong>Bill Summary:</strong><br/>
+      Total Amount: $127.45<br/>
+      Previous Balance: $0.00<br/>
+      Payments: $0.00<br/>
+      New Charges: $127.45</p>
+      <br/>
+      <p><strong>Top Services:</strong><br/>
+      • EC2-Instance: $67.23<br/>
+      • S3: $31.22<br/>
+      • CloudFront: $29.00</p>
+      <br/>
+      <p>Your payment will be automatically charged to your default payment method on June 5, 2025.</p>
+      <br/>
+      <p>AWS Billing Team</p>
+    `,
+    timestamp: "Tuesday",
+    read: false,
+  },
+  {
+    id: "10",
+    sender: "Figma",
+    avatarUrl: "/figma.svg",
+    isBrand: true,
+    subject: "You've been added to Design System project",
+    snippet: "John invited you to collaborate on a project...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>John Smith has invited you to collaborate on the "Design System" project.</p>
+      <br/>
+      <p>You now have edit access to all files in this project. You can start collaborating right away!</p>
+      <br/>
+      <p>Project includes:<br/>
+      • Component Library<br/>
+      • Design Tokens<br/>
+      • UI Guidelines</p>
+      <br/>
+      <p>Happy designing!</p>
+      <p>Figma Team</p>
+    `,
+    timestamp: "Tuesday",
+    read: true,
+  },
+  {
+    id: "11",
+    sender: "Gmail Team",
+    avatarUrl: "/gmail.svg",
+    isBrand: true,
+    subject: "Verify your new email address",
+    snippet: "Please verify your email address to complete setup...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>You recently added emilie.new@gmail.com as a recovery email for your account.</p>
+      <br/>
+      <p>To complete the setup, please verify this email address by clicking the button below:</p>
+      <br/>
+      <p><strong>Verify Email Address</strong></p>
+      <br/>
+      <p>This link will expire in 24 hours. If you didn't request this change, please ignore this email.</p>
+      <br/>
+      <p>Gmail Security Team</p>
+    `,
+    timestamp: "Monday",
+    read: false,
+  },
+  {
+    id: "12",
+    sender: "Calendly",
+    avatarUrl: "/calendly.svg",
+    isBrand: true,
+    subject: "Meeting confirmed: Design Review with Alex",
+    snippet: "Your meeting has been confirmed...",
+    content: `
+      <p>Your meeting has been confirmed!</p>
+      <br/>
+      <p><strong>Design Review with Alex</strong><br/>
+      Thursday, May 30, 2025<br/>
+      3:00 PM - 4:00 PM (PDT)</p>
+      <br/>
+      <p><strong>Location:</strong> Google Meet<br/>
+      <strong>Meeting Link:</strong> meet.google.com/abc-defg-hij</p>
+      <br/>
+      <p><strong>Attendees:</strong><br/>
+      • Emilie Lemaire (you)<br/>
+      • Alex Rodriguez</p>
+      <br/>
+      <p>Need to reschedule? Use this link to make changes.</p>
+      <br/>
+      <p>Calendly</p>
+    `,
+    timestamp: "Monday",
+    read: true,
+  },
+  {
+    id: "13",
+    sender: "Notion",
+    avatarUrl: "/notion.svg",
+    isBrand: true,
+    subject: "Weekly digest: 5 updates in your workspace",
+    snippet: "Here's what happened in your workspace this week...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>Here's what happened in your "Product Team" workspace this week:</p>
+      <br/>
+      <p><strong>Recent Updates:</strong><br/>
+      • Sarah updated "Q2 Roadmap" page<br/>
+      • Mike created "User Research Findings"<br/>
+      • Alex commented on "Design System Guidelines"<br/>
+      • You were mentioned in "Sprint Planning"<br/>
+      • New page: "API Documentation"</p>
+      <br/>
+      <p>Stay up to date with your team's progress.</p>
+      <br/>
+      <p>Notion Team</p>
+    `,
+    timestamp: "Sunday",
+    read: true,
+  },
+  {
+    id: "14",
+    sender: "Uber",
+    avatarUrl: "/uber.svg",
+    isBrand: true,
+    subject: "Trip receipt: $12.50 to Downtown",
+    snippet: "Thanks for riding with Uber...",
+    content: `
+      <p>Thanks for riding with Uber!</p>
+      <br/>
+      <p><strong>Trip Details:</strong><br/>
+      Date: May 28, 2025<br/>
+      Time: 8:15 AM - 8:32 AM<br/>
+      Driver: Carlos M. (4.9 ⭐)</p>
+      <br/>
+      <p><strong>Route:</strong><br/>
+      From: 123 Home Street<br/>
+      To: 456 Office Building, Downtown</p>
+      <br/>
+      <p><strong>Fare Breakdown:</strong><br/>
+      Trip Fare: $10.50<br/>
+      Tip: $2.00<br/>
+      Total: $12.50</p>
+      <br/>
+      <p>Rate your trip and help us improve!</p>
+      <br/>
+      <p>Uber</p>
+    `,
+    timestamp: "Sunday",
+    read: true,
+  },
+  {
+    id: "15",
+    sender: "Microsoft Teams",
+    avatarUrl: "/microsoft-teams.svg",
+    isBrand: true,
+    subject: "You missed a call from the Marketing Team",
+    snippet: "The Marketing Team tried to reach you...",
+    content: `
+      <p>Hi Emilie,</p>
+      <br/>
+      <p>The Marketing Team tried to reach you at 2:30 PM today but you weren't available.</p>
+      <br/>
+      <p><strong>Call Details:</strong><br/>
+      Duration: 0 seconds (missed)<br/>
+      Participants: Sarah Kim, John Doe, Mike Wilson</p>
+      <br/>
+      <p>You can listen to the voicemail they left or call them back directly.</p>
+      <br/>
+      <p>Microsoft Teams</p>
+    `,
+    timestamp: "2:30 PM",
+    read: false,
+  },
+  {
+    id: "16",
     sender: "Sarah Connor",
     avatarUrl: "https://i.pravatar.cc/150?u=sarah.connor",
     subject: "Next interview",
@@ -55,11 +406,11 @@ const mockEmails = [
       <p>Best regards,</p>
       <p>Sarah</p>
     `,
-    timestamp: "Yesterday",
+    timestamp: "Friday",
     read: true,
   },
   {
-    id: "3",
+    id: "17",
     sender: "Christina Correa",
     avatarUrl: "https://i.pravatar.cc/150?u=christina.correa",
     subject: "Document shared with you",
@@ -74,14 +425,14 @@ const mockEmails = [
       <p>Regards,</p>
       <p>Christina</p>
     `,
-    timestamp: "Wednesday",
+    timestamp: "Friday",
     read: true,
   },
   {
-    id: "4",
+    id: "18",
     sender: "Slack",
-    avatarUrl: "/slack.svg", // Using the Slack SVG icon
-    isBrand: true, // To handle brand icons differently if needed
+    avatarUrl: "/slack.svg",
+    isBrand: true,
     subject: "You've got 5 unread messages",
     snippet: "Your teams has sent you new messages...",
     content: `
@@ -89,7 +440,7 @@ const mockEmails = [
       <br/>
       <p>Click here to view them.</p>
     `,
-    timestamp: "Wednesday",
+    timestamp: "Friday",
     read: false,
   },
 ];
@@ -172,15 +523,27 @@ const EmailItem: React.FC<EmailItemProps> = ({
         }
       }}
     >
-      <Avatar
-        className="mr-3 flex-shrink-0"
-        classNames={{
-          base: "bg-transparent",
-        }}
-        name={sender}
-        size="md"
-        src={avatarUrl}
-      />
+      {isBrand ? (
+        <div className="mr-3 flex-shrink-0 w-10 h-10 rounded-lg bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 flex items-center justify-center p-1.5">
+          <Image
+            alt={sender}
+            className="w-full h-full object-contain"
+            height={32}
+            src={avatarUrl}
+            width={32}
+          />
+        </div>
+      ) : (
+        <Avatar
+          className="mr-3 flex-shrink-0"
+          classNames={{
+            base: "bg-transparent",
+          }}
+          name={sender}
+          size="md"
+          src={avatarUrl}
+        />
+      )}
       <div className="flex-grow truncate">
         <div className="flex justify-between items-center">
           <span

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@heroui/button";
 import { Avatar } from "@heroui/avatar";
 import { Input } from "@heroui/input";
+import Image from "next/image";
 import {
   PrinterIcon,
   InfoIcon,
@@ -13,6 +14,8 @@ import {
   MicIcon,
   SendIcon,
   XIcon,
+  SparklesIcon,
+  CheckIcon,
 } from "lucide-react";
 
 interface EmailViewProps {
@@ -31,6 +34,115 @@ interface EmailViewProps {
 
 const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   const [replyText, setReplyText] = useState("");
+  const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(
+    null
+  );
+
+  // Generate AI-powered response suggestions based on email content
+  const generateSuggestions = (email: any) => {
+    const subject = email.subject.toLowerCase();
+    const content = email.content.toLowerCase();
+
+    // Meeting/Appointment related
+    if (
+      subject.includes("meeting") ||
+      subject.includes("appointment") ||
+      subject.includes("call") ||
+      content.includes("schedule")
+    ) {
+      return [
+        "I'll be there, thanks for scheduling!",
+        "Could we reschedule for later this week?",
+        "Looking forward to our discussion",
+        "Please send the meeting agenda beforehand",
+      ];
+    }
+
+    // Job/Interview related
+    if (
+      subject.includes("interview") ||
+      content.includes("offer") ||
+      content.includes("position") ||
+      content.includes("job")
+    ) {
+      return [
+        "Thank you for the opportunity!",
+        "I'm very interested and would love to discuss further",
+        "Could you share more details about the role?",
+        "I appreciate your time and consideration",
+      ];
+    }
+
+    // Payment/Billing related
+    if (
+      subject.includes("payment") ||
+      subject.includes("bill") ||
+      subject.includes("invoice") ||
+      content.includes("receipt")
+    ) {
+      return [
+        "Payment received, thank you",
+        "Could you send an updated invoice?",
+        "I have a question about this charge",
+        "Please confirm payment was processed",
+      ];
+    }
+
+    // Security/Verification related
+    if (
+      subject.includes("security") ||
+      subject.includes("verify") ||
+      content.includes("sign-in") ||
+      content.includes("verification")
+    ) {
+      return [
+        "Yes, that was me signing in",
+        "I didn't authorize this activity",
+        "Please help me secure my account",
+        "Thanks for the security notification",
+      ];
+    }
+
+    // Shipping/Orders
+    if (
+      subject.includes("order") ||
+      subject.includes("ship") ||
+      content.includes("delivery") ||
+      content.includes("tracking")
+    ) {
+      return [
+        "Thanks for the update!",
+        "When can I expect delivery?",
+        "Could you provide tracking information?",
+        "Perfect, looking forward to receiving it",
+      ];
+    }
+
+    // Collaboration/Project related
+    if (
+      subject.includes("project") ||
+      subject.includes("collaboration") ||
+      content.includes("team") ||
+      content.includes("workspace")
+    ) {
+      return [
+        "Excited to collaborate!",
+        "I'll review and get back to you",
+        "Could we schedule a quick sync?",
+        "Thanks for adding me to the project",
+      ];
+    }
+
+    // Default professional responses
+    return [
+      "Thank you for reaching out",
+      "I'll review this and get back to you",
+      "Could we schedule a time to discuss?",
+      "I appreciate the information",
+    ];
+  };
+
+  const suggestions = useMemo(() => generateSuggestions(email), [email]);
 
   // Função para formatar a data/hora
   const formatTimestamp = (timestamp: string) => {
@@ -39,14 +151,15 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
 
   // Função para lidar com resposta rápida
   const handleQuickReply = (replyText: string) => {
-    // Implementar lógica de resposta rápida
     setReplyText(replyText);
+    setSelectedSuggestion(replyText);
   };
 
   // Função para enviar resposta
   const handleSendReply = () => {
     // Implementar lógica de envio de resposta
     setReplyText("");
+    setSelectedSuggestion(null);
   };
 
   // Função para sugerir resposta
@@ -108,15 +221,27 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
 
         {/* Sender Info */}
         <div className="py-3 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-3 mb-4">
-          <Avatar
-            className="mr-3"
-            classNames={{
-              base: "bg-transparent",
-            }}
-            name={email.sender}
-            size="md"
-            src={email.avatarUrl}
-          />
+          {email.isBrand ? (
+            <div className="mr-3 flex-shrink-0 w-10 h-10 rounded-lg bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 flex items-center justify-center p-1.5">
+              <Image
+                alt={email.sender}
+                className="w-full h-full object-contain"
+                height={32}
+                src={email.avatarUrl}
+                width={32}
+              />
+            </div>
+          ) : (
+            <Avatar
+              className="mr-3"
+              classNames={{
+                base: "bg-transparent",
+              }}
+              name={email.sender}
+              size="md"
+              src={email.avatarUrl}
+            />
+          )}
           <div>
             <div className="flex items-center">
               <span className="font-medium text-black dark:text-white">
@@ -134,44 +259,51 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           <div dangerouslySetInnerHTML={{ __html: email.content }} />
         </div>
 
-        {/* Quick Reply Options */}
-        <div className="flex flex-wrap gap-3 py-4 px-1">
-          <Button
-            className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200/50 dark:border-blue-700/30 text-blue-700 dark:text-blue-300 hover:bg-gradient-to-r hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-800/30 dark:hover:to-indigo-800/30 transition-all duration-200 shadow-sm hover:shadow-md"
-            radius="full"
-            size="sm"
-            startContent={<PlusIcon size={14} />}
-            variant="flat"
-            onClick={() =>
-              handleQuickReply("Thank you for sharing the great news")
-            }
-          >
-            Thank you for sharing the great news
-          </Button>
-
-          <Button
-            className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200/50 dark:border-green-700/30 text-green-700 dark:text-green-300 hover:bg-gradient-to-r hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-800/30 dark:hover:to-emerald-800/30 transition-all duration-200 shadow-sm hover:shadow-md"
-            radius="full"
-            size="sm"
-            startContent={<PlusIcon size={14} />}
-            variant="flat"
-            onClick={() =>
-              handleQuickReply("I&apos;m available tomorrow at 1pm PST")
-            }
-          >
-            I&apos;m available tomorrow at 1pm PST
-          </Button>
-
-          <Button
-            className="bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 border border-purple-200/50 dark:border-purple-700/30 text-purple-700 dark:text-purple-300 hover:bg-gradient-to-r hover:from-purple-100 hover:to-violet-100 dark:hover:from-purple-800/30 dark:hover:to-violet-800/30 transition-all duration-200 shadow-sm hover:shadow-md"
-            radius="full"
-            size="sm"
-            startContent={<PlusIcon size={14} />}
-            variant="flat"
-            onClick={() => handleQuickReply("Let me get back to you on this")}
-          >
-            Let me get back to you on this
-          </Button>
+        {/* AI Response Suggestions */}
+        <div className="py-4 px-1">
+          <div className="flex items-center gap-2 mb-3">
+            <SparklesIcon
+              className="text-blue-600 dark:text-blue-400"
+              size={16}
+            />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              AI Suggested Responses
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {suggestions.map((suggestion, index) => (
+              <Button
+                key={index}
+                className={`
+                  bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 
+                  border border-blue-200/60 dark:border-blue-700/40 
+                  text-blue-700 dark:text-blue-300 
+                  hover:bg-gradient-to-r hover:from-blue-100 hover:to-indigo-100 
+                  dark:hover:from-blue-900/50 dark:hover:to-indigo-900/50 
+                  hover:border-blue-300/80 dark:hover:border-blue-600/60
+                  transition-all duration-200 shadow-sm hover:shadow-md
+                  ${
+                    selectedSuggestion === suggestion
+                      ? "ring-2 ring-blue-400 dark:ring-blue-500 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/60 dark:to-indigo-900/60"
+                      : ""
+                  }
+                `}
+                radius="lg"
+                size="sm"
+                startContent={
+                  selectedSuggestion === suggestion ? (
+                    <CheckIcon size={14} />
+                  ) : (
+                    <PlusIcon size={14} />
+                  )
+                }
+                variant="flat"
+                onPress={() => handleQuickReply(suggestion)}
+              >
+                {suggestion}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
