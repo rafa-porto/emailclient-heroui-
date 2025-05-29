@@ -524,13 +524,24 @@ const EmailItem: React.FC<EmailItemProps> = ({
       }}
     >
       {isBrand ? (
-        <div className="mr-3 flex-shrink-0 w-10 h-10 rounded-lg bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 flex items-center justify-center p-1.5">
+        <div className="mr-3 flex-shrink-0 w-11 h-11 flex items-center justify-center">
           <Image
             alt={sender}
-            className="w-full h-full object-contain"
-            height={32}
+            className={`w-full h-full object-contain ${
+              // Apply theme-aware filters for black/white icons
+              avatarUrl.includes("github.svg")
+                ? "dark:invert dark:brightness-0 dark:contrast-100"
+                : avatarUrl.includes("apple.svg")
+                  ? "brightness-0 dark:brightness-100 dark:invert-0"
+                  : avatarUrl.includes("uber.svg")
+                    ? "dark:invert dark:brightness-0 dark:contrast-100"
+                    : avatarUrl.includes("aws.svg")
+                      ? "dark:invert dark:brightness-0 dark:contrast-100"
+                      : ""
+            }`}
+            height={38}
             src={avatarUrl}
-            width={32}
+            width={38}
           />
         </div>
       ) : (
