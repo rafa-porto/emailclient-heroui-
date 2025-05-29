@@ -524,7 +524,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
       }}
     >
       {isBrand ? (
-        <div className="mr-3 flex-shrink-0 w-11 h-11 flex items-center justify-center">
+        <div className="mr-3 flex-shrink-0 w-9 h-9 flex items-center justify-center">
           <Image
             alt={sender}
             className={`w-full h-full object-contain ${
@@ -539,9 +539,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
                       ? "dark:invert dark:brightness-0 dark:contrast-100"
                       : ""
             }`}
-            height={38}
+            height={36}
             src={avatarUrl}
-            width={38}
+            width={36}
           />
         </div>
       ) : (

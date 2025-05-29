@@ -222,7 +222,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         {/* Sender Info */}
         <div className="py-3 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-3 mb-4">
           {email.isBrand ? (
-            <div className="mr-3 flex-shrink-0 w-11 h-11 flex items-center justify-center">
+            <div className="mr-3 flex-shrink-0 w-9 h-9 flex items-center justify-center">
               <Image
                 alt={email.sender}
                 className={`w-full h-full object-contain ${
@@ -237,9 +237,9 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                           ? "dark:invert dark:brightness-0 dark:contrast-100"
                           : ""
                 }`}
-                height={44}
+                height={36}
                 src={email.avatarUrl}
-                width={44}
+                width={36}
               />
             </div>
           ) : (
