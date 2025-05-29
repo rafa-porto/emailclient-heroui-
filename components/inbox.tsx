@@ -209,7 +209,6 @@ const mockEmails = [
     `,
     timestamp: "Yesterday",
     read: true,
-    isAIGenerated: true,
   },
   {
     id: "9",

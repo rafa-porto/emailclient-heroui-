@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "@heroui/button";
 import { Textarea } from "@heroui/input";
 import { PaperclipIcon, MicIcon } from "lucide-react";
+import { AIIcon } from "@/components/icons";
 
 interface AiPanelProps {
   onClose: () => void;
@@ -43,6 +44,11 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
     <div className="h-full flex flex-col overflow-hidden">
       {/* Content */}
       <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 overflow-y-auto min-h-0">
+        {/* AI Icon */}
+        <div className="mb-8">
+          <AIIcon size={32} className="text-blue-600 dark:text-blue-400" />
+        </div>
+
         {/* Main Question */}
         <div className="text-center mb-12">
           <h4 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
@@ -105,40 +111,40 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
         </div>
 
         {/* Quick Actions */}
-        <div className="flex flex-col gap-3 w-full max-w-md items-center">
+        <div className="flex flex-col gap-4 w-full max-w-md items-center">
           {/* First row - two buttons */}
           <div className="flex gap-3 w-full justify-center">
             <Button
-              className="bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 border-0 flex-1 max-w-[140px]"
-              radius="full"
+              className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 flex-1 max-w-[150px] font-medium shadow-sm py-3 px-4 min-h-[50px]"
+              radius="lg"
               size="md"
               variant="flat"
               onClick={() => handleQuickAction("Organize my inbox")}
             >
-              Organize my inbox
+              <span className="text-sm">Organize my inbox</span>
             </Button>
 
             <Button
-              className="bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 border-0 flex-1 max-w-[140px]"
-              radius="full"
+              className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 flex-1 max-w-[150px] font-medium shadow-sm py-3 px-4 min-h-[50px]"
+              radius="lg"
               size="md"
               variant="flat"
               onClick={() => handleQuickAction("Find urgent emails")}
             >
-              Find urgent emails
+              <span className="text-sm">Find urgent emails</span>
             </Button>
           </div>
 
           {/* Second row - one button */}
           <div className="flex justify-center">
             <Button
-              className="bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 border-0 max-w-[140px]"
-              radius="full"
+              className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 max-w-[150px] font-medium shadow-sm py-3 px-4 min-h-[50px]"
+              radius="lg"
               size="md"
               variant="flat"
               onClick={() => handleQuickAction("Plan my day")}
             >
-              Plan my day
+              <span className="text-sm">Plan my day</span>
             </Button>
           </div>
         </div>
