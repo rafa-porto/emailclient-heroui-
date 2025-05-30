@@ -92,7 +92,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDeleting(true);
-    
+
     // Start delete animation
     setTimeout(() => {
       onDelete?.(id);
@@ -102,7 +102,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   const handlePermanentDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsPermanentDeleting(true);
-    
+
     // Start permanent delete animation (fade out and scale)
     setTimeout(() => {
       onPermanentDelete?.(id);
@@ -118,7 +118,8 @@ const EmailItem: React.FC<EmailItemProps> = ({
 
   const getAnimationClass = () => {
     if (isDeleting) return "animate-[slideOutRight_0.3s_ease-in-out_forwards]";
-    if (isPermanentDeleting) return "animate-[fadeOutScale_0.3s_ease-in-out_forwards]";
+    if (isPermanentDeleting)
+      return "animate-[fadeOutScale_0.3s_ease-in-out_forwards]";
 
     return "";
   };
