@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Switch } from "@heroui/switch";
-import { Card, CardBody } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { Select, SelectItem } from "@heroui/select";
 import { Slider } from "@heroui/slider";
@@ -13,12 +12,13 @@ import { KeyIcon, MonitorIcon, SmartphoneIcon, CheckIcon } from "lucide-react";
 
 export default function SettingsPage() {
   const searchParams = useSearchParams();
-  const [activeSection, setActiveSection] = useState("profile");
+  const [activeSection, setActiveSection] = useState("general");
 
   useEffect(() => {
     const section = searchParams.get("section");
     if (section) {
-      setActiveSection(section);
+      // Handle backward compatibility: map "profile" to "general"
+      setActiveSection(section === "profile" ? "general" : section);
     }
   }, [searchParams]);
 
@@ -44,11 +44,6 @@ export default function SettingsPage() {
     soundEnabled: true,
     notificationFrequency: "instant",
 
-    // Privacy settings
-    profileVisibility: "public",
-    twoFactorAuth: false,
-    dataCollection: true,
-
     // Appearance settings
     theme: "system",
     compactMode: false,
@@ -60,11 +55,6 @@ export default function SettingsPage() {
     signature: "",
     markAsReadDelay: 2,
     showImages: true,
-
-    // Storage settings
-    autoDelete: false,
-    deleteAfterDays: 30,
-    compressAttachments: true,
   });
 
   const updateSetting = (key: string, value: any) => {
@@ -75,7 +65,7 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Profile Information
+          General Information
         </h3>
         <div className="grid gap-4">
           <Input
@@ -231,65 +221,6 @@ export default function SettingsPage() {
     </div>
   );
 
-  const renderPrivacySection = () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Privacy Settings
-        </h3>
-        <div className="space-y-4">
-          <div>
-            <Select
-              label="Profile Visibility"
-              selectedKeys={[settings.profileVisibility]}
-              onSelectionChange={(keys) => {
-                const value = Array.from(keys)[0] as string;
-                updateSetting("profileVisibility", value);
-              }}
-              classNames={{
-                trigger: "bg-gray-50 dark:bg-neutral-800/50",
-              }}
-            >
-              <SelectItem key="public">Public</SelectItem>
-              <SelectItem key="private">Private</SelectItem>
-              <SelectItem key="contacts">Contacts Only</SelectItem>
-            </Select>
-          </div>
-
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Two-Factor Authentication
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Add an extra layer of security
-              </p>
-            </div>
-            <Switch
-              isSelected={settings.twoFactorAuth}
-              onValueChange={(value) => updateSetting("twoFactorAuth", value)}
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Data Collection
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Allow usage data collection for improvements
-              </p>
-            </div>
-            <Switch
-              isSelected={settings.dataCollection}
-              onValueChange={(value) => updateSetting("dataCollection", value)}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const renderAppearanceSection = () => (
     <div className="space-y-6">
       <div>
@@ -366,7 +297,12 @@ export default function SettingsPage() {
               minValue={12}
               maxValue={18}
               value={[settings.fontSize]}
-              onChange={(value) => updateSetting("fontSize", value[0])}
+              onChange={(value) =>
+                updateSetting(
+                  "fontSize",
+                  Array.isArray(value) ? value[0] : value
+                )
+              }
               className="max-w-md"
             />
           </div>
@@ -422,7 +358,12 @@ export default function SettingsPage() {
               minValue={0}
               maxValue={10}
               value={[settings.markAsReadDelay]}
-              onChange={(value) => updateSetting("markAsReadDelay", value[0])}
+              onChange={(value) =>
+                updateSetting(
+                  "markAsReadDelay",
+                  Array.isArray(value) ? value[0] : value
+                )
+              }
               className="max-w-md"
             />
           </div>
@@ -449,109 +390,18 @@ export default function SettingsPage() {
     </div>
   );
 
-  const renderStorageSection = () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Storage Management
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
-            <CardBody className="text-center">
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                2.4 GB
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Used</p>
-            </CardBody>
-          </Card>
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
-            <CardBody className="text-center">
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                12.6 GB
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Available
-              </p>
-            </CardBody>
-          </Card>
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
-            <CardBody className="text-center">
-              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                15 GB
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
-            </CardBody>
-          </Card>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Auto Delete Old Emails
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Automatically delete emails after specified time
-              </p>
-            </div>
-            <Switch
-              isSelected={settings.autoDelete}
-              onValueChange={(value) => updateSetting("autoDelete", value)}
-            />
-          </div>
-
-          {settings.autoDelete && (
-            <div className="space-y-2 ml-4">
-              <label className="text-sm font-medium text-gray-900 dark:text-white">
-                Delete After: {settings.deleteAfterDays} days
-              </label>
-              <Slider
-                size="sm"
-                step={5}
-                minValue={7}
-                maxValue={365}
-                value={[settings.deleteAfterDays]}
-                onChange={(value) => updateSetting("deleteAfterDays", value[0])}
-                className="max-w-md"
-              />
-            </div>
-          )}
-
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Compress Attachments
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Reduce attachment file sizes to save space
-              </p>
-            </div>
-            <Switch
-              isSelected={settings.compressAttachments}
-              onValueChange={(value) =>
-                updateSetting("compressAttachments", value)
-              }
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   const renderSectionContent = () => {
     switch (activeSection) {
-      case "profile":
+      case "general":
+      case "profile": // Backward compatibility
         return renderProfileSection();
       case "notifications":
         return renderNotificationsSection();
-      case "privacy":
-        return renderPrivacySection();
       case "appearance":
         return renderAppearanceSection();
-      case "email":
+      case "email-preferences":
+      case "email": // Backward compatibility
         return renderEmailSection();
-      case "storage":
-        return renderStorageSection();
       default:
         return renderProfileSection();
     }

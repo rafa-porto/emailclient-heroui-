@@ -16,7 +16,6 @@ import {
   ChevronDownIcon,
   ClockIcon,
   CrownIcon,
-  DatabaseIcon,
   FileTextIcon,
   HardDriveIcon,
   InboxIcon,
@@ -25,7 +24,6 @@ import {
   PaletteIcon,
   SendIcon,
   SettingsIcon,
-  ShieldIcon,
   StarIcon,
   Trash2Icon,
   UserIcon,
@@ -57,18 +55,18 @@ const Sidebar = ({
 
   // Check if we're on settings page
   const isSettingsPage = pathname.startsWith("/dashboard/settings");
-  const activeSection = searchParams.get("section") || "profile";
+  const activeSection = searchParams.get("section") || "general";
 
   // Calculate email counts
   const activeEmails = mockEmails.filter(
     (email) =>
-      !deletedEmails.includes(email.id) && !archivedEmails.includes(email.id)
+      !deletedEmails.includes(email.id) && !archivedEmails.includes(email.id),
   );
   const unreadInboxCount = activeEmails.filter(
-    (email) => !isEmailRead(email.id)
+    (email) => !isEmailRead(email.id),
   ).length;
   const starredCount = starredEmails.filter(
-    (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id)
+    (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id),
   ).length;
   const trashCount = deletedEmails.length;
   const archivedCount = archivedEmails.length;
@@ -152,44 +150,20 @@ const Sidebar = ({
         <nav className="space-y-0.5 flex-shrink-0">
           <Button
             className={`w-full justify-start ${
-              activeSection === "profile"
+              activeSection === "general" || activeSection === "profile"
                 ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
                 : ""
             }`}
             size="sm"
             startContent={<UserIcon size={16} />}
-            variant={activeSection === "profile" ? "solid" : "light"}
-            onPress={() => router.push("/dashboard/settings?section=profile")}
-          >
-            Profile
-          </Button>
-          <Button
-            className={`w-full justify-start ${
-              activeSection === "notifications"
-                ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
-                : ""
-            }`}
-            size="sm"
-            startContent={<BellIcon size={16} />}
-            variant={activeSection === "notifications" ? "solid" : "light"}
-            onPress={() =>
-              router.push("/dashboard/settings?section=notifications")
+            variant={
+              activeSection === "general" || activeSection === "profile"
+                ? "solid"
+                : "light"
             }
+            onPress={() => router.push("/dashboard/settings?section=general")}
           >
-            Notifications
-          </Button>
-          <Button
-            className={`w-full justify-start ${
-              activeSection === "privacy"
-                ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
-                : ""
-            }`}
-            size="sm"
-            startContent={<ShieldIcon size={16} />}
-            variant={activeSection === "privacy" ? "solid" : "light"}
-            onPress={() => router.push("/dashboard/settings?section=privacy")}
-          >
-            Privacy & Security
+            General
           </Button>
           <Button
             className={`w-full justify-start ${
@@ -208,6 +182,21 @@ const Sidebar = ({
           </Button>
           <Button
             className={`w-full justify-start ${
+              activeSection === "notifications"
+                ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
+                : ""
+            }`}
+            size="sm"
+            startContent={<BellIcon size={16} />}
+            variant={activeSection === "notifications" ? "solid" : "light"}
+            onPress={() =>
+              router.push("/dashboard/settings?section=notifications")
+            }
+          >
+            Notifications
+          </Button>
+          <Button
+            className={`w-full justify-start ${
               activeSection === "email"
                 ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
                 : ""
@@ -217,20 +206,7 @@ const Sidebar = ({
             variant={activeSection === "email" ? "solid" : "light"}
             onPress={() => router.push("/dashboard/settings?section=email")}
           >
-            Email Settings
-          </Button>
-          <Button
-            className={`w-full justify-start ${
-              activeSection === "storage"
-                ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
-                : ""
-            }`}
-            size="sm"
-            startContent={<DatabaseIcon size={16} />}
-            variant={activeSection === "storage" ? "solid" : "light"}
-            onPress={() => router.push("/dashboard/settings?section=storage")}
-          >
-            Storage & Data
+            Email Preferences
           </Button>
         </nav>
 
