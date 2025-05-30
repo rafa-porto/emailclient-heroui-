@@ -13,7 +13,6 @@ import {
   ArchiveIcon,
   TrashIcon,
   MoreVerticalIcon,
-  SparklesIcon,
   PaperclipIcon,
 } from "lucide-react";
 
@@ -206,13 +205,6 @@ const EmailItem: React.FC<EmailItemProps> = ({
                   title="Brand"
                 />
               )}
-              {isAIGenerated && (
-                <SparklesIcon
-                  className="text-purple-500"
-                  size={12}
-                  title="AI Generated"
-                />
-              )}
               {isImportant && (
                 <div
                   className="w-2 h-2 bg-red-500 rounded-full"
@@ -220,11 +212,12 @@ const EmailItem: React.FC<EmailItemProps> = ({
                 />
               )}
               {attachments && attachments.length > 0 && (
-                <PaperclipIcon
-                  className="text-gray-400 dark:text-neutral-500"
-                  size={12}
-                  title={`${attachments.length} attachment(s)`}
-                />
+                <div title={`${attachments.length} attachment(s)`}>
+                  <PaperclipIcon
+                    className="text-gray-400 dark:text-neutral-500"
+                    size={12}
+                  />
+                </div>
               )}
             </div>
           </div>
