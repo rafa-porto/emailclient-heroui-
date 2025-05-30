@@ -55,6 +55,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPermanentDeleting, setIsPermanentDeleting] = useState(false);
+  const [isStarring, setIsStarring] = useState(false);
   const { isEmailStarred, isEmailRead, isEmailArchived, isEmailDeleted } =
     useEmailContext();
 
@@ -107,6 +108,17 @@ const EmailItem: React.FC<EmailItemProps> = ({
     setTimeout(() => {
       onPermanentDelete?.(id);
     }, 300); // Wait for animation to complete
+  };
+
+  const handleStar = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsStarring(true);
+
+    // Start star animation
+    setTimeout(() => {
+      onStar?.(id);
+      setIsStarring(false);
+    }, 400); // Wait for star animation to complete
   };
 
   const getOpacity = () => {
@@ -214,7 +226,9 @@ const EmailItem: React.FC<EmailItemProps> = ({
               )}
               {isStarredFromContext && (
                 <StarIcon
-                  className="text-yellow-500 fill-yellow-500"
+                  className={`text-yellow-500 fill-yellow-500 ${
+                    isStarring ? "animate-[starPulse_0.5s_ease-out]" : ""
+                  } transition-all duration-200`}
                   size={12}
                 />
               )}
@@ -275,14 +289,13 @@ const EmailItem: React.FC<EmailItemProps> = ({
                   ? "text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 shadow-sm"
                   : "text-gray-600 dark:text-neutral-400 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
               }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                onStar(id);
-              }}
+              onClick={handleStar}
               title={isStarredFromContext ? "Unstar" : "Star"}
             >
               <StarIcon
-                className={isStarredFromContext ? "fill-current" : ""}
+                className={`${isStarredFromContext ? "fill-current" : ""} ${
+                  isStarring ? "animate-[starSparkle_0.6s_ease-out]" : ""
+                } transition-all duration-300`}
                 size={14}
               />
             </button>
