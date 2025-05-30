@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 import { EmailData } from "@/types";
 import { usePersistentState } from "@/components/hooks/use-persistent-state";
@@ -33,6 +39,11 @@ interface EmailContextType {
   markAsRead: (emailId: string) => void;
   markAsUnread: (emailId: string) => void;
   isEmailRead: (emailId: string) => boolean;
+  // New email functionality
+  newEmails: EmailData[];
+  addNewEmail: (email: EmailData) => void;
+  animatingEmails: string[];
+  removeAnimatingEmail: (emailId: string) => void;
 }
 
 const EmailContext = createContext<EmailContextType | undefined>(undefined);
@@ -70,6 +81,66 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
     key: "readEmails",
     defaultValue: [] as string[],
   });
+
+  // New email functionality
+  const [newEmails, setNewEmails] = useState<EmailData[]>([]);
+  const [animatingEmails, setAnimatingEmails] = useState<string[]>([]);
+
+  // Add new email with animation
+  const addNewEmail = (email: EmailData) => {
+    setNewEmails((prev) => [email, ...prev]);
+    setAnimatingEmails((prev) => [...prev, email.id]);
+
+    // Remove animation after 3 seconds
+    setTimeout(() => {
+      setAnimatingEmails((prev) => prev.filter((id) => id !== email.id));
+    }, 3000);
+  };
+
+  const removeAnimatingEmail = (emailId: string) => {
+    setAnimatingEmails((prev) => prev.filter((id) => id !== emailId));
+  };
+
+  // Auto-add new email after 5 seconds on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const newEmail: EmailData = {
+        id: `new-${Date.now()}`,
+        sender: "GitHub",
+        avatarUrl: "/github.svg",
+        subject: "🎉 Your pull request has been merged!",
+        snippet:
+          "Congratulations! Your contribution to the project has been successfully merged...",
+        content: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #333;">🎉 Pull Request Merged Successfully!</h2>
+            <p>Hi there,</p>
+            <p>Great news! Your pull request <strong>#1234 - Add new email notification feature</strong> has been successfully merged into the main branch.</p>
+            <p>Your contribution helps make our project better. Thank you for your hard work!</p>
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+            <p><strong>Changed files:</strong></p>
+            <ul>
+              <li>components/email-context.tsx</li>
+              <li>app/dashboard/all/page.tsx</li>
+            </ul>
+            <p>Best regards,<br>The GitHub Team</p>
+          </div>
+        `,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        read: false,
+        isBrand: true,
+        isAIGenerated: false,
+        isImportant: true,
+      };
+
+      addNewEmail(newEmail);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Star functionality
   const toggleStarEmail = (emailId: string) => {
@@ -154,6 +225,10 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
         markAsRead,
         markAsUnread,
         isEmailRead,
+        newEmails,
+        addNewEmail,
+        animatingEmails,
+        removeAnimatingEmail,
       }}
     >
       {children}

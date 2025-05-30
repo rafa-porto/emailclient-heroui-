@@ -27,6 +27,7 @@ interface EmailItemProps extends EmailData {
   onStar?: (id: string) => void;
   onArchive?: (id: string) => void;
   onDelete?: (id: string) => void;
+  isAnimating?: boolean;
 }
 
 const EmailItem: React.FC<EmailItemProps> = ({
@@ -46,6 +47,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   onStar,
   onArchive,
   onDelete,
+  isAnimating,
 }) => {
   const [showActionPopup, setShowActionPopup] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);
@@ -100,7 +102,15 @@ const EmailItem: React.FC<EmailItemProps> = ({
   return (
     <div
       aria-label={`Email from ${sender}: ${subject}`}
-      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${!isReadFromContext ? "bg-gray-100 dark:bg-neutral-800" : "bg-white dark:bg-neutral-900"}`}
+      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer transition-all duration-300 ${
+        !isReadFromContext
+          ? "bg-gray-100 dark:bg-neutral-800"
+          : "bg-white dark:bg-neutral-900"
+      } ${
+        isAnimating
+          ? "animate-pulse bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 shadow-lg transform scale-[1.02]"
+          : ""
+      }`}
       role="button"
       tabIndex={0}
       onClick={handleClick}
@@ -277,6 +287,9 @@ const Inbox = () => {
     markAsRead,
     isEmailArchived,
     isEmailDeleted,
+    newEmails,
+    animatingEmails,
+    removeAnimatingEmail,
   } = useEmailContext();
 
   const handleEmailClick = (email: EmailData) => {
@@ -297,10 +310,22 @@ const Inbox = () => {
     deleteEmail(id);
   };
 
-  // Filter emails based on their state
-  const visibleEmails = mockEmails.filter(
+  // Filter emails based on their state and include new emails
+  const allEmailsData = [...newEmails, ...mockEmails];
+  const visibleEmails = allEmailsData.filter(
     (email) => !isEmailDeleted(email.id) && !isEmailArchived(email.id)
   );
+
+  // Add useEffect to handle animation cleanup
+  useEffect(() => {
+    animatingEmails.forEach((emailId) => {
+      const timer = setTimeout(() => {
+        removeAnimatingEmail(emailId);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    });
+  }, [animatingEmails, removeAnimatingEmail]);
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-neutral-950 text-black dark:text-white p-4">
@@ -382,6 +407,7 @@ const Inbox = () => {
             <EmailItem
               key={email.id}
               {...email}
+              isAnimating={animatingEmails.includes(email.id)}
               onArchive={handleArchiveEmail}
               onClick={handleEmailClick}
               onDelete={handleDeleteEmail}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
@@ -32,10 +32,24 @@ const AllPage = () => {
     isEmailRead,
     isEmailStarred,
     toggleStarEmail,
+    newEmails,
+    animatingEmails,
+    removeAnimatingEmail,
   } = useEmailContext();
 
-  // Show all emails regardless of status
-  const allEmailsData = mockEmails;
+  // Show all emails including new ones
+  const allEmailsData = [...newEmails, ...mockEmails];
+
+  useEffect(() => {
+    // Remove animation after some time for better UX
+    animatingEmails.forEach((emailId) => {
+      const timer = setTimeout(() => {
+        removeAnimatingEmail(emailId);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    });
+  }, [animatingEmails, removeAnimatingEmail]);
 
   const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
@@ -105,6 +119,7 @@ const AllPage = () => {
             <EmailItem
               key={email.id}
               email={email}
+              isAnimating={animatingEmails.includes(email.id)}
               isArchived={archivedEmails.includes(email.id)}
               isDeleted={deletedEmails.includes(email.id)}
               isRead={isEmailRead(email.id)}
@@ -128,6 +143,7 @@ interface EmailItemProps {
   isStarred: boolean;
   isArchived: boolean;
   isDeleted: boolean;
+  isAnimating?: boolean;
   onClick: (email: EmailData) => void;
   onStar: (id: string) => void;
   onArchive: (id: string) => void;
@@ -140,6 +156,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   isStarred,
   isArchived,
   isDeleted,
+  isAnimating,
   onClick,
   onStar,
   onArchive,
@@ -165,11 +182,15 @@ const EmailItem: React.FC<EmailItemProps> = ({
 
   return (
     <div
-      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer ${
+      className={`group relative flex items-center p-3 mb-2 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/80 cursor-pointer transition-all duration-300 ${
         !isRead
           ? "bg-gray-100 dark:bg-neutral-800"
           : "bg-white dark:bg-neutral-900"
-      } ${getEmailOpacity()}`}
+      } ${getEmailOpacity()} ${
+        isAnimating
+          ? "animate-pulse bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 shadow-lg transform scale-[1.02]"
+          : ""
+      }`}
       onClick={() => !isDeleted && onClick(email)}
     >
       {email.isBrand ? (
