@@ -53,6 +53,8 @@ const EmailItem: React.FC<EmailItemProps> = ({
   isAnimating,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPermanentDeleting, setIsPermanentDeleting] = useState(false);
   const { isEmailStarred, isEmailRead, isEmailArchived, isEmailDeleted } =
     useEmailContext();
 
@@ -87,9 +89,37 @@ const EmailItem: React.FC<EmailItemProps> = ({
     setIsHovered(false);
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDeleting(true);
+    
+    // Start delete animation
+    setTimeout(() => {
+      onDelete?.(id);
+    }, 300); // Wait for animation to complete
+  };
+
+  const handlePermanentDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsPermanentDeleting(true);
+    
+    // Start permanent delete animation (fade out and scale)
+    setTimeout(() => {
+      onPermanentDelete?.(id);
+    }, 300); // Wait for animation to complete
+  };
+
   const getOpacity = () => {
     if (isDeletedFromContext) return "opacity-50";
     if (isArchivedFromContext) return "opacity-75";
+
+    return "";
+  };
+
+  const getAnimationClass = () => {
+    if (isDeleting) return "animate-[slideOutRight_0.3s_ease-in-out_forwards]";
+    if (isPermanentDeleting) return "animate-[fadeOutScale_0.3s_ease-in-out_forwards]";
+
     return "";
   };
 
@@ -100,18 +130,18 @@ const EmailItem: React.FC<EmailItemProps> = ({
         !isReadFromContext
           ? "bg-gray-100 dark:bg-neutral-800"
           : "bg-white dark:bg-neutral-900"
-      } ${getOpacity()}`}
+      } ${getOpacity()} ${getAnimationClass()}`}
       role="button"
       tabIndex={0}
       onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           handleClick();
         }
       }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Ping animation for new emails */}
       {isAnimating && (
@@ -299,10 +329,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
           {onDelete && !isDeletedFromContext && (
             <button
               className="p-2 rounded-lg text-gray-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(id);
-              }}
+              onClick={handleDelete}
               title="Delete"
             >
               <TrashIcon size={14} />
@@ -312,10 +339,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
           {onPermanentDelete && isDeletedFromContext && (
             <button
               className="p-2 rounded-lg text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 shadow-sm transition-all duration-200"
-              onClick={(e) => {
-                e.stopPropagation();
-                onPermanentDelete(id);
-              }}
+              onClick={handlePermanentDelete}
               title="Delete Forever"
             >
               <TrashIcon size={14} />
