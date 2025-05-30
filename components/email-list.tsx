@@ -100,10 +100,6 @@ const EmailItem: React.FC<EmailItemProps> = ({
         !isReadFromContext
           ? "bg-gray-100 dark:bg-neutral-800"
           : "bg-white dark:bg-neutral-900"
-      } ${
-        isAnimating
-          ? "animate-pulse bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700 shadow-lg transform scale-[1.02]"
-          : ""
       } ${getOpacity()}`}
       role="button"
       tabIndex={0}
@@ -117,6 +113,14 @@ const EmailItem: React.FC<EmailItemProps> = ({
         }
       }}
     >
+      {/* Ping animation for new emails */}
+      {isAnimating && (
+        <div className="absolute -top-1 -left-1 w-4 h-4">
+          <div className="absolute w-full h-full bg-blue-400 rounded-full animate-ping" />
+          <div className="relative w-full h-full bg-blue-500 rounded-full" />
+        </div>
+      )}
+
       {/* Avatar */}
       <div className="mr-3 flex-shrink-0">
         {avatarUrl ? (
@@ -232,7 +236,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
 
       {/* Horizontal Action Popup on Hover */}
       {isHovered && (
-        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-50 flex items-center gap-0.5 bg-white dark:bg-neutral-800 border border-gray-200/80 dark:border-neutral-700/80 rounded-xl px-1.5 py-1 shadow-xl backdrop-blur-sm transition-all duration-200 ease-in-out">
+        <div className="absolute right-3 -top-2 z-50 flex items-center gap-0.5 bg-white dark:bg-neutral-800 border border-gray-200/80 dark:border-neutral-700/80 rounded-xl px-1.5 py-1 shadow-xl backdrop-blur-sm transition-all duration-200 ease-in-out">
           {onStar && (
             <button
               className={`p-2 rounded-lg transition-all duration-200 ${
