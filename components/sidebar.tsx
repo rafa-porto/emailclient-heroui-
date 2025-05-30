@@ -81,7 +81,7 @@ const Sidebar = ({
       </div>
 
       {/* User Info with Enhanced Dropdown */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 shadow-sm border border-gray-200 dark:border-neutral-700 flex-shrink-0">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 shadow-sm border-[0.5px] border-gray-200 dark:border-neutral-700 flex-shrink-0">
         <Dropdown>
           <DropdownTrigger>
             <Button
@@ -284,7 +284,7 @@ const Sidebar = ({
       <div className="flex-1" />
 
       {/* Upgrade Card */}
-      <Card className="bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700">
+      <Card className="bg-white dark:bg-neutral-800 border-[0.5px] border-gray-200 dark:border-neutral-700">
         <CardBody className="p-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -307,7 +307,7 @@ const Sidebar = ({
       </Card>
 
       {/* Storage Card */}
-      <Card className="bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700">
+      <Card className="bg-white dark:bg-neutral-800 border-[0.5px] border-gray-200 dark:border-neutral-700">
         <CardBody className="p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center space-x-2">
