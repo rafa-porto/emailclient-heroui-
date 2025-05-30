@@ -131,17 +131,17 @@ const Sidebar = ({
         <Button
           className={`w-full justify-start ${
             pathname === "/dashboard"
-              ? "bg-primary/10 text-primary border-primary/20 border"
+              ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
               : ""
           }`}
           size="sm"
           startContent={<InboxIcon size={16} />}
-          variant={pathname === "/dashboard" ? "flat" : "light"}
+          variant={pathname === "/dashboard" ? "solid" : "light"}
           onClick={() => router.push("/dashboard")}
         >
           Inbox
           {unreadInboxCount > 0 && (
-            <span className="ml-auto text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-medium">
+            <span className="ml-auto text-xs bg-white/20 text-white px-1.5 py-0.5 rounded-full font-medium">
               {unreadInboxCount}
             </span>
           )}
@@ -149,33 +149,45 @@ const Sidebar = ({
         <Button
           className={`w-full justify-start ${
             pathname === "/dashboard/all"
-              ? "bg-primary/10 text-primary border-primary/20 border"
+              ? "bg-green-600 text-white border-green-600 border hover:bg-green-700"
               : ""
           }`}
           size="sm"
           startContent={<MailIcon size={16} />}
-          variant={pathname === "/dashboard/all" ? "flat" : "light"}
+          variant={pathname === "/dashboard/all" ? "solid" : "light"}
           onClick={() => router.push("/dashboard/all")}
         >
           All
-          <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+          <span
+            className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+              pathname === "/dashboard/all"
+                ? "bg-white/20 text-white"
+                : "bg-gray-200 dark:bg-neutral-700"
+            }`}
+          >
             {allCount}
           </span>
         </Button>
         <Button
           className={`w-full justify-start ${
             pathname === "/dashboard/starred"
-              ? "bg-primary/10 text-primary border-primary/20 border"
+              ? "bg-yellow-600 text-white border-yellow-600 border hover:bg-yellow-700"
               : ""
           }`}
           size="sm"
           startContent={<StarIcon size={16} />}
-          variant={pathname === "/dashboard/starred" ? "flat" : "light"}
+          variant={pathname === "/dashboard/starred" ? "solid" : "light"}
           onClick={() => router.push("/dashboard/starred")}
         >
           Starred
           {starredCount > 0 && (
-            <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+            <span
+              className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                pathname === "/dashboard/starred"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-200 dark:bg-neutral-700"
+              }`}
+            >
               {starredCount}
             </span>
           )}
@@ -183,17 +195,23 @@ const Sidebar = ({
         <Button
           className={`w-full justify-start ${
             pathname === "/dashboard/archived"
-              ? "bg-primary/10 text-primary border-primary/20 border"
+              ? "bg-purple-600 text-white border-purple-600 border hover:bg-purple-700"
               : ""
           }`}
           size="sm"
           startContent={<ArchiveIcon size={16} />}
-          variant={pathname === "/dashboard/archived" ? "flat" : "light"}
+          variant={pathname === "/dashboard/archived" ? "solid" : "light"}
           onClick={() => router.push("/dashboard/archived")}
         >
           Archive
           {archivedCount > 0 && (
-            <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+            <span
+              className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                pathname === "/dashboard/archived"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-200 dark:bg-neutral-700"
+              }`}
+            >
               {archivedCount}
             </span>
           )}
@@ -233,17 +251,23 @@ const Sidebar = ({
         <Button
           className={`w-full justify-start ${
             pathname === "/dashboard/trash"
-              ? "bg-primary/10 text-primary border-primary/20 border"
+              ? "bg-red-600 text-white border-red-600 border hover:bg-red-700"
               : ""
           }`}
           size="sm"
           startContent={<Trash2Icon size={16} />}
-          variant={pathname === "/dashboard/trash" ? "flat" : "light"}
+          variant={pathname === "/dashboard/trash" ? "solid" : "light"}
           onClick={() => router.push("/dashboard/trash")}
         >
           Trash
           {trashCount > 0 && (
-            <span className="ml-auto text-xs bg-gray-200 dark:bg-neutral-700 px-1.5 py-0.5 rounded-full">
+            <span
+              className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                pathname === "/dashboard/trash"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-200 dark:bg-neutral-700"
+              }`}
+            >
               {trashCount}
             </span>
           )}

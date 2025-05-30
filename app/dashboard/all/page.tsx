@@ -3,6 +3,8 @@
 import React from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
+import { Avatar } from "@heroui/avatar";
+import Image from "next/image";
 import {
   SearchIcon,
   Edit3Icon,
@@ -13,6 +15,7 @@ import {
   StarIcon,
   MoreVerticalIcon,
   PaperclipIcon,
+  SparklesIcon,
 } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -149,12 +152,14 @@ const EmailItem: React.FC<EmailItemProps> = ({
     if (isArchived) return <ArchiveIcon className="text-gray-500" size={14} />;
     if (isStarred)
       return <StarIcon className="text-yellow-500 fill-yellow-500" size={14} />;
+
     return null;
   };
 
   const getEmailOpacity = () => {
     if (isDeleted) return "opacity-50";
     if (isArchived) return "opacity-75";
+
     return "";
   };
 
@@ -167,11 +172,38 @@ const EmailItem: React.FC<EmailItemProps> = ({
       } ${getEmailOpacity()}`}
       onClick={() => !isDeleted && onClick(email)}
     >
-      <div className="mr-3 flex-shrink-0">
-        <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-          {email.sender.charAt(0).toUpperCase()}
+      {email.isBrand ? (
+        <div className="mr-3 flex-shrink-0 w-9 h-9 flex items-center justify-center">
+          <Image
+            alt={email.sender}
+            className={`w-full h-full object-contain ${
+              // Apply theme-aware filters for black/white icons
+              email.avatarUrl.includes("github.svg")
+                ? "dark:invert dark:brightness-0 dark:contrast-100"
+                : email.avatarUrl.includes("apple.svg")
+                  ? "brightness-0 dark:brightness-100 dark:invert-0"
+                  : email.avatarUrl.includes("uber.svg")
+                    ? "dark:invert dark:brightness-0 dark:contrast-100"
+                    : email.avatarUrl.includes("aws.svg")
+                      ? "dark:invert dark:brightness-0 dark:contrast-100"
+                      : ""
+            }`}
+            height={36}
+            src={email.avatarUrl}
+            width={36}
+          />
         </div>
-      </div>
+      ) : (
+        <Avatar
+          className="mr-3 flex-shrink-0"
+          classNames={{
+            base: "bg-transparent",
+          }}
+          name={email.sender}
+          size="md"
+          src={email.avatarUrl}
+        />
+      )}
 
       <div className="flex-grow truncate">
         <div className="flex justify-between items-center">
@@ -185,6 +217,15 @@ const EmailItem: React.FC<EmailItemProps> = ({
             >
               {email.sender}
             </span>
+            {isStarred && (
+              <StarIcon className="text-yellow-500 fill-yellow-500" size={14} />
+            )}
+            {email.isAIGenerated && !email.isImportant && (
+              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium">
+                <SparklesIcon size={8} />
+                AI
+              </div>
+            )}
             {getStatusIcon()}
           </div>
           <div className="flex items-center gap-2">
@@ -200,9 +241,18 @@ const EmailItem: React.FC<EmailItemProps> = ({
             {!isDeleted && (
               <div
                 className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-gray-200 dark:hover:bg-neutral-700 transition-opacity cursor-pointer"
+                role="button"
+                tabIndex={0}
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowActionPopup(!showActionPopup);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowActionPopup(!showActionPopup);
+                  }
                 }}
               >
                 <MoreVerticalIcon
@@ -236,10 +286,20 @@ const EmailItem: React.FC<EmailItemProps> = ({
                 ? "text-yellow-600 dark:text-yellow-400"
                 : "text-gray-600 dark:text-gray-400"
             }`}
+            role="button"
+            tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               onStar(email.id);
               setShowActionPopup(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                e.stopPropagation();
+                onStar(email.id);
+                setShowActionPopup(false);
+              }
             }}
           >
             <StarIcon className={isStarred ? "fill-current" : ""} size={16} />
@@ -248,10 +308,20 @@ const EmailItem: React.FC<EmailItemProps> = ({
           {!isArchived && (
             <div
               className="flex items-center gap-2 w-full p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/20 rounded cursor-pointer"
+              role="button"
+              tabIndex={0}
               onClick={(e) => {
                 e.stopPropagation();
                 onArchive(email.id);
                 setShowActionPopup(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onArchive(email.id);
+                  setShowActionPopup(false);
+                }
               }}
             >
               <ArchiveIcon size={16} />
@@ -260,10 +330,20 @@ const EmailItem: React.FC<EmailItemProps> = ({
           )}
           <div
             className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
+            role="button"
+            tabIndex={0}
             onClick={(e) => {
               e.stopPropagation();
               onDelete(email.id);
               setShowActionPopup(false);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                e.stopPropagation();
+                onDelete(email.id);
+                setShowActionPopup(false);
+              }
             }}
           >
             <Trash2Icon size={16} />
