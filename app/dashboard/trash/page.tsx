@@ -16,10 +16,12 @@ const TrashPage = () => {
     restoreEmail,
     permanentlyDeleteEmail,
     markAsRead,
+    newEmails,
   } = useEmailContext();
 
-  // Filter deleted emails
-  const deletedEmailsData = mockEmails.filter((email) =>
+  // Filter deleted emails from both mockEmails and newEmails
+  const allEmails = [...newEmails, ...mockEmails];
+  const deletedEmailsData = allEmails.filter((email) =>
     deletedEmails.includes(email.id)
   );
 

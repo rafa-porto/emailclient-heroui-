@@ -18,10 +18,12 @@ const StarredPage = () => {
     archiveEmail,
     deleteEmail,
     markAsRead,
+    newEmails,
   } = useEmailContext();
 
-  // Filter starred emails that are not deleted or archived
-  const starredEmailsData = mockEmails.filter(
+  // Filter starred emails that are not deleted or archived from both mockEmails and newEmails
+  const allEmails = [...newEmails, ...mockEmails];
+  const starredEmailsData = allEmails.filter(
     (email) =>
       starredEmails.includes(email.id) &&
       !deletedEmails.includes(email.id) &&

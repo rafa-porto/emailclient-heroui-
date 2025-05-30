@@ -16,10 +16,12 @@ const ArchivedPage = () => {
     deleteEmail,
     markAsRead,
     toggleStarEmail,
+    newEmails,
   } = useEmailContext();
 
-  // Filter archived emails
-  const archivedEmailsData = mockEmails.filter((email) =>
+  // Filter archived emails from both mockEmails and newEmails
+  const allEmails = [...newEmails, ...mockEmails];
+  const archivedEmailsData = allEmails.filter((email) =>
     archivedEmails.includes(email.id)
   );
 
