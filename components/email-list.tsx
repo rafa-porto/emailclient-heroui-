@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Avatar } from "@heroui/avatar";
@@ -12,7 +12,6 @@ import {
   StarIcon,
   ArchiveIcon,
   TrashIcon,
-  MoreVerticalIcon,
   PaperclipIcon,
 } from "lucide-react";
 
@@ -53,8 +52,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   onPermanentDelete,
   isAnimating,
 }) => {
-  const [showActionPopup, setShowActionPopup] = useState(false);
-  const popupRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const { isEmailStarred, isEmailRead, isEmailArchived, isEmailDeleted } =
     useEmailContext();
 
@@ -63,25 +61,6 @@ const EmailItem: React.FC<EmailItemProps> = ({
   const isStarredFromContext = isEmailStarred(id);
   const isArchivedFromContext = isEmailArchived(id);
   const isDeletedFromContext = isEmailDeleted(id);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        popupRef.current &&
-        !popupRef.current.contains(event.target as Node)
-      ) {
-        setShowActionPopup(false);
-      }
-    };
-
-    if (showActionPopup) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showActionPopup]);
 
   const handleClick = () => {
     onClick({
@@ -100,9 +79,12 @@ const EmailItem: React.FC<EmailItemProps> = ({
     });
   };
 
-  const handleMoreClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowActionPopup(!showActionPopup);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
 
   const getOpacity = () => {
@@ -126,6 +108,8 @@ const EmailItem: React.FC<EmailItemProps> = ({
       role="button"
       tabIndex={0}
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -226,15 +210,6 @@ const EmailItem: React.FC<EmailItemProps> = ({
             <span className="text-xs text-gray-500 dark:text-neutral-400">
               {timestamp}
             </span>
-            <Button
-              isIconOnly
-              className="opacity-0 group-hover:opacity-100 transition-opacity bg-transparent hover:bg-gray-200 dark:hover:bg-neutral-700"
-              size="sm"
-              variant="light"
-              onClick={handleMoreClick}
-            >
-              <MoreVerticalIcon size={14} />
-            </Button>
           </div>
         </div>
 
@@ -255,101 +230,92 @@ const EmailItem: React.FC<EmailItemProps> = ({
         </div>
       </div>
 
-      {/* Action Popup */}
-      {showActionPopup && (
-        <div
-          ref={popupRef}
-          className="absolute right-0 top-12 z-50 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 min-w-[120px]"
-        >
+      {/* Horizontal Action Popup on Hover */}
+      {isHovered && (
+        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-50 flex items-center gap-0.5 bg-white dark:bg-neutral-800 border border-gray-200/80 dark:border-neutral-700/80 rounded-xl px-1.5 py-1 shadow-xl backdrop-blur-sm transition-all duration-200 ease-in-out">
           {onStar && (
-            <div
-              className={`flex items-center gap-2 w-full p-2 text-sm hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded cursor-pointer ${
+            <button
+              className={`p-2 rounded-lg transition-all duration-200 ${
                 isStarredFromContext
-                  ? "text-yellow-600 dark:text-yellow-400"
-                  : "text-gray-600 dark:text-gray-400"
+                  ? "text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 shadow-sm"
+                  : "text-gray-600 dark:text-neutral-400 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
               }`}
               onClick={(e) => {
                 e.stopPropagation();
                 onStar(id);
-                setShowActionPopup(false);
               }}
+              title={isStarredFromContext ? "Unstar" : "Star"}
             >
               <StarIcon
                 className={isStarredFromContext ? "fill-current" : ""}
-                size={16}
+                size={14}
               />
-              {isStarredFromContext ? "Unstar" : "Star"}
-            </div>
+            </button>
           )}
 
           {onArchive && !isArchivedFromContext && (
-            <div
-              className="flex items-center gap-2 w-full p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-700/50 rounded cursor-pointer"
+            <button
+              className="p-2 rounded-lg text-gray-600 dark:text-neutral-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 onArchive(id);
-                setShowActionPopup(false);
               }}
+              title="Archive"
             >
-              <ArchiveIcon size={16} />
-              Archive
-            </div>
+              <ArchiveIcon size={14} />
+            </button>
           )}
 
           {onUnarchive && isArchivedFromContext && (
-            <div
-              className="flex items-center gap-2 w-full p-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-700/50 rounded cursor-pointer"
+            <button
+              className="p-2 rounded-lg text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-900/20 shadow-sm transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 onUnarchive(id);
-                setShowActionPopup(false);
               }}
+              title="Unarchive"
             >
-              <ArchiveIcon size={16} />
-              Unarchive
-            </div>
+              <ArchiveIcon size={14} />
+            </button>
           )}
 
           {onRestore && isDeletedFromContext && (
-            <div
-              className="flex items-center gap-2 w-full p-2 text-sm text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded cursor-pointer"
+            <button
+              className="p-2 rounded-lg text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 shadow-sm transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 onRestore(id);
-                setShowActionPopup(false);
               }}
+              title="Restore"
             >
-              <ArchiveIcon size={16} />
-              Restore
-            </div>
+              <ArchiveIcon size={14} />
+            </button>
           )}
 
           {onDelete && !isDeletedFromContext && (
-            <div
-              className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
+            <button
+              className="p-2 rounded-lg text-gray-600 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete(id);
-                setShowActionPopup(false);
               }}
+              title="Delete"
             >
-              <TrashIcon size={16} />
-              Delete
-            </div>
+              <TrashIcon size={14} />
+            </button>
           )}
 
           {onPermanentDelete && isDeletedFromContext && (
-            <div
-              className="flex items-center gap-2 w-full p-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded cursor-pointer"
+            <button
+              className="p-2 rounded-lg text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 shadow-sm transition-all duration-200"
               onClick={(e) => {
                 e.stopPropagation();
                 onPermanentDelete(id);
-                setShowActionPopup(false);
               }}
+              title="Delete Forever"
             >
-              <TrashIcon size={16} />
-              Delete Forever
-            </div>
+              <TrashIcon size={14} />
+            </button>
           )}
         </div>
       )}
