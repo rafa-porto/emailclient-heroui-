@@ -60,13 +60,13 @@ const Sidebar = ({
   // Calculate email counts
   const activeEmails = mockEmails.filter(
     (email) =>
-      !deletedEmails.includes(email.id) && !archivedEmails.includes(email.id),
+      !deletedEmails.includes(email.id) && !archivedEmails.includes(email.id)
   );
   const unreadInboxCount = activeEmails.filter(
-    (email) => !isEmailRead(email.id),
+    (email) => !isEmailRead(email.id)
   ).length;
   const starredCount = starredEmails.filter(
-    (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id),
+    (id) => !deletedEmails.includes(id) && !archivedEmails.includes(id)
   ).length;
   const trashCount = deletedEmails.length;
   const archivedCount = archivedEmails.length;
