@@ -17,7 +17,6 @@ import {
   ClockIcon,
   CrownIcon,
   FileTextIcon,
-  HardDriveIcon,
   InboxIcon,
   LogOutIcon,
   MailIcon,
@@ -243,51 +242,42 @@ const Sidebar = ({
         <div className="flex-1" />
 
         {/* Upgrade Card */}
-        <Card className="bg-white dark:bg-neutral-800 border-[0.5px] border-gray-200 dark:border-neutral-700">
-          <CardBody className="p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <CrownIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/30 border-[0.5px] border-blue-200 dark:border-blue-800">
+          <CardBody className="p-4">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <CrownIcon className="w-4 h-4 text-white" />
+                </div>
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                    Upgrade
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    Upgrade to Pro
                   </h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
+                    Unlock premium features
+                  </p>
                 </div>
               </div>
-              <Button
-                className="text-xs h-6 px-2 bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600"
-                size="sm"
-                variant="flat"
-              >
-                Pro
-              </Button>
             </div>
-          </CardBody>
-        </Card>
 
-        {/* Storage Card */}
-        <Card className="bg-white dark:bg-neutral-800 border-[0.5px] border-gray-200 dark:border-neutral-700">
-          <CardBody className="p-3">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-2">
-                <HardDriveIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  Storage
-                </h3>
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300">
+                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                <span>Advanced AI features</span>
               </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                28%
-              </span>
+              <div className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300">
+                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                <span>Priority support</span>
+              </div>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-1.5">
-              <div
-                className="bg-gray-600 dark:bg-gray-400 h-1.5 rounded-full transition-all duration-300"
-                style={{ width: "28%" }}
-              />
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              4.2 GB of 15 GB
-            </p>
+
+            <Button
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium"
+              size="sm"
+              variant="solid"
+            >
+              Upgrade Now
+            </Button>
           </CardBody>
         </Card>
       </div>
@@ -551,51 +541,42 @@ const Sidebar = ({
       <div className="flex-1" />
 
       {/* Upgrade Card */}
-      <Card className="bg-white dark:bg-neutral-800 border-[0.5px] border-gray-200 dark:border-neutral-700">
-        <CardBody className="p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <CrownIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+      <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/30 border-[0.5px] border-blue-200 dark:border-blue-800">
+        <CardBody className="p-4">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <CrownIcon className="w-4 h-4 text-white" />
+              </div>
               <div>
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                  Upgrade
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                  Upgrade to Pro
                 </h3>
+                <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
+                  Unlock premium features
+                </p>
               </div>
             </div>
-            <Button
-              className="text-xs h-6 px-2 bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600"
-              size="sm"
-              variant="flat"
-            >
-              Pro
-            </Button>
           </div>
-        </CardBody>
-      </Card>
 
-      {/* Storage Card */}
-      <Card className="bg-white dark:bg-neutral-800 border-[0.5px] border-gray-200 dark:border-neutral-700">
-        <CardBody className="p-3">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-2">
-              <HardDriveIcon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                Storage
-              </h3>
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300">
+              <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+              <span>Advanced AI features</span>
             </div>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
-              28%
-            </span>
+            <div className="flex items-center space-x-2 text-xs text-gray-700 dark:text-gray-300">
+              <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+              <span>Priority support</span>
+            </div>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-neutral-700 rounded-full h-1.5">
-            <div
-              className="bg-gray-600 dark:bg-gray-400 h-1.5 rounded-full transition-all duration-300"
-              style={{ width: "28%" }}
-            />
-          </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            4.2 GB of 15 GB
-          </p>
+
+          <Button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium"
+            size="sm"
+            variant="solid"
+          >
+            Upgrade Now
+          </Button>
         </CardBody>
       </Card>
     </div>
