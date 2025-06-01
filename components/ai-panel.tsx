@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@heroui/button";
 import { Textarea } from "@heroui/input";
 import { Progress } from "@heroui/progress";
+import { Switch } from "@heroui/switch";
+import { Accordion, AccordionItem } from "@heroui/accordion";
 import {
   PaperclipIcon,
   MicIcon,
@@ -12,6 +14,22 @@ import {
   ClockIcon,
   TrendingUpIcon,
   FolderIcon,
+  SparklesIcon,
+  HeartIcon,
+  AlertTriangleIcon,
+  TagIcon,
+  ReplyIcon,
+  LinkIcon,
+  CopyIcon,
+  CalendarIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ZapIcon,
+  BrainIcon,
+  SettingsIcon,
+  PlayIcon,
+  PauseIcon,
+  RefreshCwIcon,
 } from "lucide-react";
 import { AIIcon } from "@/components/icons";
 import { useEmailContext } from "@/components/email-context";
@@ -34,6 +52,37 @@ interface OrganizationSummary {
   totalCategoriesUsed: number;
 }
 
+interface AIFeatureSettings {
+  emailSummarization: boolean;
+  smartCategorization: boolean;
+  priorityDetection: boolean;
+  sentimentAnalysis: boolean;
+  smartReplies: boolean;
+  threadAnalysis: boolean;
+  duplicateDetection: boolean;
+  scheduleOptimization: boolean;
+}
+
+interface AIProcessingTask {
+  id: string;
+  name: string;
+  status: "idle" | "processing" | "completed" | "error";
+  progress: number;
+  result?: any;
+  error?: string;
+  startTime?: number;
+  endTime?: number;
+}
+
+interface AIFeatureResult {
+  type: string;
+  title: string;
+  description: string;
+  data: any;
+  timestamp: string;
+  canUndo: boolean;
+}
+
 const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
   const [aiInput, setAiInput] = useState("");
   const [organizationSummary, setOrganizationSummary] =
@@ -42,12 +91,98 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
     number | null
   >(null);
 
+  // Enhanced AI Features State
+  const [activeView, setActiveView] = useState<
+    "default" | "features" | "settings"
+  >("default");
+  const [aiFeatureSettings, setAiFeatureSettings] = useState<AIFeatureSettings>(
+    {
+      emailSummarization: true,
+      smartCategorization: true,
+      priorityDetection: true,
+      sentimentAnalysis: false,
+      smartReplies: true,
+      threadAnalysis: false,
+      duplicateDetection: true,
+      scheduleOptimization: false,
+    }
+  );
+  const [processingTasks, setProcessingTasks] = useState<AIProcessingTask[]>(
+    []
+  );
+  const [featureResults, setFeatureResults] = useState<AIFeatureResult[]>([]);
+  const [expandedSections, setExpandedSections] = useState<string[]>([
+    "quick-actions",
+  ]);
+
   const {
     organizeInbox,
     resetInboxOrganization,
     isInboxOrganized,
     organizationProgress,
   } = useEmailContext();
+
+  // Helper functions for AI features
+  const createTask = (name: string): AIProcessingTask => ({
+    id: Math.random().toString(36).substr(2, 9),
+    name,
+    status: "idle",
+    progress: 0,
+    startTime: Date.now(),
+  });
+
+  const updateTask = (taskId: string, updates: Partial<AIProcessingTask>) => {
+    setProcessingTasks((prev) =>
+      prev.map((task) => (task.id === taskId ? { ...task, ...updates } : task))
+    );
+  };
+
+  const simulateAIProcessing = async (
+    task: AIProcessingTask,
+    duration: number = 3000
+  ) => {
+    updateTask(task.id, { status: "processing", progress: 0 });
+
+    const steps = 20;
+    const stepDuration = duration / steps;
+
+    for (let i = 1; i <= steps; i++) {
+      await new Promise((resolve) => setTimeout(resolve, stepDuration));
+      updateTask(task.id, { progress: (i / steps) * 100 });
+    }
+
+    updateTask(task.id, {
+      status: "completed",
+      progress: 100,
+      endTime: Date.now(),
+    });
+  };
+
+  const addFeatureResult = (result: Omit<AIFeatureResult, "timestamp">) => {
+    const newResult: AIFeatureResult = {
+      ...result,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    setFeatureResults((prev) => [newResult, ...prev.slice(0, 4)]); // Keep last 5 results
+  };
+
+  const toggleFeatureSetting = (feature: keyof AIFeatureSettings) => {
+    setAiFeatureSettings((prev) => ({
+      ...prev,
+      [feature]: !prev[feature],
+    }));
+  };
+
+  const toggleSection = (sectionKey: string) => {
+    setExpandedSections((prev) =>
+      prev.includes(sectionKey)
+        ? prev.filter((key) => key !== sectionKey)
+        : [...prev, sectionKey]
+    );
+  };
 
   // Track organization completion and generate summary
   useEffect(() => {
@@ -129,6 +264,133 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
       handleOrganizeInbox();
     } else {
       setAiInput(action);
+    }
+  };
+
+  // Enhanced AI Feature Handlers
+  const handleEmailSummarization = async () => {
+    if (!aiFeatureSettings.emailSummarization) return;
+
+    const task = createTask("Email Summarization");
+    setProcessingTasks((prev) => [...prev, task]);
+
+    try {
+      await simulateAIProcessing(task, 2500);
+      addFeatureResult({
+        type: "summarization",
+        title: "Email Summaries Generated",
+        description: "Created summaries for 15 emails in your inbox",
+        data: { emailsProcessed: 15, averageLength: "2 sentences" },
+        canUndo: true,
+      });
+    } catch (error) {
+      updateTask(task.id, {
+        status: "error",
+        error: "Failed to generate summaries",
+      });
+    }
+  };
+
+  const handlePriorityDetection = async () => {
+    if (!aiFeatureSettings.priorityDetection) return;
+
+    const task = createTask("Priority Detection");
+    setProcessingTasks((prev) => [...prev, task]);
+
+    try {
+      await simulateAIProcessing(task, 2000);
+      addFeatureResult({
+        type: "priority",
+        title: "Priority Emails Detected",
+        description: "Found 3 high-priority and 7 medium-priority emails",
+        data: { high: 3, medium: 7, low: 12 },
+        canUndo: true,
+      });
+    } catch (error) {
+      updateTask(task.id, {
+        status: "error",
+        error: "Failed to detect priorities",
+      });
+    }
+  };
+
+  const handleSentimentAnalysis = async () => {
+    if (!aiFeatureSettings.sentimentAnalysis) return;
+
+    const task = createTask("Sentiment Analysis");
+    setProcessingTasks((prev) => [...prev, task]);
+
+    try {
+      await simulateAIProcessing(task, 3000);
+      addFeatureResult({
+        type: "sentiment",
+        title: "Sentiment Analysis Complete",
+        description: "Analyzed emotional tone of 22 emails",
+        data: { positive: 12, neutral: 8, negative: 2 },
+        canUndo: false,
+      });
+    } catch (error) {
+      updateTask(task.id, {
+        status: "error",
+        error: "Failed to analyze sentiment",
+      });
+    }
+  };
+
+  const handleDuplicateDetection = async () => {
+    if (!aiFeatureSettings.duplicateDetection) return;
+
+    const task = createTask("Duplicate Detection");
+    setProcessingTasks((prev) => [...prev, task]);
+
+    try {
+      await simulateAIProcessing(task, 1800);
+      addFeatureResult({
+        type: "duplicates",
+        title: "Duplicate Emails Found",
+        description: "Detected 4 duplicate emails ready for cleanup",
+        data: { duplicatesFound: 4, spaceToSave: "2.3 MB" },
+        canUndo: true,
+      });
+    } catch (error) {
+      updateTask(task.id, {
+        status: "error",
+        error: "Failed to detect duplicates",
+      });
+    }
+  };
+
+  const handleSmartReplies = async () => {
+    if (!aiFeatureSettings.smartReplies) return;
+
+    const task = createTask("Smart Reply Generation");
+    setProcessingTasks((prev) => [...prev, task]);
+
+    try {
+      await simulateAIProcessing(task, 2200);
+      addFeatureResult({
+        type: "replies",
+        title: "Smart Replies Generated",
+        description: "Created reply suggestions for 8 emails",
+        data: { emailsWithReplies: 8, averageSuggestions: 3 },
+        canUndo: false,
+      });
+    } catch (error) {
+      updateTask(task.id, {
+        status: "error",
+        error: "Failed to generate replies",
+      });
+    }
+  };
+
+  const handleUndoAction = (resultIndex: number) => {
+    const result = featureResults[resultIndex];
+    if (result.canUndo) {
+      setFeatureResults((prev) =>
+        prev.filter((_, index) => index !== resultIndex)
+      );
+      // Here you would implement the actual undo logic
+      console.log(`Undoing action: ${result.title}`);
     }
   };
 
@@ -413,6 +675,287 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
     </div>
   );
 
+  // Render enhanced features interface
+  const renderFeaturesInterface = () => (
+    <div className="flex-1 flex flex-col px-4 py-6 overflow-y-auto min-h-0">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Button
+            isIconOnly
+            className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
+            size="sm"
+            variant="light"
+            onPress={() => setActiveView("default")}
+          >
+            <ChevronDownIcon size={18} />
+          </Button>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            AI Features
+          </h3>
+        </div>
+        <Button
+          isIconOnly
+          className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
+          size="sm"
+          variant="light"
+          onPress={() => setActiveView("settings")}
+        >
+          <SettingsIcon size={18} />
+        </Button>
+      </div>
+
+      {/* Active Tasks */}
+      {processingTasks.filter((task) => task.status === "processing").length >
+        0 && (
+        <div className="mb-6">
+          <h4 className="text-sm font-medium text-gray-700 dark:text-neutral-300 mb-3">
+            Processing
+          </h4>
+          <div className="space-y-3">
+            {processingTasks
+              .filter((task) => task.status === "processing")
+              .map((task) => (
+                <div
+                  key={task.id}
+                  className="bg-blue-50 dark:bg-blue-950/40 rounded-lg p-3"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                      {task.name}
+                    </span>
+                    <span className="text-xs text-blue-600 dark:text-blue-400">
+                      {Math.round(task.progress)}%
+                    </span>
+                  </div>
+                  <Progress
+                    value={task.progress}
+                    className="h-1"
+                    color="primary"
+                    size="sm"
+                  />
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* Recent Results */}
+      {featureResults.length > 0 && (
+        <div className="mb-6">
+          <h4 className="text-sm font-medium text-gray-700 dark:text-neutral-300 mb-3">
+            Recent Results
+          </h4>
+          <div className="space-y-3">
+            {featureResults.map((result, index) => (
+              <div
+                key={index}
+                className="bg-green-50 dark:bg-green-950/40 rounded-lg p-3"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <CheckCircleIcon
+                        className="text-green-600 dark:text-green-400"
+                        size={14}
+                      />
+                      <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                        {result.title}
+                      </span>
+                      <span className="text-xs text-green-600 dark:text-green-400">
+                        {result.timestamp}
+                      </span>
+                    </div>
+                    <p className="text-xs text-green-600 dark:text-green-400">
+                      {result.description}
+                    </p>
+                  </div>
+                  {result.canUndo && (
+                    <Button
+                      isIconOnly
+                      className="text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/50 transition-all duration-200"
+                      size="sm"
+                      variant="light"
+                      onPress={() => handleUndoAction(index)}
+                    >
+                      <RotateCcwIcon size={14} />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* AI Features Grid */}
+      <div className="space-y-4">
+        <h4 className="text-sm font-medium text-gray-700 dark:text-neutral-300">
+          Available Features
+        </h4>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all duration-200 h-auto p-4 flex-col gap-2"
+            isDisabled={
+              !aiFeatureSettings.emailSummarization ||
+              processingTasks.some(
+                (t) =>
+                  t.name === "Email Summarization" && t.status === "processing"
+              )
+            }
+            radius="lg"
+            variant="flat"
+            onPress={handleEmailSummarization}
+          >
+            <ZapIcon size={20} />
+            <span className="text-xs font-medium">Summarize Emails</span>
+          </Button>
+
+          <Button
+            className="bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-all duration-200 h-auto p-4 flex-col gap-2"
+            isDisabled={
+              !aiFeatureSettings.priorityDetection ||
+              processingTasks.some(
+                (t) =>
+                  t.name === "Priority Detection" && t.status === "processing"
+              )
+            }
+            radius="lg"
+            variant="flat"
+            onPress={handlePriorityDetection}
+          >
+            <AlertTriangleIcon size={20} />
+            <span className="text-xs font-medium">Detect Priority</span>
+          </Button>
+
+          <Button
+            className="bg-pink-50 dark:bg-pink-950/40 text-pink-700 dark:text-pink-300 hover:bg-pink-100 dark:hover:bg-pink-900/50 transition-all duration-200 h-auto p-4 flex-col gap-2"
+            isDisabled={
+              !aiFeatureSettings.sentimentAnalysis ||
+              processingTasks.some(
+                (t) =>
+                  t.name === "Sentiment Analysis" && t.status === "processing"
+              )
+            }
+            radius="lg"
+            variant="flat"
+            onPress={handleSentimentAnalysis}
+          >
+            <HeartIcon size={20} />
+            <span className="text-xs font-medium">Analyze Sentiment</span>
+          </Button>
+
+          <Button
+            className="bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-all duration-200 h-auto p-4 flex-col gap-2"
+            isDisabled={
+              !aiFeatureSettings.duplicateDetection ||
+              processingTasks.some(
+                (t) =>
+                  t.name === "Duplicate Detection" && t.status === "processing"
+              )
+            }
+            radius="lg"
+            variant="flat"
+            onPress={handleDuplicateDetection}
+          >
+            <CopyIcon size={20} />
+            <span className="text-xs font-medium">Find Duplicates</span>
+          </Button>
+
+          <Button
+            className="bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 transition-all duration-200 h-auto p-4 flex-col gap-2"
+            isDisabled={
+              !aiFeatureSettings.smartReplies ||
+              processingTasks.some(
+                (t) =>
+                  t.name === "Smart Reply Generation" &&
+                  t.status === "processing"
+              )
+            }
+            radius="lg"
+            variant="flat"
+            onPress={handleSmartReplies}
+          >
+            <ReplyIcon size={20} />
+            <span className="text-xs font-medium">Smart Replies</span>
+          </Button>
+
+          <Button
+            className="bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-900/50 transition-all duration-200 h-auto p-4 flex-col gap-2"
+            isDisabled={!aiFeatureSettings.threadAnalysis}
+            radius="lg"
+            variant="flat"
+          >
+            <LinkIcon size={20} />
+            <span className="text-xs font-medium">Thread Analysis</span>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Render settings interface
+  const renderSettingsInterface = () => (
+    <div className="flex-1 flex flex-col px-4 py-6 overflow-y-auto min-h-0">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-6">
+        <Button
+          isIconOnly
+          className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
+          size="sm"
+          variant="light"
+          onPress={() => setActiveView("features")}
+        >
+          <ChevronDownIcon size={18} />
+        </Button>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          AI Settings
+        </h3>
+      </div>
+
+      {/* Feature Toggles */}
+      <div className="space-y-4">
+        <h4 className="text-sm font-medium text-gray-700 dark:text-neutral-300">
+          Enable Features
+        </h4>
+
+        <div className="space-y-3">
+          {Object.entries(aiFeatureSettings).map(([key, enabled]) => {
+            const featureNames: Record<string, string> = {
+              emailSummarization: "Email Summarization",
+              smartCategorization: "Smart Categorization",
+              priorityDetection: "Priority Detection",
+              sentimentAnalysis: "Sentiment Analysis",
+              smartReplies: "Smart Replies",
+              threadAnalysis: "Thread Analysis",
+              duplicateDetection: "Duplicate Detection",
+              scheduleOptimization: "Schedule Optimization",
+            };
+
+            return (
+              <div
+                key={key}
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-neutral-800 rounded-lg"
+              >
+                <span className="text-sm text-gray-700 dark:text-neutral-300">
+                  {featureNames[key]}
+                </span>
+                <Switch
+                  isSelected={enabled}
+                  size="sm"
+                  onValueChange={() =>
+                    toggleFeatureSetting(key as keyof AIFeatureSettings)
+                  }
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
   // Render default interface
   const renderDefaultInterface = () => (
     <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 overflow-y-auto min-h-0">
@@ -497,6 +1040,20 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
           </div>
         )}
 
+        {/* Enhanced Features Access */}
+        <div className="flex gap-3 w-full justify-center mb-4">
+          <Button
+            className="bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 flex-1 max-w-[200px] font-medium py-3 px-4 min-h-[50px] transition-all duration-200"
+            radius="lg"
+            size="md"
+            startContent={<BrainIcon size={18} />}
+            variant="flat"
+            onPress={() => setActiveView("features")}
+          >
+            <span className="text-sm">AI Features</span>
+          </Button>
+        </div>
+
         {/* First row - two buttons */}
         <div className="flex gap-3 w-full justify-center">
           <Button
@@ -504,7 +1061,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
               isInboxOrganized
                 ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50"
                 : "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50"
-            } flex-1 max-w-[150px] font-medium py-3 px-4 min-h-[50px]`}
+            } flex-1 max-w-[150px] font-medium py-3 px-4 min-h-[50px] transition-all duration-200`}
             radius="lg"
             size="md"
             variant="flat"
@@ -517,7 +1074,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
           </Button>
 
           <Button
-            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 flex-1 max-w-[150px] font-medium py-3 px-4 min-h-[50px]"
+            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 flex-1 max-w-[150px] font-medium py-3 px-4 min-h-[50px] transition-all duration-200"
             radius="lg"
             size="md"
             variant="flat"
@@ -530,7 +1087,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
         {/* Second row - one button */}
         <div className="flex justify-center">
           <Button
-            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 max-w-[150px] font-medium py-3 px-4 min-h-[50px]"
+            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 max-w-[150px] font-medium py-3 px-4 min-h-[50px] transition-all duration-200"
             radius="lg"
             size="md"
             variant="flat"
@@ -551,7 +1108,11 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
         organizationProgress.progress < 100) ||
       organizationSummary
         ? renderOrganizationInterface()
-        : renderDefaultInterface()}
+        : activeView === "features"
+          ? renderFeaturesInterface()
+          : activeView === "settings"
+            ? renderSettingsInterface()
+            : renderDefaultInterface()}
     </div>
   );
 };
