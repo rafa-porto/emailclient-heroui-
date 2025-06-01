@@ -255,7 +255,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
                     </div>
                     <div className="flex items-center gap-2">
                       <span
-                        className={`text-xs px-2 py-1 rounded-full ${colorClasses.bg} ${colorClasses.text} ${colorClasses.border} border`}
+                        className={`text-xs px-2 py-1 rounded-full ${colorClasses.bg} ${colorClasses.text}`}
                       >
                         {count} email{count !== 1 ? "s" : ""}
                       </span>
@@ -486,7 +486,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
       <div className="flex flex-col gap-4 w-full max-w-md items-center">
         {/* Organization Status */}
         {isInboxOrganized && (
-          <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-700/40 rounded-lg p-3 mb-4 w-full">
+          <div className="bg-green-50 dark:bg-green-950/40 rounded-lg p-3 mb-4 w-full">
             <div className="flex items-center gap-2 text-green-700 dark:text-green-300">
               <CheckCircleIcon size={16} />
               <span className="text-sm font-medium">Inbox Organized</span>
@@ -502,9 +502,9 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
           <Button
             className={`${
               isInboxOrganized
-                ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 border border-green-200/60 dark:border-green-700/40"
-                : "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40"
-            } flex-1 max-w-[150px] font-medium shadow-sm py-3 px-4 min-h-[50px]`}
+                ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50"
+                : "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50"
+            } flex-1 max-w-[150px] font-medium py-3 px-4 min-h-[50px]`}
             radius="lg"
             size="md"
             variant="flat"
@@ -517,7 +517,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
           </Button>
 
           <Button
-            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 flex-1 max-w-[150px] font-medium shadow-sm py-3 px-4 min-h-[50px]"
+            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 flex-1 max-w-[150px] font-medium py-3 px-4 min-h-[50px]"
             radius="lg"
             size="md"
             variant="flat"
@@ -530,7 +530,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
         {/* Second row - one button */}
         <div className="flex justify-center">
           <Button
-            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 max-w-[150px] font-medium shadow-sm py-3 px-4 min-h-[50px]"
+            className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 max-w-[150px] font-medium py-3 px-4 min-h-[50px]"
             radius="lg"
             size="md"
             variant="flat"

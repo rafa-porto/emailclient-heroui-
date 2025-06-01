@@ -2,7 +2,10 @@
 
 import React from "react";
 import { EmailCategory } from "@/types";
-import { EMAIL_CATEGORIES, getCategoryColorClasses } from "@/utils/emailClassification";
+import {
+  EMAIL_CATEGORIES,
+  getCategoryColorClasses,
+} from "@/utils/emailClassification";
 
 interface EmailCategoryBadgeProps {
   category: EmailCategory;
@@ -23,8 +26,8 @@ const EmailCategoryBadge: React.FC<EmailCategoryBadgeProps> = ({
   const colorClasses = getCategoryColorClasses(category);
 
   const sizeClasses = {
-    sm: "px-2 py-1 text-xs",
-    md: "px-3 py-1.5 text-sm",
+    sm: "px-2.5 py-1 text-xs",
+    md: "px-3.5 py-1.5 text-sm",
     lg: "px-4 py-2 text-base",
   };
 
@@ -37,22 +40,16 @@ const EmailCategoryBadge: React.FC<EmailCategoryBadgeProps> = ({
   return (
     <div
       className={`
-        inline-flex items-center gap-1 rounded-full border font-medium
-        ${colorClasses.bg} ${colorClasses.text} ${colorClasses.border}
+        inline-flex items-center gap-1 rounded-full font-medium transition-all duration-200
+        ${colorClasses.bg} ${colorClasses.text}
         ${sizeClasses[size]}
         ${className}
       `}
       title={categoryInfo.description}
     >
-      {showIcon && (
-        <span className={iconSizes[size]}>
-          {categoryInfo.icon}
-        </span>
-      )}
+      {showIcon && <span className={iconSizes[size]}>{categoryInfo.icon}</span>}
       {showText && (
-        <span className="whitespace-nowrap">
-          {categoryInfo.name}
-        </span>
+        <span className="whitespace-nowrap">{categoryInfo.name}</span>
       )}
     </div>
   );
