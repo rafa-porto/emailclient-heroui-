@@ -247,7 +247,7 @@ const Sidebar = ({
         <div className="flex-1" />
 
         {/* Upgrade Card */}
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/30 border-[0.5px] border-blue-200 dark:border-blue-800">
+        <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/30">
           <CardBody className="p-4">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center space-x-3">
@@ -304,7 +304,7 @@ const Sidebar = ({
       </div>
 
       {/* User Info with Enhanced Dropdown */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 shadow-sm border-[0.5px] border-gray-200 dark:border-neutral-700 flex-shrink-0">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-2 flex-shrink-0">
         <Dropdown>
           <DropdownTrigger>
             <Button
@@ -369,7 +369,13 @@ const Sidebar = ({
         >
           Inbox
           {unreadInboxCount > 0 && (
-            <span className="ml-auto text-xs bg-white/20 text-white px-1.5 py-0.5 rounded-full font-medium">
+            <span
+              className={`ml-auto text-xs px-1.5 py-0.5 rounded-full font-medium ${
+                pathname === "/dashboard"
+                  ? "bg-white/20 text-white"
+                  : "bg-blue-100 dark:bg-neutral-700 text-blue-800 dark:text-neutral-200"
+              }`}
+            >
               {unreadInboxCount}
             </span>
           )}
@@ -390,7 +396,7 @@ const Sidebar = ({
             className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
               pathname === "/dashboard/all"
                 ? "bg-white/20 text-white"
-                : "bg-gray-200 dark:bg-neutral-700"
+                : "bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-neutral-200"
             }`}
           >
             {allCount}
@@ -413,7 +419,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/starred"
                   ? "bg-white/20 text-white"
-                  : "bg-gray-200 dark:bg-neutral-700"
+                  : "bg-yellow-100 dark:bg-neutral-700 text-yellow-700 dark:text-neutral-200"
               }`}
             >
               {starredCount}
@@ -437,7 +443,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/archived"
                   ? "bg-white/20 text-white"
-                  : "bg-gray-200 dark:bg-neutral-700"
+                  : "bg-purple-100 dark:bg-neutral-700 text-purple-700 dark:text-neutral-200"
               }`}
             >
               {archivedCount}
@@ -485,7 +491,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/sent"
                   ? "bg-white/20 text-white"
-                  : "bg-gray-200 dark:bg-neutral-700"
+                  : "bg-green-100 dark:bg-neutral-700 text-green-700 dark:text-neutral-200"
               }`}
             >
               {sentCount}
@@ -509,7 +515,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/trash"
                   ? "bg-white/20 text-white"
-                  : "bg-gray-200 dark:bg-neutral-700"
+                  : "bg-red-100 dark:bg-neutral-700 text-red-700 dark:text-neutral-200"
               }`}
             >
               {trashCount}
@@ -533,7 +539,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/spam"
                   ? "bg-white/20 text-white"
-                  : "bg-gray-200 dark:bg-neutral-700"
+                  : "bg-orange-100 dark:bg-neutral-700 text-orange-700 dark:text-neutral-200"
               }`}
             >
               {spamCount}
@@ -574,7 +580,7 @@ const Sidebar = ({
                     className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                       pathname === "/dashboard/work"
                         ? "bg-white/20 text-white"
-                        : "bg-gray-200 dark:bg-neutral-700"
+                        : "bg-blue-100 dark:bg-neutral-700 text-blue-700 dark:text-neutral-200"
                     }`}
                   >
                     {workEmails.length}
@@ -612,7 +618,7 @@ const Sidebar = ({
                     className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                       pathname === "/dashboard/promotions"
                         ? "bg-white/20 text-white"
-                        : "bg-gray-200 dark:bg-neutral-700"
+                        : "bg-orange-100 dark:bg-neutral-700 text-orange-700 dark:text-neutral-200"
                     }`}
                   >
                     {promotionEmails.length}
@@ -647,7 +653,7 @@ const Sidebar = ({
                     className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                       pathname === "/dashboard/bills"
                         ? "bg-white/20 text-white"
-                        : "bg-gray-200 dark:bg-neutral-700"
+                        : "bg-amber-100 dark:bg-neutral-700 text-amber-700 dark:text-neutral-200"
                     }`}
                   >
                     {billsEmails.length}
@@ -663,7 +669,7 @@ const Sidebar = ({
       <div className="flex-1" />
 
       {/* Upgrade Card */}
-      <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/30 border-[0.5px] border-blue-200 dark:border-blue-800">
+      <Card className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/30">
         <CardBody className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center space-x-3">
