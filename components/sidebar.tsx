@@ -11,7 +11,7 @@ import {
   AlertOctagonIcon,
   ArchiveIcon,
   ArrowLeftIcon,
-  BellIcon,
+  ShieldIcon,
   CheckIcon,
   ChevronDownIcon,
   ClockIcon,
@@ -182,18 +182,16 @@ const Sidebar = ({
           </Button>
           <Button
             className={`w-full justify-start ${
-              activeSection === "notifications"
+              activeSection === "privacy"
                 ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
                 : ""
             }`}
             size="sm"
-            startContent={<BellIcon size={16} />}
-            variant={activeSection === "notifications" ? "solid" : "light"}
-            onPress={() =>
-              router.push("/dashboard/settings?section=notifications")
-            }
+            startContent={<ShieldIcon size={16} />}
+            variant={activeSection === "privacy" ? "solid" : "light"}
+            onPress={() => router.push("/dashboard/settings?section=privacy")}
           >
-            Notifications
+            Privacy
           </Button>
           <Button
             className={`w-full justify-start ${

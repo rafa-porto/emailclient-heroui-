@@ -8,7 +8,7 @@ import { Switch } from "@heroui/switch";
 import { Divider } from "@heroui/divider";
 import { Select, SelectItem } from "@heroui/select";
 import { Slider } from "@heroui/slider";
-import { KeyIcon, MonitorIcon, SmartphoneIcon, CheckIcon } from "lucide-react";
+import { MonitorIcon, SmartphoneIcon, CheckIcon } from "lucide-react";
 
 export default function SettingsPage() {
   const searchParams = useSearchParams();
@@ -33,16 +33,12 @@ export default function SettingsPage() {
   };
 
   const [settings, setSettings] = useState({
-    // Profile settings
-    displayName: "John Doe",
-    email: getProviderEmail(),
-    bio: "",
+    // General settings
+    language: "en",
+    timezone: "America/New_York",
 
-    // Notification settings
-    emailNotifications: true,
-    pushNotifications: true,
-    soundEnabled: true,
-    notificationFrequency: "instant",
+    // Privacy settings
+    displayExternalImages: false,
 
     // Appearance settings
     theme: "system",
@@ -65,158 +61,86 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          General Information
+          General Settings
         </h3>
         <div className="grid gap-4">
-          <Input
-            label="Display Name"
-            placeholder="Enter your display name"
-            value={settings.displayName}
-            onChange={(e) => updateSetting("displayName", e.target.value)}
-            classNames={{
-              input: "text-sm",
-              inputWrapper: "bg-gray-50 dark:bg-neutral-800/50",
+          <Select
+            label="Language"
+            selectedKeys={[settings.language]}
+            onSelectionChange={(keys) => {
+              const value = Array.from(keys)[0] as string;
+              updateSetting("language", value);
             }}
-          />
-          <Input
-            label="Email Address"
-            placeholder="Your provider email"
-            type="email"
-            value={settings.email}
-            isReadOnly
-            description="Email address from your login provider (cannot be changed)"
             classNames={{
-              input: "text-sm",
-              inputWrapper: "bg-gray-100 dark:bg-neutral-700/50",
+              trigger: "bg-gray-50 dark:bg-neutral-800/50",
             }}
-          />
-          <Input
-            label="Bio"
-            placeholder="Tell us about yourself"
-            value={settings.bio}
-            onChange={(e) => updateSetting("bio", e.target.value)}
-            classNames={{
-              input: "text-sm",
-              inputWrapper: "bg-gray-50 dark:bg-neutral-800/50",
-            }}
-          />
-        </div>
-      </div>
+          >
+            <SelectItem key="en">English</SelectItem>
+            <SelectItem key="es">Español</SelectItem>
+            <SelectItem key="fr">Français</SelectItem>
+            <SelectItem key="de">Deutsch</SelectItem>
+            <SelectItem key="it">Italiano</SelectItem>
+            <SelectItem key="pt">Português</SelectItem>
+            <SelectItem key="ja">日本語</SelectItem>
+            <SelectItem key="ko">한국어</SelectItem>
+            <SelectItem key="zh">中文</SelectItem>
+          </Select>
 
-      <Divider />
-
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Account Actions
-        </h3>
-        <div className="space-y-3">
-          <Button
-            variant="flat"
-            color="primary"
-            className="w-full justify-start"
-            startContent={<KeyIcon size={16} />}
+          <Select
+            label="Timezone"
+            selectedKeys={[settings.timezone]}
+            onSelectionChange={(keys) => {
+              const value = Array.from(keys)[0] as string;
+              updateSetting("timezone", value);
+            }}
+            classNames={{
+              trigger: "bg-gray-50 dark:bg-neutral-800/50",
+            }}
           >
-            Change Password
-          </Button>
-          <Button
-            variant="flat"
-            color="warning"
-            className="w-full justify-start"
-          >
-            Export Data
-          </Button>
-          <Button
-            variant="flat"
-            color="danger"
-            className="w-full justify-start"
-          >
-            Delete Account
-          </Button>
+            <SelectItem key="America/New_York">Eastern Time (UTC-5)</SelectItem>
+            <SelectItem key="America/Chicago">Central Time (UTC-6)</SelectItem>
+            <SelectItem key="America/Denver">Mountain Time (UTC-7)</SelectItem>
+            <SelectItem key="America/Los_Angeles">
+              Pacific Time (UTC-8)
+            </SelectItem>
+            <SelectItem key="Europe/London">London (UTC+0)</SelectItem>
+            <SelectItem key="Europe/Paris">Paris (UTC+1)</SelectItem>
+            <SelectItem key="Europe/Berlin">Berlin (UTC+1)</SelectItem>
+            <SelectItem key="Europe/Rome">Rome (UTC+1)</SelectItem>
+            <SelectItem key="Asia/Tokyo">Tokyo (UTC+9)</SelectItem>
+            <SelectItem key="Asia/Seoul">Seoul (UTC+9)</SelectItem>
+            <SelectItem key="Asia/Shanghai">Shanghai (UTC+8)</SelectItem>
+            <SelectItem key="Australia/Sydney">Sydney (UTC+10)</SelectItem>
+          </Select>
         </div>
       </div>
     </div>
   );
 
-  const renderNotificationsSection = () => (
+  const renderPrivacySection = () => (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Notification Preferences
+          Privacy Settings
         </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
             <div>
               <p className="font-medium text-gray-900 dark:text-white">
-                Email Notifications
+                Display External Images
               </p>
               <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Receive notifications via email
+                Allow emails to display images from external sources.
               </p>
             </div>
             <Switch
-              isSelected={settings.emailNotifications}
+              isSelected={settings.displayExternalImages}
               onValueChange={(value) =>
-                updateSetting("emailNotifications", value)
+                updateSetting("displayExternalImages", value)
               }
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Push Notifications
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Receive browser push notifications
-              </p>
-            </div>
-            <Switch
-              isSelected={settings.pushNotifications}
-              onValueChange={(value) =>
-                updateSetting("pushNotifications", value)
-              }
-            />
-          </div>
-
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Sound Effects
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Play sounds for notifications
-              </p>
-            </div>
-            <Switch
-              isSelected={settings.soundEnabled}
-              onValueChange={(value) => updateSetting("soundEnabled", value)}
             />
           </div>
         </div>
-      </div>
-
-      <Divider />
-
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Notification Frequency
-        </h3>
-        <Select
-          label="How often would you like to receive notifications?"
-          selectedKeys={[settings.notificationFrequency]}
-          onSelectionChange={(keys) => {
-            const value = Array.from(keys)[0] as string;
-            updateSetting("notificationFrequency", value);
-          }}
-          classNames={{
-            trigger: "bg-gray-50 dark:bg-neutral-800/50",
-          }}
-        >
-          <SelectItem key="instant">Instant</SelectItem>
-          <SelectItem key="hourly">Hourly</SelectItem>
-          <SelectItem key="daily">Daily</SelectItem>
-          <SelectItem key="weekly">Weekly</SelectItem>
-        </Select>
       </div>
     </div>
   );
@@ -395,8 +319,8 @@ export default function SettingsPage() {
       case "general":
       case "profile": // Backward compatibility
         return renderProfileSection();
-      case "notifications":
-        return renderNotificationsSection();
+      case "privacy":
+        return renderPrivacySection();
       case "appearance":
         return renderAppearanceSection();
       case "email-preferences":
@@ -420,7 +344,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm border-[0.5px] border-gray-200 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm">
         {renderSectionContent()}
       </div>
 
