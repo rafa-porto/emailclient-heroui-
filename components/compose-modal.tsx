@@ -410,7 +410,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
       scrollBehavior="inside"
       hideCloseButton
       classNames={{
-        base: `${isExpanded ? "max-w-full max-h-full rounded-t-xl rounded-b-none" : "max-w-4xl rounded-t-2xl rounded-b-none"} !mb-0 !pb-0`,
+        base: `${isExpanded ? "max-w-full max-h-full rounded-t-xl rounded-b-none" : "max-w-4xl sm:max-w-5xl rounded-t-2xl rounded-b-none"} !mb-0 !pb-0`,
         backdrop: "bg-black/50 backdrop-blur-sm",
         wrapper: `z-50 ${isExpanded ? "items-center justify-center !pb-0 !mb-0" : "items-end !pb-0 !mb-0 !bottom-0"}`,
         body: "p-0",
@@ -442,7 +442,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
           <>
             {/* Custom Header */}
             <ModalHeader
-              className={`flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 px-6 py-4 ${isExpanded ? "rounded-t-xl" : "rounded-t-2xl"}`}
+              className={`flex items-center justify-between bg-white dark:bg-neutral-900 px-6 py-5 ${isExpanded ? "rounded-t-xl" : "rounded-t-2xl"}`}
             >
               <div className="flex items-center gap-3">
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -497,9 +497,9 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
             <ModalBody className="p-0 overflow-hidden flex flex-row bg-white dark:bg-neutral-900">
               {/* AI Assistant Panel */}
               {showAiAssistant && (
-                <div className="w-80 border-r border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 flex flex-col">
+                <div className="w-72 sm:w-80 lg:w-96 xl:w-80 bg-gray-50/80 dark:bg-neutral-800/80 flex flex-col flex-shrink-0 min-w-0">
                   {/* AI Panel Header */}
-                  <div className="p-4 border-b border-gray-200 dark:border-neutral-700">
+                  <div className="p-5 pb-4">
                     <div className="flex items-center gap-2 mb-3">
                       <AIIcon
                         size={20}
@@ -515,7 +515,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                   </div>
 
                   {/* AI Panel Content */}
-                  <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+                  <div className="flex-1 p-5 pt-2 space-y-6 overflow-y-auto">
                     {/* Subject Suggestions */}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -548,7 +548,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                             <button
                               key={index}
                               onClick={() => setSubject(suggestion)}
-                              className="w-full text-left p-2 text-xs bg-white dark:bg-neutral-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-neutral-600 transition-colors"
+                              className="w-full text-left p-3 text-xs bg-white dark:bg-neutral-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                             >
                               {suggestion}
                             </button>
@@ -562,7 +562,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                         Email Tone
                       </h4>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 gap-3">
                         {aiSuggestions.tones.map((tone) => (
                           <Button
                             key={tone.name}
@@ -576,23 +576,33 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                               selectedTone === tone.name
                                 ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                                 : "bg-white dark:bg-neutral-700 text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-600"
-                            } text-xs px-2 py-2 h-auto flex-col items-start border border-gray-200 dark:border-neutral-600`}
+                            } text-xs px-4 py-4 h-auto flex-col items-start transition-all duration-200 w-full min-h-[80px] justify-start rounded-lg`}
                           >
-                            <span className="font-medium">{tone.name}</span>
-                            <span className="text-xs opacity-70">
-                              {tone.description}
-                            </span>
+                            <div className="w-full text-left">
+                              <div className="font-medium text-sm mb-2">
+                                {tone.name}
+                              </div>
+                              <div className="text-xs opacity-70 leading-relaxed">
+                                {tone.description}
+                              </div>
+                            </div>
                           </Button>
                         ))}
                       </div>
 
                       {isGeneratingContent && (
-                        <Progress
-                          value={aiProgress}
-                          className="mt-2"
-                          color="primary"
-                          size="sm"
-                        />
+                        <div className="space-y-2">
+                          <Progress
+                            value={aiProgress}
+                            className="w-full"
+                            color="primary"
+                            size="sm"
+                          />
+                          <p className="text-xs text-gray-600 dark:text-neutral-400 text-center">
+                            Generating {selectedTone.toLowerCase()} email
+                            template...
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -604,7 +614,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                 className={`flex flex-col bg-white dark:bg-neutral-900 ${isExpanded ? "h-[calc(100vh-180px)]" : "h-[550px]"} ${showAiAssistant ? "flex-1" : "w-full"}`}
               >
                 {/* Recipients Section */}
-                <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+                <div className="p-6 space-y-5 bg-gray-50/30 dark:bg-neutral-800/20">
                   {/* To Field */}
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-medium text-gray-700 dark:text-neutral-300 w-12">
@@ -616,7 +626,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         {selectedContacts.map((contact) => (
                           <div
                             key={contact.email}
-                            className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full text-sm border border-blue-200/60 dark:border-blue-700/40 transition-all duration-200"
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/30 rounded-full text-sm transition-all duration-200"
                           >
                             <span className="text-sm">{contact.avatar}</span>
                             <span className="text-blue-800 dark:text-blue-200 font-medium text-xs">
@@ -666,7 +676,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           variant="flat"
                           classNames={{
                             inputWrapper:
-                              "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
+                              "bg-gray-100 dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 focus-within:bg-white dark:focus-within:bg-neutral-700 transition-all duration-200",
                             input:
                               "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                           }}
@@ -674,7 +684,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
 
                         {/* Contact Suggestions Dropdown */}
                         {showSuggestions && filteredContacts.length > 0 && (
-                          <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                          <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                             {filteredContacts.map((contact, index) => (
                               <div
                                 key={contact.email}
@@ -738,7 +748,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           {selectedCcContacts.map((contact) => (
                             <div
                               key={contact.email}
-                              className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-full text-sm border border-purple-200/60 dark:border-purple-700/40 transition-all duration-200"
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-purple-50 dark:bg-purple-900/30 rounded-full text-sm transition-all duration-200"
                             >
                               <span className="text-sm">{contact.avatar}</span>
                               <span className="text-purple-800 dark:text-purple-200 font-medium text-xs">
@@ -777,7 +787,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                             variant="flat"
                             classNames={{
                               inputWrapper:
-                                "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
+                                "bg-gray-100 dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 focus-within:bg-white dark:focus-within:bg-neutral-700 transition-all duration-200",
                               input:
                                 "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                             }}
@@ -786,7 +796,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           {/* CC Contact Suggestions */}
                           {showCcSuggestions &&
                             filteredCcContacts.length > 0 && (
-                              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                              <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                 {filteredCcContacts.map((contact, index) => (
                                   <div
                                     key={contact.email}
@@ -842,7 +852,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           {selectedBccContacts.map((contact) => (
                             <div
                               key={contact.email}
-                              className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-full text-sm border border-emerald-200/60 dark:border-emerald-700/40 transition-all duration-200"
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-full text-sm transition-all duration-200"
                             >
                               <span className="text-sm">{contact.avatar}</span>
                               <span className="text-emerald-800 dark:text-emerald-200 font-medium text-xs">
@@ -881,7 +891,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                             variant="flat"
                             classNames={{
                               inputWrapper:
-                                "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
+                                "bg-gray-100 dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 focus-within:bg-white dark:focus-within:bg-neutral-700 transition-all duration-200",
                               input:
                                 "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                             }}
@@ -890,7 +900,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           {/* BCC Contact Suggestions */}
                           {showBccSuggestions &&
                             filteredBccContacts.length > 0 && (
-                              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                              <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                                 {filteredBccContacts.map((contact, index) => (
                                   <div
                                     key={contact.email}
@@ -946,7 +956,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       variant="flat"
                       classNames={{
                         inputWrapper:
-                          "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
+                          "bg-gray-100 dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 focus-within:bg-white dark:focus-within:bg-neutral-700 transition-all duration-200",
                         input:
                           "text-sm font-medium text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                       }}
@@ -966,7 +976,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex-shrink-0">
+                <div className="flex items-center justify-between px-6 py-5 bg-gray-50/30 dark:bg-neutral-800/20 flex-shrink-0">
                   <div className="flex items-center gap-3">
                     <Button
                       size="sm"
@@ -995,7 +1005,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         variant="flat"
                         startContent={<AIIcon size={16} />}
                         onPress={handleGenerateContent}
-                        className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 px-4 py-2"
+                        className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 px-4 py-2"
                       >
                         AI Assistant
                       </Button>
