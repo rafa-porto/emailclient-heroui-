@@ -17,6 +17,7 @@ const ArchivedPage = () => {
     markAsRead,
     toggleStarEmail,
     newEmails,
+    isInboxOrganized,
   } = useEmailContext();
 
   // Filter archived emails from both mockEmails and newEmails
@@ -54,6 +55,7 @@ const ArchivedPage = () => {
       showComposeButton={true}
       showAiButton={true}
       showFilterButtons={false}
+      isInboxOrganized={isInboxOrganized}
       onEmailClick={handleEmailClick}
       onStar={handleStarEmail}
       onUnarchive={handleUnarchiveEmail}

@@ -1,35 +1,35 @@
 "use client";
 
 import React from "react";
-import { StarIcon } from "lucide-react";
+import { BriefcaseIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
 import { EmailData } from "@/types";
 import { mockEmails } from "@/data/mockEmails";
 import EmailList from "@/components/email-list";
 
-const StarredPage = () => {
+const WorkPage = () => {
   const {
     setSelectedEmail,
-    starredEmails,
-    deletedEmails,
-    archivedEmails,
     toggleStarEmail,
     archiveEmail,
     deleteEmail,
     markAsRead,
+    markAsSpam,
+    isEmailArchived,
+    isEmailDeleted,
     newEmails,
+    animatingEmails,
+    getEmailsByCategory,
     isInboxOrganized,
   } = useEmailContext();
 
-  // Filter starred emails that are not deleted or archived from both mockEmails and newEmails
-  const allEmails = [...newEmails, ...mockEmails];
-  const starredEmailsData = allEmails.filter(
-    (email) =>
-      starredEmails.includes(email.id) &&
-      !deletedEmails.includes(email.id) &&
-      !archivedEmails.includes(email.id)
+  // Get work emails that are not archived or deleted
+  const allEmails = [...newEmails, ...mockEmails].filter(
+    (email) => !isEmailArchived(email.id) && !isEmailDeleted(email.id)
   );
+
+  const workEmails = getEmailsByCategory("work", allEmails);
 
   const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
@@ -49,14 +49,18 @@ const StarredPage = () => {
     deleteEmail(id);
   };
 
+  const handleMarkAsSpam = (id: string) => {
+    markAsSpam(id);
+  };
+
   return (
     <EmailList
-      emails={starredEmailsData}
-      title="Starred"
-      searchPlaceholder="Search starred emails..."
-      emptyIcon={<StarIcon className="mb-4" size={48} />}
-      emptyTitle="No starred emails"
-      emptyDescription="Star emails to see them here"
+      emails={workEmails}
+      title="Work"
+      searchPlaceholder="Search work emails..."
+      emptyIcon={<BriefcaseIcon className="mb-4" size={48} />}
+      emptyTitle="No work emails"
+      emptyDescription="Work-related emails will appear here"
       showComposeButton={true}
       showAiButton={true}
       showFilterButtons={false}
@@ -65,8 +69,10 @@ const StarredPage = () => {
       onStar={handleStarEmail}
       onArchive={handleArchiveEmail}
       onDelete={handleDeleteEmail}
+      onMarkAsSpam={handleMarkAsSpam}
+      animatingEmails={animatingEmails}
     />
   );
 };
 
-export default StarredPage;
+export default WorkPage;

@@ -20,12 +20,22 @@ const Inbox = () => {
     isEmailDeleted,
     newEmails,
     animatingEmails,
+    classifyEmailAutomatically,
+    isInboxOrganized,
   } = useEmailContext();
 
-  // Filter emails that are not archived or deleted
-  const visibleEmails = [...newEmails, ...mockEmails].filter(
-    (email) => !isEmailArchived(email.id) && !isEmailDeleted(email.id)
-  );
+  // Filter emails based on organization state
+  const visibleEmails = [...newEmails, ...mockEmails]
+    .filter((email) => !isEmailArchived(email.id) && !isEmailDeleted(email.id))
+    .map(classifyEmailAutomatically)
+    .filter((email) => {
+      // If inbox is organized, only show uncategorized emails or emails without specific categories
+      if (isInboxOrganized) {
+        return !email.category || email.category === "general";
+      }
+      // If inbox is not organized, show all emails (default behavior)
+      return true;
+    });
 
   const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
@@ -60,6 +70,7 @@ const Inbox = () => {
       showComposeButton={true}
       showAiButton={true}
       showFilterButtons={true}
+      isInboxOrganized={isInboxOrganized}
       onEmailClick={handleEmailClick}
       onStar={handleStarEmail}
       onArchive={handleArchiveEmail}

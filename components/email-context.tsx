@@ -8,8 +8,10 @@ import React, {
   useEffect,
 } from "react";
 
-import { EmailData } from "@/types";
+import { EmailData, EmailCategory } from "@/types";
 import { usePersistentState } from "@/components/hooks/use-persistent-state";
+import { classifyEmail } from "@/utils/emailClassification";
+import { mockEmails } from "@/data/mockEmails";
 
 interface EmailContextType {
   selectedEmail: EmailData | null;
@@ -48,6 +50,24 @@ interface EmailContextType {
   emailSummaries: Record<string, string>;
   generateEmailSummary: (emailId: string, content: string) => Promise<string>;
   getEmailSummary: (emailId: string) => string | null;
+  // Email classification functionality
+  classifyEmailAutomatically: (email: EmailData) => EmailData;
+  getEmailsByCategory: (
+    category: EmailCategory,
+    emails: EmailData[]
+  ) => EmailData[];
+  // Inbox organization functionality
+  isInboxOrganized: boolean;
+  organizeInbox: () => Promise<void>;
+  resetInboxOrganization: () => void;
+  organizationProgress: {
+    isOrganizing: boolean;
+    currentStep: string;
+    progress: number;
+    categoryCounts: Record<EmailCategory, number>;
+    totalProcessed: number;
+    totalEmails: number;
+  };
   // New email functionality
   newEmails: EmailData[];
   addNewEmail: (email: EmailData) => void;
@@ -112,6 +132,21 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
   const [sentEmails, setSentEmails] = usePersistentState({
     key: "sentEmails",
     defaultValue: [] as EmailData[],
+  });
+
+  // Inbox organization state
+  const [isInboxOrganized, setIsInboxOrganized] = usePersistentState({
+    key: "isInboxOrganized",
+    defaultValue: false,
+  });
+
+  const [organizationProgress, setOrganizationProgress] = useState({
+    isOrganizing: false,
+    currentStep: "",
+    progress: 0,
+    categoryCounts: {} as Record<EmailCategory, number>,
+    totalProcessed: 0,
+    totalEmails: 0,
   });
 
   // Track emails that have already been animated to prevent repeating animations
@@ -381,6 +416,144 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
     return summary;
   };
 
+  // Email classification functionality
+  const classifyEmailAutomatically = (email: EmailData): EmailData => {
+    if (email.category) {
+      return email; // Already classified
+    }
+
+    const category = classifyEmail(email);
+    return {
+      ...email,
+      category,
+    };
+  };
+
+  const getEmailsByCategory = (
+    category: EmailCategory,
+    emails: EmailData[]
+  ): EmailData[] => {
+    return emails
+      .map(classifyEmailAutomatically) // Ensure all emails are classified
+      .filter((email) => email.category === category);
+  };
+
+  // Inbox organization functionality
+  const organizeInbox = async (): Promise<void> => {
+    if (organizationProgress.isOrganizing) return;
+
+    // Get all emails that need to be organized
+    const allEmails = [...newEmails, ...mockEmails].filter(
+      (email) =>
+        !isEmailArchived(email.id) &&
+        !isEmailDeleted(email.id) &&
+        !isEmailSpam(email.id)
+    );
+
+    const totalEmails = allEmails.length;
+    const categoryCounts: Record<EmailCategory, number> = {
+      work: 0,
+      personal: 0,
+      promotions: 0,
+      urgent: 0,
+      bills: 0,
+      social: 0,
+      newsletters: 0,
+      travel: 0,
+      shopping: 0,
+      security: 0,
+      spam: 0,
+      general: 0,
+    };
+
+    // Start organization process
+    setOrganizationProgress({
+      isOrganizing: true,
+      currentStep: "Initializing AI analysis...",
+      progress: 0,
+      categoryCounts,
+      totalProcessed: 0,
+      totalEmails,
+    });
+
+    // Simulate AI processing with realistic steps
+    const steps = [
+      "Analyzing email content...",
+      "Detecting patterns and keywords...",
+      "Identifying sender domains...",
+      "Classifying email types...",
+      "Organizing into categories...",
+      "Finalizing organization...",
+    ];
+
+    for (let i = 0; i < steps.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      setOrganizationProgress((prev) => ({
+        ...prev,
+        currentStep: steps[i],
+        progress: ((i + 1) / steps.length) * 50, // First 50% for analysis
+      }));
+    }
+
+    // Process emails one by one with visual feedback
+    for (let i = 0; i < allEmails.length; i++) {
+      const email = allEmails[i];
+      const classifiedEmail = classifyEmailAutomatically(email);
+
+      if (classifiedEmail.category) {
+        categoryCounts[classifiedEmail.category]++;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 200)); // Simulate processing time
+
+      setOrganizationProgress((prev) => ({
+        ...prev,
+        currentStep: `Processing: ${email.subject.substring(0, 30)}...`,
+        progress: 50 + ((i + 1) / totalEmails) * 50, // Second 50% for processing
+        categoryCounts: { ...categoryCounts },
+        totalProcessed: i + 1,
+      }));
+    }
+
+    // Complete organization
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    setOrganizationProgress((prev) => ({
+      ...prev,
+      currentStep: "Organization complete!",
+      progress: 100,
+      isOrganizing: false,
+    }));
+
+    // Set inbox as organized
+    setIsInboxOrganized(true);
+
+    // Reset progress after a short delay
+    setTimeout(() => {
+      setOrganizationProgress({
+        isOrganizing: false,
+        currentStep: "",
+        progress: 0,
+        categoryCounts: {} as Record<EmailCategory, number>,
+        totalProcessed: 0,
+        totalEmails: 0,
+      });
+    }, 3000);
+  };
+
+  const resetInboxOrganization = () => {
+    setIsInboxOrganized(false);
+    setOrganizationProgress({
+      isOrganizing: false,
+      currentStep: "",
+      progress: 0,
+      categoryCounts: {} as Record<EmailCategory, number>,
+      totalProcessed: 0,
+      totalEmails: 0,
+    });
+  };
+
   return (
     <EmailContext.Provider
       value={{
@@ -417,6 +590,12 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
         emailSummaries,
         generateEmailSummary,
         getEmailSummary,
+        classifyEmailAutomatically,
+        getEmailsByCategory,
+        isInboxOrganized,
+        organizeInbox,
+        resetInboxOrganization,
+        organizationProgress,
         newEmails,
         addNewEmail,
         animatingEmails,

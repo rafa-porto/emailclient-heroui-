@@ -18,6 +18,7 @@ const SpamPage = () => {
     spamEmails: markedSpamEmails,
     isEmailDeleted,
     isEmailArchived,
+    isInboxOrganized,
   } = useEmailContext();
 
   // Combine spam emails with any emails marked as spam from regular emails
@@ -55,10 +56,11 @@ const SpamPage = () => {
       showComposeButton={false}
       showAiButton={false}
       showFilterButtons={false}
+      isInboxOrganized={isInboxOrganized}
+      isSpamPage={true}
       onEmailClick={handleEmailClick}
       onNotSpam={handleNotSpam}
       onDelete={handleDeleteForever}
-      isSpamPage={true}
     />
   );
 };

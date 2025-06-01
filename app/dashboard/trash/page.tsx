@@ -17,6 +17,7 @@ const TrashPage = () => {
     permanentlyDeleteEmail,
     markAsRead,
     newEmails,
+    isInboxOrganized,
   } = useEmailContext();
 
   // Filter deleted emails from both mockEmails and newEmails
@@ -56,6 +57,7 @@ const TrashPage = () => {
       showComposeButton={true}
       showAiButton={true}
       showFilterButtons={false}
+      isInboxOrganized={isInboxOrganized}
       additionalHeaderButtons={
         deletedEmailsData.length > 0 && (
           <Button

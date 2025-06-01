@@ -13,6 +13,29 @@ export interface EmailAttachment {
   url?: string;
 }
 
+// Email Categories
+export type EmailCategory =
+  | "work"
+  | "personal"
+  | "promotions"
+  | "urgent"
+  | "bills"
+  | "social"
+  | "newsletters"
+  | "travel"
+  | "shopping"
+  | "security"
+  | "spam"
+  | "general";
+
+export interface EmailCategoryInfo {
+  id: EmailCategory;
+  name: string;
+  icon: string;
+  color: string;
+  description: string;
+}
+
 export interface EmailData {
   id: string;
   sender: string;
@@ -26,4 +49,5 @@ export interface EmailData {
   isAIGenerated?: boolean;
   isImportant?: boolean;
   attachments?: EmailAttachment[];
+  category?: EmailCategory;
 }

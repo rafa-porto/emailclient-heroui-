@@ -20,6 +20,7 @@ import {
 import { useEmailContext } from "@/components/email-context";
 import { AIIcon } from "@/components/icons";
 import { EmailData } from "@/types";
+import EmailCategoryBadge from "@/components/email-category-badge";
 
 interface EmailItemProps extends EmailData {
   onClick: (email: EmailData) => void;
@@ -34,6 +35,7 @@ interface EmailItemProps extends EmailData {
   onQuickSummary?: (id: string, content: string) => void;
   isAnimating?: boolean;
   isSpamPage?: boolean;
+  isInboxOrganized?: boolean;
 }
 
 const EmailItem: React.FC<EmailItemProps> = ({
@@ -49,6 +51,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   isAIGenerated,
   isImportant,
   attachments,
+  category,
   onClick,
   onStar,
   onArchive,
@@ -61,6 +64,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   onQuickSummary,
   isAnimating,
   isSpamPage,
+  isInboxOrganized,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -284,8 +288,19 @@ const EmailItem: React.FC<EmailItemProps> = ({
           </span>
         </div>
 
-        <div className="text-xs text-gray-500 dark:text-neutral-400 truncate">
-          {snippet}
+        <div className="flex items-center justify-between gap-2">
+          <div className="text-xs text-gray-500 dark:text-neutral-400 truncate flex-1">
+            {snippet}
+          </div>
+          {category && isInboxOrganized && (
+            <EmailCategoryBadge
+              category={category}
+              size="sm"
+              showIcon={true}
+              showText={false}
+              className="flex-shrink-0"
+            />
+          )}
         </div>
       </div>
 
@@ -423,6 +438,7 @@ interface EmailListProps {
   onMarkAsSpam?: (id: string) => void;
   animatingEmails?: string[];
   isSpamPage?: boolean;
+  isInboxOrganized?: boolean;
 }
 
 const EmailList: React.FC<EmailListProps> = ({
@@ -447,6 +463,7 @@ const EmailList: React.FC<EmailListProps> = ({
   onMarkAsSpam,
   animatingEmails = [],
   isSpamPage = false,
+  isInboxOrganized = false,
 }) => {
   const {
     isAiPanelOpen,
@@ -560,6 +577,8 @@ const EmailList: React.FC<EmailListProps> = ({
                 key={email.id}
                 {...email}
                 isAnimating={animatingEmails.includes(email.id)}
+                isInboxOrganized={isInboxOrganized}
+                isSpamPage={isSpamPage}
                 onClick={onEmailClick}
                 onStar={onStar}
                 onArchive={onArchive}
@@ -569,7 +588,6 @@ const EmailList: React.FC<EmailListProps> = ({
                 onPermanentDelete={onPermanentDelete}
                 onNotSpam={onNotSpam}
                 onMarkAsSpam={onMarkAsSpam}
-                isSpamPage={isSpamPage}
               />
             ))
           )}

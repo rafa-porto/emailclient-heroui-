@@ -17,6 +17,7 @@ const AllPage = () => {
     markAsRead,
     newEmails,
     animatingEmails,
+    isInboxOrganized,
   } = useEmailContext();
 
   // Show all emails including new ones
@@ -51,6 +52,7 @@ const AllPage = () => {
       showComposeButton={true}
       showAiButton={true}
       showFilterButtons={false}
+      isInboxOrganized={isInboxOrganized}
       onEmailClick={handleEmailClick}
       onStar={handleStarEmail}
       onArchive={handleArchiveEmail}

@@ -21,6 +21,7 @@ export const mockEmails: EmailData[] = [
     read: false,
     isAIGenerated: true,
     isImportant: true,
+    category: "work",
     attachments: [
       {
         id: "att1",
@@ -56,6 +57,7 @@ export const mockEmails: EmailData[] = [
     `,
     timestamp: "9:48AM",
     read: true,
+    category: "work",
   },
   {
     id: "3",
@@ -81,6 +83,7 @@ export const mockEmails: EmailData[] = [
     `,
     timestamp: "9:42AM",
     read: false,
+    category: "bills",
   },
   {
     id: "4",
@@ -104,6 +107,7 @@ export const mockEmails: EmailData[] = [
     `,
     timestamp: "Yesterday",
     read: true,
+    category: "shopping",
     attachments: [
       {
         id: "att3",
@@ -169,6 +173,7 @@ export const mockEmails: EmailData[] = [
     `,
     timestamp: "2 hours ago",
     read: false,
+    category: "bills",
   },
   {
     id: "7",

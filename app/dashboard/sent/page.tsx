@@ -7,7 +7,7 @@ import { useEmailContext } from "@/components/email-context";
 import { EmailData } from "@/types";
 
 export default function SentPage() {
-  const { sentEmails, setSelectedEmail } = useEmailContext();
+  const { sentEmails, setSelectedEmail, isInboxOrganized } = useEmailContext();
 
   const handleEmailClick = (email: EmailData) => {
     setSelectedEmail(email);
@@ -21,6 +21,7 @@ export default function SentPage() {
         emptyTitle="No sent emails"
         emptyDescription="No sent emails yet. Compose and send your first email!"
         emptyIcon="📤"
+        isInboxOrganized={isInboxOrganized}
         onEmailClick={handleEmailClick}
         showFilterButtons={false}
       />

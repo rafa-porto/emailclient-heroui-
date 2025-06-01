@@ -34,6 +34,8 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { useEmailContext } from "@/components/email-context";
 import { siteConfig } from "@/config/site";
 import { spamEmails as mockSpamEmails } from "@/data/spamEmails";
+import { EMAIL_CATEGORIES } from "@/utils/emailClassification";
+import { mockEmails } from "@/data/mockEmails";
 
 interface SidebarProps {
   userEmail?: string;
@@ -57,6 +59,9 @@ const Sidebar = ({
     spamEmails,
     isEmailRead,
     sentEmails,
+    isInboxOrganized,
+    getEmailsByCategory,
+    newEmails,
   } = useEmailContext();
 
   // Check if we're on settings page
@@ -536,6 +541,123 @@ const Sidebar = ({
           )}
         </Button>
       </nav>
+
+      {/* Categories Section - Only show when inbox is organized */}
+      {isInboxOrganized && (
+        <div className="space-y-1">
+          <h3 className="text-xs font-medium text-gray-500 dark:text-neutral-400 uppercase tracking-wider px-2 mb-2">
+            Categories
+          </h3>
+
+          <Button
+            className={`w-full justify-start ${
+              pathname === "/dashboard/work"
+                ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
+                : ""
+            }`}
+            size="sm"
+            startContent={<span className="text-sm">💼</span>}
+            variant={pathname === "/dashboard/work" ? "solid" : "light"}
+            onClick={() => router.push("/dashboard/work")}
+          >
+            Work
+            {(() => {
+              const allEmails = [...newEmails, ...mockEmails].filter(
+                (email) =>
+                  !deletedEmails.includes(email.id) &&
+                  !archivedEmails.includes(email.id)
+              );
+              const workEmails = getEmailsByCategory("work", allEmails);
+              return (
+                workEmails.length > 0 && (
+                  <span
+                    className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                      pathname === "/dashboard/work"
+                        ? "bg-white/20 text-white"
+                        : "bg-gray-200 dark:bg-neutral-700"
+                    }`}
+                  >
+                    {workEmails.length}
+                  </span>
+                )
+              );
+            })()}
+          </Button>
+
+          <Button
+            className={`w-full justify-start ${
+              pathname === "/dashboard/promotions"
+                ? "bg-orange-600 text-white border-orange-600 border hover:bg-orange-700"
+                : ""
+            }`}
+            size="sm"
+            startContent={<span className="text-sm">🏷️</span>}
+            variant={pathname === "/dashboard/promotions" ? "solid" : "light"}
+            onClick={() => router.push("/dashboard/promotions")}
+          >
+            Promotions
+            {(() => {
+              const allEmails = [...newEmails, ...mockEmails].filter(
+                (email) =>
+                  !deletedEmails.includes(email.id) &&
+                  !archivedEmails.includes(email.id)
+              );
+              const promotionEmails = getEmailsByCategory(
+                "promotions",
+                allEmails
+              );
+              return (
+                promotionEmails.length > 0 && (
+                  <span
+                    className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                      pathname === "/dashboard/promotions"
+                        ? "bg-white/20 text-white"
+                        : "bg-gray-200 dark:bg-neutral-700"
+                    }`}
+                  >
+                    {promotionEmails.length}
+                  </span>
+                )
+              );
+            })()}
+          </Button>
+
+          <Button
+            className={`w-full justify-start ${
+              pathname === "/dashboard/bills"
+                ? "bg-yellow-600 text-white border-yellow-600 border hover:bg-yellow-700"
+                : ""
+            }`}
+            size="sm"
+            startContent={<span className="text-sm">💳</span>}
+            variant={pathname === "/dashboard/bills" ? "solid" : "light"}
+            onClick={() => router.push("/dashboard/bills")}
+          >
+            Bills
+            {(() => {
+              const allEmails = [...newEmails, ...mockEmails].filter(
+                (email) =>
+                  !deletedEmails.includes(email.id) &&
+                  !archivedEmails.includes(email.id)
+              );
+              const billsEmails = getEmailsByCategory("bills", allEmails);
+              return (
+                billsEmails.length > 0 && (
+                  <span
+                    className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                      pathname === "/dashboard/bills"
+                        ? "bg-white/20 text-white"
+                        : "bg-gray-200 dark:bg-neutral-700"
+                    }`}
+                  >
+                    {billsEmails.length}
+                  </span>
+                )
+              );
+            })()}
+          </Button>
+        </div>
+      )}
 
       {/* Spacer to push cards to bottom */}
       <div className="flex-1" />
