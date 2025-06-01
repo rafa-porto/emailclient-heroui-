@@ -15,6 +15,8 @@ import {
 
 import { AIIcon } from "@/components/icons";
 import RichTextEditor from "@/components/rich-text-editor";
+import { useEmailContext } from "@/components/email-context";
+import { EmailData } from "@/types";
 
 interface ComposeModalProps {
   isOpen: boolean;
@@ -22,6 +24,7 @@ interface ComposeModalProps {
 }
 
 const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
+  const { addSentEmail } = useEmailContext();
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
   const [bcc, setBcc] = useState("");
@@ -34,9 +37,43 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
 
   // Função para enviar email
   const handleSendEmail = () => {
-    // Implementar lógica de envio
+    // Validar se há destinatários
+    const allRecipients = [...recipients];
+    if (to.trim()) {
+      allRecipients.push(to.trim());
+    }
+
+    if (allRecipients.length === 0) {
+      alert("Please add at least one recipient.");
+      return;
+    }
+
+    // Criar o email enviado
+    const sentEmail: EmailData = {
+      id: `sent-${Date.now()}`,
+      sender: "You", // Ou pegar do contexto do usuário
+      avatarUrl: "/user-avatar.png", // Avatar do usuário
+      subject: subject || "(No Subject)",
+      snippet: content.replace(/<[^>]*>/g, "").substring(0, 100) + "...", // Remove HTML tags
+      content: content,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      read: true, // Emails enviados são sempre "lidos"
+      isBrand: false,
+      isAIGenerated: false,
+      isImportant: false,
+    };
+
+    // Adicionar aos emails enviados
+    addSentEmail(sentEmail);
+
+    // Mostrar confirmação
+    alert(`Email sent successfully to: ${allRecipients.join(", ")}`);
+
+    // Fechar modal e resetar form
     onClose();
-    // Reset form
     setTo("");
     setCc("");
     setBcc("");
@@ -162,12 +199,12 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
               </div>
             </ModalHeader>
 
-            <ModalBody className="p-0 overflow-hidden flex flex-col">
+            <ModalBody className="p-0 overflow-hidden flex flex-col bg-white dark:bg-neutral-900">
               <div
-                className={`flex flex-col ${isExpanded ? "h-[calc(100vh-180px)]" : "h-[550px]"}`}
+                className={`flex flex-col bg-white dark:bg-neutral-900 ${isExpanded ? "h-[calc(100vh-180px)]" : "h-[550px]"}`}
               >
                 {/* Recipients Section */}
-                <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-800">
+                <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
                   {/* To Field */}
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-medium text-gray-700 dark:text-neutral-300 w-12">
@@ -195,8 +232,9 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         variant="flat"
                         classNames={{
                           inputWrapper:
-                            "bg-transparent border-none shadow-none",
-                          input: "text-sm",
+                            "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                          input:
+                            "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                         }}
                       />
                     </div>
@@ -237,8 +275,9 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         variant="flat"
                         classNames={{
                           inputWrapper:
-                            "bg-transparent border-none shadow-none",
-                          input: "text-sm",
+                            "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                          input:
+                            "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                         }}
                       />
                       <Button
@@ -269,8 +308,9 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         variant="flat"
                         classNames={{
                           inputWrapper:
-                            "bg-transparent border-none shadow-none",
-                          input: "text-sm",
+                            "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                          input:
+                            "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                         }}
                       />
                       <Button
@@ -299,26 +339,28 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       onChange={(e) => setSubject(e.target.value)}
                       variant="flat"
                       classNames={{
-                        inputWrapper: "bg-transparent border-none shadow-none",
-                        input: "text-sm font-medium",
+                        inputWrapper:
+                          "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                        input:
+                          "text-sm font-medium text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                       }}
                     />
                   </div>
                 </div>
 
                 {/* Message Content */}
-                <div className="flex-1 flex flex-col min-h-0">
+                <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-neutral-900">
                   <RichTextEditor
                     value={content}
                     onChange={setContent}
                     placeholder="Compose your message..."
                     height={isExpanded ? "calc(100vh - 500px)" : "220px"}
-                    className="h-full flex-1"
+                    className="h-full flex-1 bg-white dark:bg-neutral-900"
                   />
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-800 bg-gray-50/50 dark:bg-neutral-900/50 flex-shrink-0">
+                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 flex-shrink-0">
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"
@@ -333,7 +375,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                     <Button
                       size="sm"
                       variant="light"
-                      className="text-gray-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
                     >
                       Save Draft
                     </Button>
@@ -353,11 +395,11 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       isIconOnly
                       size="sm"
                       variant="light"
-                      className="text-gray-500 dark:text-neutral-400 hover:bg-gray-200 dark:hover:bg-neutral-700"
+                      className="text-gray-500 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
                     >
                       <PaperclipIcon size={16} />
                     </Button>
-                    <span className="text-xs text-gray-500 dark:text-neutral-500">
+                    <span className="text-xs text-gray-500 dark:text-neutral-400">
                       {content.length} characters
                     </span>
                   </div>

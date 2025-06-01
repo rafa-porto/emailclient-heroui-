@@ -50,8 +50,13 @@ const Sidebar = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { starredEmails, deletedEmails, archivedEmails, isEmailRead } =
-    useEmailContext();
+  const {
+    starredEmails,
+    deletedEmails,
+    archivedEmails,
+    isEmailRead,
+    sentEmails,
+  } = useEmailContext();
 
   // Check if we're on settings page
   const isSettingsPage = pathname.startsWith("/dashboard/settings");
@@ -71,6 +76,7 @@ const Sidebar = ({
   const trashCount = deletedEmails.length;
   const archivedCount = archivedEmails.length;
   const allCount = mockEmails.length;
+  const sentCount = sentEmails.length;
 
   const handleLogout = () => {
     router.push("/");
@@ -460,12 +466,28 @@ const Sidebar = ({
           Drafts
         </Button>
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard/sent"
+              ? "bg-green-600 text-white border-green-600 border hover:bg-green-700"
+              : ""
+          }`}
           size="sm"
           startContent={<SendIcon size={16} />}
-          variant="light"
+          variant={pathname === "/dashboard/sent" ? "solid" : "light"}
+          onClick={() => router.push("/dashboard/sent")}
         >
           Sent
+          {sentCount > 0 && (
+            <span
+              className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                pathname === "/dashboard/sent"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-200 dark:bg-neutral-700"
+              }`}
+            >
+              {sentCount}
+            </span>
+          )}
         </Button>
         <Button
           className={`w-full justify-start ${

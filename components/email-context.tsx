@@ -44,6 +44,9 @@ interface EmailContextType {
   addNewEmail: (email: EmailData) => void;
   animatingEmails: string[];
   removeAnimatingEmail: (emailId: string) => void;
+  // Sent emails functionality
+  sentEmails: EmailData[];
+  addSentEmail: (email: EmailData) => void;
 }
 
 const EmailContext = createContext<EmailContextType | undefined>(undefined);
@@ -86,6 +89,12 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
   const [newEmails, setNewEmails] = useState<EmailData[]>([]);
   const [animatingEmails, setAnimatingEmails] = useState<string[]>([]);
 
+  // Sent emails functionality
+  const [sentEmails, setSentEmails] = usePersistentState({
+    key: "sentEmails",
+    defaultValue: [] as EmailData[],
+  });
+
   // Track emails that have already been animated to prevent repeating animations
   const [animatedEmails, setAnimatedEmails] = usePersistentState({
     key: "animatedEmails",
@@ -110,6 +119,11 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
 
   const removeAnimatingEmail = (emailId: string) => {
     setAnimatingEmails((prev) => prev.filter((id) => id !== emailId));
+  };
+
+  // Add sent email functionality
+  const addSentEmail = (email: EmailData) => {
+    setSentEmails((prev) => [email, ...prev]);
   };
 
   // Auto-add new email after 5 seconds on mount
@@ -246,6 +260,8 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
         addNewEmail,
         animatingEmails,
         removeAnimatingEmail,
+        sentEmails,
+        addSentEmail,
       }}
     >
       {children}

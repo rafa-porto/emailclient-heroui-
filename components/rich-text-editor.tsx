@@ -176,19 +176,19 @@ export const RichTextEditor = forwardRef<
 
     return (
       <div
-        className={`rich-text-editor border border-gray-200 rounded-lg overflow-hidden flex flex-col ${className}`}
+        className={`rich-text-editor border border-gray-200 dark:border-neutral-700 rounded-lg overflow-hidden flex flex-col bg-white dark:bg-neutral-900 ${className}`}
       >
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center gap-1 p-3 bg-gray-50 border-b border-gray-200 min-h-fit">
+        <div className="flex flex-wrap items-center gap-1 p-3 bg-gray-50 dark:bg-neutral-800 border-b border-gray-200 dark:border-neutral-700 min-h-fit">
           {/* Formatação básica */}
           <Button
             size="sm"
             variant="light"
             isIconOnly
             onClick={handleBold}
-            className={`min-w-8 h-8 flex-shrink-0 ${
+            className={`min-w-8 h-8 flex-shrink-0 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 ${
               activeFormats.has("bold")
-                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50"
                 : ""
             }`}
           >
@@ -199,9 +199,9 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleItalic}
-            className={`min-w-8 h-8 flex-shrink-0 ${
+            className={`min-w-8 h-8 flex-shrink-0 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 ${
               activeFormats.has("italic")
-                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50"
                 : ""
             }`}
           >
@@ -212,16 +212,16 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleUnderline}
-            className={`min-w-8 h-8 flex-shrink-0 ${
+            className={`min-w-8 h-8 flex-shrink-0 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 ${
               activeFormats.has("underline")
-                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50"
                 : ""
             }`}
           >
             <Underline size={14} />
           </Button>
 
-          <div className="w-px h-6 bg-gray-300 mx-1" />
+          <div className="w-px h-6 bg-gray-300 dark:bg-neutral-600 mx-1" />
 
           {/* Listas */}
           <Button
@@ -229,9 +229,9 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleBulletList}
-            className={`min-w-8 h-8 ${
+            className={`min-w-8 h-8 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 ${
               activeFormats.has("bulletList")
-                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50"
                 : ""
             }`}
           >
@@ -242,16 +242,16 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleNumberedList}
-            className={`min-w-8 h-8 ${
+            className={`min-w-8 h-8 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 ${
               activeFormats.has("numberedList")
-                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/50"
                 : ""
             }`}
           >
             <ListOrdered size={14} />
           </Button>
 
-          <div className="w-px h-6 bg-gray-300 mx-1" />
+          <div className="w-px h-6 bg-gray-300 dark:bg-neutral-600 mx-1" />
 
           {/* Alinhamento */}
           <Button
@@ -259,7 +259,7 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleAlignLeft}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
           >
             <AlignLeft size={14} />
           </Button>
@@ -268,7 +268,7 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleAlignCenter}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
           >
             <AlignCenter size={14} />
           </Button>
@@ -277,12 +277,12 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleAlignRight}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
           >
             <AlignRight size={14} />
           </Button>
 
-          <div className="w-px h-6 bg-gray-300 mx-1" />
+          <div className="w-px h-6 bg-gray-300 dark:bg-neutral-600 mx-1" />
 
           {/* Link */}
           <Button
@@ -290,7 +290,7 @@ export const RichTextEditor = forwardRef<
             variant="light"
             isIconOnly
             onClick={handleLink}
-            className="min-w-8 h-8"
+            className="min-w-8 h-8 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
           >
             <Link size={14} />
           </Button>
@@ -298,7 +298,7 @@ export const RichTextEditor = forwardRef<
           {/* Tamanho da fonte */}
           <select
             onChange={(e) => handleFontSize(e.target.value)}
-            className="text-xs border border-gray-200 rounded px-2 py-1 bg-white"
+            className="text-xs border border-gray-200 dark:border-neutral-600 rounded px-2 py-1 bg-white dark:bg-neutral-800 text-gray-900 dark:text-white"
           >
             <option value="1">8pt</option>
             <option value="2">10pt</option>
@@ -315,7 +315,7 @@ export const RichTextEditor = forwardRef<
           <input
             type="color"
             onChange={(e) => handleTextColor(e.target.value)}
-            className="w-8 h-8 border border-gray-200 rounded cursor-pointer"
+            className="w-8 h-8 border border-gray-200 dark:border-neutral-600 rounded cursor-pointer bg-white dark:bg-neutral-800"
             title="Text Color"
           />
         </div>
@@ -325,7 +325,7 @@ export const RichTextEditor = forwardRef<
           ref={editorRef}
           contentEditable
           onInput={handleInput}
-          className="p-4 focus:outline-none flex-1"
+          className="p-4 focus:outline-none flex-1 bg-white dark:bg-neutral-900 text-gray-900 dark:text-white"
           style={{
             minHeight: height,
             maxHeight: "400px",
@@ -341,6 +341,9 @@ export const RichTextEditor = forwardRef<
             color: #9ca3af;
             font-style: italic;
             pointer-events: none;
+          }
+          .dark [contenteditable]:empty:before {
+            color: #6b7280;
           }
 
           [contenteditable] {
