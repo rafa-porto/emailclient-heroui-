@@ -3,12 +3,20 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
 import { Switch } from "@heroui/switch";
 import { Divider } from "@heroui/divider";
 import { Select, SelectItem } from "@heroui/select";
 import { Slider } from "@heroui/slider";
-import { MonitorIcon, SmartphoneIcon, CheckIcon } from "lucide-react";
+import {
+  MonitorIcon,
+  SmartphoneIcon,
+  CheckIcon,
+  MailIcon,
+  Trash2Icon,
+  AlertTriangleIcon,
+} from "lucide-react";
+
+import { GmailIcon, OutlookIcon, AppleIcon } from "@/components/icons";
 
 export default function SettingsPage() {
   const searchParams = useSearchParams();
@@ -235,84 +243,187 @@ export default function SettingsPage() {
     </div>
   );
 
-  const renderEmailSection = () => (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Email Behavior
-        </h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
+  const renderConnectionsSection = () => {
+    // Get connected email accounts based on login provider
+    const connectedAccounts = [
+      {
+        id: "1",
+        provider: providerParam || "gmail",
+        email: getProviderEmail(),
+        status: "connected",
+        lastSync: "2 minutes ago",
+      },
+    ];
+
+    const getProviderIcon = (provider: string) => {
+      switch (provider) {
+        case "gmail":
+          return <GmailIcon className="h-6 w-6" />;
+        case "outlook":
+        case "microsoft":
+          return <OutlookIcon className="h-6 w-6" />;
+        case "apple":
+          return <AppleIcon className="h-6 w-6" />;
+        default:
+          return <MailIcon size={24} />;
+      }
+    };
+
+    const getProviderName = (provider: string) => {
+      switch (provider) {
+        case "gmail":
+          return "Gmail";
+        case "outlook":
+        case "microsoft":
+          return "Outlook";
+        case "apple":
+          return "iCloud";
+        default:
+          return "Email";
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Connected Email Accounts
+          </h3>
+          <div className="space-y-3">
+            {connectedAccounts.map((account) => (
+              <div
+                key={account.id}
+                className="flex items-center justify-between p-4 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-neutral-700"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center justify-center">
+                    {getProviderIcon(account.provider)}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {getProviderName(account.provider)}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-neutral-400">
+                      {account.email}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-neutral-500">
+                      Last sync: {account.lastSync}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full" />
+                    <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                      Connected
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Divider />
+
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Add New Account
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-neutral-400 mb-4">
+            Connect additional email accounts to manage all your emails in one
+            place.
+          </p>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            startContent={<MailIcon size={16} />}
+            onPress={() => {
+              // Navigate to login page to add new account
+              window.location.href = "/login";
+            }}
+          >
+            Add Email Account
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderDeleteAccountSection = () => {
+    const handleDeleteAccount = () => {
+      // Show confirmation dialog
+      const confirmed = window.confirm(
+        "Are you sure you want to delete your account? This action cannot be undone and will permanently delete all your data, emails, and settings."
+      );
+
+      if (confirmed) {
+        // Additional confirmation
+        const doubleConfirmed = window.confirm(
+          "This is your final warning. Deleting your account will:\n\n• Permanently delete all your emails\n• Remove all your settings and preferences\n• Cancel any active subscriptions\n• Delete your account data\n\nType 'DELETE' to confirm:"
+        );
+
+        if (doubleConfirmed) {
+          // Here you would typically call an API to delete the account
+          alert(
+            "Account deletion initiated. You will be redirected to the login page."
+          );
+          // Redirect to login or home page
+          window.location.href = "/";
+        }
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <div className="flex items-start space-x-3">
+            <AlertTriangleIcon className="h-6 w-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Auto Reply
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Automatically reply to emails when away
+              <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-2">
+                Danger Zone
+              </h3>
+              <p className="text-sm text-red-800 dark:text-red-200 mb-4">
+                Once you delete your account, there is no going back. Please be
+                certain.
               </p>
             </div>
-            <Switch
-              isSelected={settings.autoReply}
-              onValueChange={(value) => updateSetting("autoReply", value)}
-            />
           </div>
+        </div>
 
-          <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">
-                Show Images
-              </p>
-              <p className="text-sm text-gray-500 dark:text-neutral-400">
-                Automatically load images in emails
-              </p>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Delete Your Account
+          </h3>
+          <div className="space-y-4">
+            <div className="bg-gray-50 dark:bg-neutral-800/50 rounded-lg p-4 border border-gray-200 dark:border-neutral-700">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                What happens when you delete your account:
+              </h4>
+              <ul className="text-sm text-gray-600 dark:text-neutral-400 space-y-1">
+                <li>
+                  • All your emails and attachments will be permanently deleted
+                </li>
+                <li>• Your account settings and preferences will be removed</li>
+                <li>• Connected email accounts will be disconnected</li>
+                <li>• Any active subscriptions will be cancelled</li>
+                <li>• This action cannot be undone</li>
+              </ul>
             </div>
-            <Switch
-              isSelected={settings.showImages}
-              onValueChange={(value) => updateSetting("showImages", value)}
-            />
-          </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-900 dark:text-white">
-              Mark as Read Delay: {settings.markAsReadDelay}s
-            </label>
-            <Slider
-              size="sm"
-              step={1}
-              minValue={0}
-              maxValue={10}
-              value={[settings.markAsReadDelay]}
-              onChange={(value) =>
-                updateSetting(
-                  "markAsReadDelay",
-                  Array.isArray(value) ? value[0] : value
-                )
-              }
-              className="max-w-md"
-            />
+            <div className="pt-4">
+              <Button
+                className="bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700"
+                startContent={<Trash2Icon size={16} />}
+                onPress={handleDeleteAccount}
+              >
+                Delete My Account
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-
-      <Divider />
-
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Email Signature
-        </h3>
-        <Input
-          label="Signature"
-          placeholder="Your email signature"
-          value={settings.signature}
-          onChange={(e) => updateSetting("signature", e.target.value)}
-          classNames={{
-            input: "text-sm",
-            inputWrapper: "bg-gray-50 dark:bg-neutral-800/50",
-          }}
-        />
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderSectionContent = () => {
     switch (activeSection) {
@@ -323,9 +434,10 @@ export default function SettingsPage() {
         return renderPrivacySection();
       case "appearance":
         return renderAppearanceSection();
-      case "email-preferences":
-      case "email": // Backward compatibility
-        return renderEmailSection();
+      case "connections":
+        return renderConnectionsSection();
+      case "delete-account":
+        return renderDeleteAccountSection();
       default:
         return renderProfileSection();
     }
@@ -348,26 +460,29 @@ export default function SettingsPage() {
         {renderSectionContent()}
       </div>
 
-      {/* Save Button */}
-      <div className="mt-3 flex justify-end">
-        <div className="flex gap-2">
-          <Button
-            variant="flat"
-            color="default"
-            size="sm"
-            className="bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600"
-          >
-            Reset to Defaults
-          </Button>
-          <Button
-            color="primary"
-            size="sm"
-            startContent={<CheckIcon size={14} />}
-          >
-            Save Changes
-          </Button>
-        </div>
-      </div>
+      {/* Save Button - Only show for sections that need saving */}
+      {activeSection !== "connections" &&
+        activeSection !== "delete-account" && (
+          <div className="mt-3 flex justify-end">
+            <div className="flex gap-2">
+              <Button
+                variant="flat"
+                color="default"
+                size="sm"
+                className="bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600"
+              >
+                Reset to Defaults
+              </Button>
+              <Button
+                color="primary"
+                size="sm"
+                startContent={<CheckIcon size={14} />}
+              >
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        )}
     </div>
   );
 }

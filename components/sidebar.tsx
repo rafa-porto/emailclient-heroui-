@@ -195,16 +195,33 @@ const Sidebar = ({
           </Button>
           <Button
             className={`w-full justify-start ${
-              activeSection === "email"
+              activeSection === "connections"
                 ? "bg-blue-600 text-white border-blue-600 border hover:bg-blue-700"
                 : ""
             }`}
             size="sm"
             startContent={<MailIcon size={16} />}
-            variant={activeSection === "email" ? "solid" : "light"}
-            onPress={() => router.push("/dashboard/settings?section=email")}
+            variant={activeSection === "connections" ? "solid" : "light"}
+            onPress={() =>
+              router.push("/dashboard/settings?section=connections")
+            }
           >
-            Email Preferences
+            Connections
+          </Button>
+          <Button
+            className={`w-full justify-start ${
+              activeSection === "delete-account"
+                ? "bg-red-600 text-white border-red-600 border hover:bg-red-700"
+                : ""
+            }`}
+            size="sm"
+            startContent={<Trash2Icon size={16} />}
+            variant={activeSection === "delete-account" ? "solid" : "light"}
+            onPress={() =>
+              router.push("/dashboard/settings?section=delete-account")
+            }
+          >
+            Delete Account
           </Button>
         </nav>
 
