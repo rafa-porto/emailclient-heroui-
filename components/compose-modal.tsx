@@ -23,6 +23,22 @@ interface ComposeModalProps {
   onClose: () => void;
 }
 
+// Predefined contacts for suggestions
+const PREDEFINED_CONTACTS = [
+  { name: "John Smith", email: "john.smith@company.com", avatar: "👨‍💼" },
+  { name: "Sarah Johnson", email: "sarah.johnson@company.com", avatar: "👩‍💼" },
+  { name: "Mike Davis", email: "mike.davis@company.com", avatar: "👨‍💻" },
+  { name: "Emily Brown", email: "emily.brown@company.com", avatar: "👩‍💻" },
+  { name: "David Wilson", email: "david.wilson@company.com", avatar: "👨‍🔬" },
+  { name: "Lisa Garcia", email: "lisa.garcia@company.com", avatar: "👩‍🔬" },
+  { name: "Tom Anderson", email: "tom.anderson@company.com", avatar: "👨‍🎨" },
+  { name: "Anna Martinez", email: "anna.martinez@company.com", avatar: "👩‍🎨" },
+  { name: "Chris Taylor", email: "chris.taylor@company.com", avatar: "👨‍🏫" },
+  { name: "Jessica Lee", email: "jessica.lee@company.com", avatar: "👩‍🏫" },
+  { name: "Robert Miller", email: "robert.miller@gmail.com", avatar: "👨‍⚕️" },
+  { name: "Maria Rodriguez", email: "maria.rodriguez@gmail.com", avatar: "👩‍⚕️" },
+];
+
 const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
   const { addSentEmail } = useEmailContext();
   const [to, setTo] = useState("");
@@ -35,10 +51,148 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
   const [recipients, setRecipients] = useState<string[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Contact suggestions states
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showCcSuggestions, setShowCcSuggestions] = useState(false);
+  const [showBccSuggestions, setShowBccSuggestions] = useState(false);
+  const [filteredContacts, setFilteredContacts] = useState(PREDEFINED_CONTACTS);
+  const [filteredCcContacts, setFilteredCcContacts] =
+    useState(PREDEFINED_CONTACTS);
+  const [filteredBccContacts, setFilteredBccContacts] =
+    useState(PREDEFINED_CONTACTS);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [selectedCcSuggestionIndex, setSelectedCcSuggestionIndex] =
+    useState(-1);
+  const [selectedBccSuggestionIndex, setSelectedBccSuggestionIndex] =
+    useState(-1);
+
+  // Filter contacts based on input
+  const filterContacts = (input: string) => {
+    if (!input.trim()) {
+      setFilteredContacts(PREDEFINED_CONTACTS);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const filtered = PREDEFINED_CONTACTS.filter(
+      (contact) =>
+        contact.name.toLowerCase().includes(input.toLowerCase()) ||
+        contact.email.toLowerCase().includes(input.toLowerCase())
+    );
+
+    setFilteredContacts(filtered);
+    setShowSuggestions(filtered.length > 0);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  // Filter CC contacts
+  const filterCcContacts = (input: string) => {
+    if (!input.trim()) {
+      setFilteredCcContacts(PREDEFINED_CONTACTS);
+      setShowCcSuggestions(false);
+      return;
+    }
+
+    const filtered = PREDEFINED_CONTACTS.filter(
+      (contact) =>
+        contact.name.toLowerCase().includes(input.toLowerCase()) ||
+        contact.email.toLowerCase().includes(input.toLowerCase())
+    );
+
+    setFilteredCcContacts(filtered);
+    setShowCcSuggestions(filtered.length > 0);
+    setSelectedCcSuggestionIndex(-1);
+  };
+
+  // Filter BCC contacts
+  const filterBccContacts = (input: string) => {
+    if (!input.trim()) {
+      setFilteredBccContacts(PREDEFINED_CONTACTS);
+      setShowBccSuggestions(false);
+      return;
+    }
+
+    const filtered = PREDEFINED_CONTACTS.filter(
+      (contact) =>
+        contact.name.toLowerCase().includes(input.toLowerCase()) ||
+        contact.email.toLowerCase().includes(input.toLowerCase())
+    );
+
+    setFilteredBccContacts(filtered);
+    setShowBccSuggestions(filtered.length > 0);
+    setSelectedBccSuggestionIndex(-1);
+  };
+
+  // Selected contacts for visual chips
+  const [selectedContacts, setSelectedContacts] = useState<
+    (typeof PREDEFINED_CONTACTS)[]
+  >([]);
+  const [selectedCcContacts, setSelectedCcContacts] = useState<
+    (typeof PREDEFINED_CONTACTS)[]
+  >([]);
+  const [selectedBccContacts, setSelectedBccContacts] = useState<
+    (typeof PREDEFINED_CONTACTS)[]
+  >([]);
+
+  // Handle contact selection
+  const selectContact = (contact: (typeof PREDEFINED_CONTACTS)[0]) => {
+    // Check if contact is already selected
+    if (!selectedContacts.find((c) => c.email === contact.email)) {
+      setSelectedContacts((prev) => [...prev, contact]);
+    }
+    setTo("");
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  // Handle CC contact selection
+  const selectCcContact = (contact: (typeof PREDEFINED_CONTACTS)[0]) => {
+    if (!selectedCcContacts.find((c) => c.email === contact.email)) {
+      setSelectedCcContacts((prev) => [...prev, contact]);
+    }
+    setCc("");
+    setShowCcSuggestions(false);
+    setSelectedCcSuggestionIndex(-1);
+  };
+
+  // Handle BCC contact selection
+  const selectBccContact = (contact: (typeof PREDEFINED_CONTACTS)[0]) => {
+    if (!selectedBccContacts.find((c) => c.email === contact.email)) {
+      setSelectedBccContacts((prev) => [...prev, contact]);
+    }
+    setBcc("");
+    setShowBccSuggestions(false);
+    setSelectedBccSuggestionIndex(-1);
+  };
+
+  // Remove selected contact
+  const removeSelectedContact = (email: string) => {
+    setSelectedContacts((prev) => prev.filter((c) => c.email !== email));
+  };
+
+  // Remove selected CC contact
+  const removeSelectedCcContact = (email: string) => {
+    setSelectedCcContacts((prev) => prev.filter((c) => c.email !== email));
+  };
+
+  // Remove selected BCC contact
+  const removeSelectedBccContact = (email: string) => {
+    setSelectedBccContacts((prev) => prev.filter((c) => c.email !== email));
+  };
+
   // Função para enviar email
   const handleSendEmail = () => {
     // Validar se há destinatários
     const allRecipients = [...recipients];
+
+    // Add selected contacts
+    selectedContacts.forEach((contact) => {
+      if (!allRecipients.includes(contact.email)) {
+        allRecipients.push(contact.email);
+      }
+    });
+
+    // Add manual input if any
     if (to.trim()) {
       allRecipients.push(to.trim());
     }
@@ -83,6 +237,19 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
     setShowCc(false);
     setShowBcc(false);
     setIsExpanded(false);
+
+    // Reset suggestions
+    setShowSuggestions(false);
+    setShowCcSuggestions(false);
+    setShowBccSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+    setSelectedCcSuggestionIndex(-1);
+    setSelectedBccSuggestionIndex(-1);
+
+    // Reset selected contacts
+    setSelectedContacts([]);
+    setSelectedCcContacts([]);
+    setSelectedBccContacts([]);
   };
 
   // Função para adicionar destinatário
@@ -100,7 +267,30 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
 
   // Função para lidar com Enter no campo To
   const handleToKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && to.trim()) {
+    if (showSuggestions && filteredContacts.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev < filteredContacts.length - 1 ? prev + 1 : 0
+        );
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedSuggestionIndex((prev) =>
+          prev > 0 ? prev - 1 : filteredContacts.length - 1
+        );
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          selectContact(filteredContacts[selectedSuggestionIndex]);
+        } else if (to.trim()) {
+          handleAddRecipient(to.trim());
+        }
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+      }
+    } else if (e.key === "Enter" && to.trim()) {
       e.preventDefault();
       handleAddRecipient(to.trim());
     }
@@ -212,6 +402,27 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                     </span>
                     <div className="flex-1">
                       <div className="flex flex-wrap gap-2 mb-2">
+                        {/* Selected Contact Chips */}
+                        {selectedContacts.map((contact) => (
+                          <div
+                            key={contact.email}
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-full text-sm border border-blue-200/60 dark:border-blue-700/40 transition-all duration-200"
+                          >
+                            <span className="text-sm">{contact.avatar}</span>
+                            <span className="text-blue-800 dark:text-blue-200 font-medium text-xs">
+                              {contact.email}
+                            </span>
+                            <button
+                              onClick={() =>
+                                removeSelectedContact(contact.email)
+                              }
+                              className="ml-1 p-0.5 rounded-full text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 transition-all duration-200"
+                            >
+                              <XIcon size={12} />
+                            </button>
+                          </div>
+                        ))}
+                        {/* Manual Recipients */}
                         {recipients.map((email) => (
                           <Chip
                             key={email}
@@ -224,19 +435,62 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           </Chip>
                         ))}
                       </div>
-                      <Input
-                        placeholder="Add recipients"
-                        value={to}
-                        onChange={(e) => setTo(e.target.value)}
-                        onKeyPress={handleToKeyPress}
-                        variant="flat"
-                        classNames={{
-                          inputWrapper:
-                            "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
-                          input:
-                            "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
-                        }}
-                      />
+                      <div className="relative flex-1">
+                        <Input
+                          placeholder="Add recipients"
+                          value={to}
+                          onChange={(e) => {
+                            setTo(e.target.value);
+                            filterContacts(e.target.value);
+                          }}
+                          onKeyPress={handleToKeyPress}
+                          onFocus={() => {
+                            if (to.trim()) {
+                              filterContacts(to);
+                            }
+                          }}
+                          onBlur={() => {
+                            // Delay hiding suggestions to allow clicking
+                            setTimeout(() => setShowSuggestions(false), 150);
+                          }}
+                          variant="flat"
+                          classNames={{
+                            inputWrapper:
+                              "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                            input:
+                              "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
+                          }}
+                        />
+
+                        {/* Contact Suggestions Dropdown */}
+                        {showSuggestions && filteredContacts.length > 0 && (
+                          <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            {filteredContacts.map((contact, index) => (
+                              <div
+                                key={contact.email}
+                                className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
+                                  index === selectedSuggestionIndex
+                                    ? "bg-blue-50 dark:bg-blue-900/20"
+                                    : "hover:bg-gray-50 dark:hover:bg-neutral-700"
+                                }`}
+                                onClick={() => selectContact(contact)}
+                              >
+                                <span className="text-lg">
+                                  {contact.avatar}
+                                </span>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                    {contact.name}
+                                  </p>
+                                  <p className="text-xs text-gray-500 dark:text-neutral-400 truncate">
+                                    {contact.email}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="flex gap-2">
                       {!showCc && (
@@ -268,18 +522,88 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       <span className="text-sm font-medium text-gray-700 dark:text-neutral-300 w-12">
                         Cc
                       </span>
-                      <Input
-                        placeholder="Carbon copy"
-                        value={cc}
-                        onChange={(e) => setCc(e.target.value)}
-                        variant="flat"
-                        classNames={{
-                          inputWrapper:
-                            "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
-                          input:
-                            "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
-                        }}
-                      />
+                      <div className="flex-1">
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {/* Selected CC Contact Chips */}
+                          {selectedCcContacts.map((contact) => (
+                            <div
+                              key={contact.email}
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 rounded-full text-sm border border-purple-200/60 dark:border-purple-700/40 transition-all duration-200"
+                            >
+                              <span className="text-sm">{contact.avatar}</span>
+                              <span className="text-purple-800 dark:text-purple-200 font-medium text-xs">
+                                {contact.email}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  removeSelectedCcContact(contact.email)
+                                }
+                                className="ml-1 p-0.5 rounded-full text-purple-600 dark:text-purple-300 hover:text-purple-800 dark:hover:text-purple-100 hover:bg-purple-200/50 dark:hover:bg-purple-800/50 transition-all duration-200"
+                              >
+                                <XIcon size={12} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="relative">
+                          <Input
+                            placeholder="Carbon copy"
+                            value={cc}
+                            onChange={(e) => {
+                              setCc(e.target.value);
+                              filterCcContacts(e.target.value);
+                            }}
+                            onFocus={() => {
+                              if (cc.trim()) {
+                                filterCcContacts(cc);
+                              }
+                            }}
+                            onBlur={() => {
+                              setTimeout(
+                                () => setShowCcSuggestions(false),
+                                150
+                              );
+                            }}
+                            variant="flat"
+                            classNames={{
+                              inputWrapper:
+                                "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                              input:
+                                "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
+                            }}
+                          />
+
+                          {/* CC Contact Suggestions */}
+                          {showCcSuggestions &&
+                            filteredCcContacts.length > 0 && (
+                              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                {filteredCcContacts.map((contact, index) => (
+                                  <div
+                                    key={contact.email}
+                                    className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
+                                      index === selectedCcSuggestionIndex
+                                        ? "bg-blue-50 dark:bg-blue-900/20"
+                                        : "hover:bg-gray-50 dark:hover:bg-neutral-700"
+                                    }`}
+                                    onClick={() => selectCcContact(contact)}
+                                  >
+                                    <span className="text-lg">
+                                      {contact.avatar}
+                                    </span>
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                        {contact.name}
+                                      </p>
+                                      <p className="text-xs text-gray-500 dark:text-neutral-400 truncate">
+                                        {contact.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                        </div>
+                      </div>
                       <Button
                         isIconOnly
                         size="sm"
@@ -287,6 +611,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         onPress={() => {
                           setShowCc(false);
                           setCc("");
+                          setShowCcSuggestions(false);
                         }}
                         className="text-gray-500 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-neutral-700 dark:hover:text-white"
                       >
@@ -301,18 +626,88 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       <span className="text-sm font-medium text-gray-700 dark:text-neutral-300 w-12">
                         Bcc
                       </span>
-                      <Input
-                        placeholder="Blind carbon copy"
-                        value={bcc}
-                        onChange={(e) => setBcc(e.target.value)}
-                        variant="flat"
-                        classNames={{
-                          inputWrapper:
-                            "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
-                          input:
-                            "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
-                        }}
-                      />
+                      <div className="flex-1">
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {/* Selected BCC Contact Chips */}
+                          {selectedBccContacts.map((contact) => (
+                            <div
+                              key={contact.email}
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/30 dark:to-teal-900/30 rounded-full text-sm border border-emerald-200/60 dark:border-emerald-700/40 transition-all duration-200"
+                            >
+                              <span className="text-sm">{contact.avatar}</span>
+                              <span className="text-emerald-800 dark:text-emerald-200 font-medium text-xs">
+                                {contact.email}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  removeSelectedBccContact(contact.email)
+                                }
+                                className="ml-1 p-0.5 rounded-full text-emerald-600 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-emerald-100 hover:bg-emerald-200/50 dark:hover:bg-emerald-800/50 transition-all duration-200"
+                              >
+                                <XIcon size={12} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="relative">
+                          <Input
+                            placeholder="Blind carbon copy"
+                            value={bcc}
+                            onChange={(e) => {
+                              setBcc(e.target.value);
+                              filterBccContacts(e.target.value);
+                            }}
+                            onFocus={() => {
+                              if (bcc.trim()) {
+                                filterBccContacts(bcc);
+                              }
+                            }}
+                            onBlur={() => {
+                              setTimeout(
+                                () => setShowBccSuggestions(false),
+                                150
+                              );
+                            }}
+                            variant="flat"
+                            classNames={{
+                              inputWrapper:
+                                "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                              input:
+                                "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
+                            }}
+                          />
+
+                          {/* BCC Contact Suggestions */}
+                          {showBccSuggestions &&
+                            filteredBccContacts.length > 0 && (
+                              <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                {filteredBccContacts.map((contact, index) => (
+                                  <div
+                                    key={contact.email}
+                                    className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${
+                                      index === selectedBccSuggestionIndex
+                                        ? "bg-blue-50 dark:bg-blue-900/20"
+                                        : "hover:bg-gray-50 dark:hover:bg-neutral-700"
+                                    }`}
+                                    onClick={() => selectBccContact(contact)}
+                                  >
+                                    <span className="text-lg">
+                                      {contact.avatar}
+                                    </span>
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                        {contact.name}
+                                      </p>
+                                      <p className="text-xs text-gray-500 dark:text-neutral-400 truncate">
+                                        {contact.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                        </div>
+                      </div>
                       <Button
                         isIconOnly
                         size="sm"
@@ -320,6 +715,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         onPress={() => {
                           setShowBcc(false);
                           setBcc("");
+                          setShowBccSuggestions(false);
                         }}
                         className="text-gray-500 hover:text-gray-700 hover:bg-gray-200 dark:hover:bg-neutral-700 dark:hover:text-white"
                       >
@@ -367,7 +763,11 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       color="primary"
                       endContent={<SendIcon size={16} />}
                       onPress={handleSendEmail}
-                      isDisabled={!to.trim() && recipients.length === 0}
+                      isDisabled={
+                        !to.trim() &&
+                        recipients.length === 0 &&
+                        selectedContacts.length === 0
+                      }
                       className="font-medium"
                     >
                       Send

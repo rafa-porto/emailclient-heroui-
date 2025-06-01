@@ -199,7 +199,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden overflow-x-hidden">
       {/* Header */}
       <div className="flex items-center justify-between bg-gray-50 dark:bg-neutral-900/50 px-4 py-3 flex-shrink-0">
         <div className="flex items-center gap-2">
@@ -268,7 +268,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 min-h-0">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 min-h-0">
         {/* Email Subject */}
         <div className="py-4">
           <h2 className="text-xl font-semibold text-black dark:text-white">
@@ -342,7 +342,10 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
 
         {/* Email Content */}
         <div className="py-4 text-black dark:text-white">
-          <div dangerouslySetInnerHTML={{ __html: email.content }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: email.content }}
+            className="email-content break-words overflow-wrap-anywhere max-w-full overflow-hidden"
+          />
         </div>
 
         {/* Attachments */}

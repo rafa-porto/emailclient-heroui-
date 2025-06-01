@@ -54,6 +54,7 @@ export const RichTextEditor = forwardRef<
   ) => {
     const editorRef = useRef<HTMLDivElement>(null);
     const [activeFormats, setActiveFormats] = useState<Set<string>>(new Set());
+    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Função para verificar formatação ativa
     const checkActiveFormats = useCallback(() => {
@@ -161,16 +162,35 @@ export const RichTextEditor = forwardRef<
       }
     }, [value]);
 
-    // Listener para mudanças na seleção
+    // Listener para mudanças na seleção - apenas quando dentro do editor
     React.useEffect(() => {
       const handleSelectionChange = () => {
-        checkActiveFormats();
+        const selection = window.getSelection();
+        if (!selection || !editorRef.current) return;
+
+        // Só verifica formatação se a seleção está dentro do editor
+        if (
+          editorRef.current.contains(selection.anchorNode) ||
+          editorRef.current.contains(selection.focusNode)
+        ) {
+          // Debounce para evitar muitas verificações consecutivas
+          if (debounceTimeoutRef.current) {
+            clearTimeout(debounceTimeoutRef.current);
+          }
+
+          debounceTimeoutRef.current = setTimeout(() => {
+            checkActiveFormats();
+          }, 50); // 50ms de debounce
+        }
       };
 
       document.addEventListener("selectionchange", handleSelectionChange);
 
       return () => {
         document.removeEventListener("selectionchange", handleSelectionChange);
+        if (debounceTimeoutRef.current) {
+          clearTimeout(debounceTimeoutRef.current);
+        }
       };
     }, [checkActiveFormats]);
 

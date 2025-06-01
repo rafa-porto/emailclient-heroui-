@@ -108,7 +108,7 @@ const EmailViewModal: React.FC<EmailViewModalProps> = ({
                 </Button>
               </div>
             </ModalHeader>
-            <ModalBody className="px-4 py-0">
+            <ModalBody className="px-4 py-0 overflow-x-hidden">
               {/* Email Subject */}
               <div className="py-4 border-b border-gray-200 dark:border-neutral-800">
                 <h2 className="text-xl font-semibold text-black dark:text-white">
@@ -138,7 +138,10 @@ const EmailViewModal: React.FC<EmailViewModalProps> = ({
 
               {/* Email Content */}
               <div className="py-4 text-black dark:text-white">
-                <div dangerouslySetInnerHTML={{ __html: email.content }} />
+                <div
+                  dangerouslySetInnerHTML={{ __html: email.content }}
+                  className="email-content break-words overflow-wrap-anywhere max-w-full overflow-hidden"
+                />
               </div>
 
               {/* Quick Reply Options */}
