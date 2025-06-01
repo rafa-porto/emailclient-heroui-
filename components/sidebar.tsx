@@ -34,6 +34,7 @@ import { Avatar } from "@heroui/avatar";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useEmailContext } from "@/components/email-context";
 import { siteConfig } from "@/config/site";
+import { spamEmails as mockSpamEmails } from "@/data/spamEmails";
 
 interface SidebarProps {
   userEmail?: string;
@@ -54,6 +55,7 @@ const Sidebar = ({
     starredEmails,
     deletedEmails,
     archivedEmails,
+    spamEmails,
     isEmailRead,
     sentEmails,
   } = useEmailContext();
@@ -77,6 +79,12 @@ const Sidebar = ({
   const archivedCount = archivedEmails.length;
   const allCount = mockEmails.length;
   const sentCount = sentEmails.length;
+  // Calculate spam count: includes both mock spam emails and emails marked as spam
+  const spamCount =
+    mockSpamEmails.length +
+    spamEmails.filter(
+      (id) => !mockSpamEmails.some((spamEmail) => spamEmail.id === id)
+    ).length;
 
   const handleLogout = () => {
     router.push("/");
@@ -514,12 +522,28 @@ const Sidebar = ({
           )}
         </Button>
         <Button
-          className="w-full justify-start"
+          className={`w-full justify-start ${
+            pathname === "/dashboard/spam"
+              ? "bg-orange-600 text-white border-orange-600 border hover:bg-orange-700"
+              : ""
+          }`}
           size="sm"
           startContent={<AlertOctagonIcon size={16} />}
-          variant="light"
+          variant={pathname === "/dashboard/spam" ? "solid" : "light"}
+          onClick={() => router.push("/dashboard/spam")}
         >
           Spam
+          {spamCount > 0 && (
+            <span
+              className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
+                pathname === "/dashboard/spam"
+                  ? "bg-white/20 text-white"
+                  : "bg-gray-200 dark:bg-neutral-700"
+              }`}
+            >
+              {spamCount}
+            </span>
+          )}
         </Button>
       </nav>
 

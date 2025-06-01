@@ -35,6 +35,11 @@ interface EmailContextType {
   restoreEmail: (emailId: string) => void;
   permanentlyDeleteEmail: (emailId: string) => void;
   isEmailDeleted: (emailId: string) => boolean;
+  // Spam email functionality
+  spamEmails: string[];
+  markAsSpam: (emailId: string) => void;
+  markAsNotSpam: (emailId: string) => void;
+  isEmailSpam: (emailId: string) => boolean;
   readEmails: string[];
   markAsRead: (emailId: string) => void;
   markAsUnread: (emailId: string) => void;
@@ -77,6 +82,11 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
 
   const [deletedEmails, setDeletedEmails] = usePersistentState({
     key: "deletedEmails",
+    defaultValue: [] as string[],
+  });
+
+  const [spamEmails, setSpamEmails] = usePersistentState({
+    key: "spamEmails",
     defaultValue: [] as string[],
   });
 
@@ -213,6 +223,17 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
 
   const isEmailDeleted = (emailId: string) => deletedEmails.includes(emailId);
 
+  // Spam functionality
+  const markAsSpam = (emailId: string) => {
+    setSpamEmails((prev: string[]) => [...prev, emailId]);
+  };
+
+  const markAsNotSpam = (emailId: string) => {
+    setSpamEmails((prev: string[]) => prev.filter((id) => id !== emailId));
+  };
+
+  const isEmailSpam = (emailId: string) => spamEmails.includes(emailId);
+
   // Read/Unread functionality
   const markAsRead = (emailId: string) => {
     setReadEmails((prev: string[]) => [
@@ -252,6 +273,10 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
         restoreEmail,
         permanentlyDeleteEmail,
         isEmailDeleted,
+        spamEmails,
+        markAsSpam,
+        markAsNotSpam,
+        isEmailSpam,
         readEmails,
         markAsRead,
         markAsUnread,

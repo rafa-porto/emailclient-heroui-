@@ -13,6 +13,8 @@ import {
   ArchiveIcon,
   TrashIcon,
   PaperclipIcon,
+  ShieldCheckIcon,
+  AlertOctagonIcon,
 } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -27,7 +29,10 @@ interface EmailItemProps extends EmailData {
   onUnarchive?: (id: string) => void;
   onRestore?: (id: string) => void;
   onPermanentDelete?: (id: string) => void;
+  onNotSpam?: (id: string) => void;
+  onMarkAsSpam?: (id: string) => void;
   isAnimating?: boolean;
+  isSpamPage?: boolean;
 }
 
 const EmailItem: React.FC<EmailItemProps> = ({
@@ -50,7 +55,10 @@ const EmailItem: React.FC<EmailItemProps> = ({
   onUnarchive,
   onRestore,
   onPermanentDelete,
+  onNotSpam,
+  onMarkAsSpam,
   isAnimating,
+  isSpamPage,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -359,6 +367,32 @@ const EmailItem: React.FC<EmailItemProps> = ({
               <TrashIcon size={14} />
             </button>
           )}
+
+          {onNotSpam && isSpamPage && (
+            <button
+              className="p-2 rounded-lg text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                onNotSpam(id);
+              }}
+              title="Not Spam"
+            >
+              <ShieldCheckIcon size={14} />
+            </button>
+          )}
+
+          {onMarkAsSpam && !isSpamPage && (
+            <button
+              className="p-2 rounded-lg text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all duration-200"
+              onClick={(e) => {
+                e.stopPropagation();
+                onMarkAsSpam(id);
+              }}
+              title="Mark as Spam"
+            >
+              <AlertOctagonIcon size={14} />
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -383,7 +417,10 @@ interface EmailListProps {
   onUnarchive?: (id: string) => void;
   onRestore?: (id: string) => void;
   onPermanentDelete?: (id: string) => void;
+  onNotSpam?: (id: string) => void;
+  onMarkAsSpam?: (id: string) => void;
   animatingEmails?: string[];
+  isSpamPage?: boolean;
 }
 
 const EmailList: React.FC<EmailListProps> = ({
@@ -404,7 +441,10 @@ const EmailList: React.FC<EmailListProps> = ({
   onUnarchive,
   onRestore,
   onPermanentDelete,
+  onNotSpam,
+  onMarkAsSpam,
   animatingEmails = [],
+  isSpamPage = false,
 }) => {
   const {
     isAiPanelOpen,
@@ -525,6 +565,9 @@ const EmailList: React.FC<EmailListProps> = ({
                 onUnarchive={onUnarchive}
                 onRestore={onRestore}
                 onPermanentDelete={onPermanentDelete}
+                onNotSpam={onNotSpam}
+                onMarkAsSpam={onMarkAsSpam}
+                isSpamPage={isSpamPage}
               />
             ))
           )}

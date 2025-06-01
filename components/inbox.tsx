@@ -15,6 +15,7 @@ const Inbox = () => {
     archiveEmail,
     deleteEmail,
     markAsRead,
+    markAsSpam,
     isEmailArchived,
     isEmailDeleted,
     newEmails,
@@ -44,6 +45,10 @@ const Inbox = () => {
     deleteEmail(id);
   };
 
+  const handleMarkAsSpam = (id: string) => {
+    markAsSpam(id);
+  };
+
   return (
     <EmailList
       emails={visibleEmails}
@@ -59,6 +64,7 @@ const Inbox = () => {
       onStar={handleStarEmail}
       onArchive={handleArchiveEmail}
       onDelete={handleDeleteEmail}
+      onMarkAsSpam={handleMarkAsSpam}
       animatingEmails={animatingEmails}
     />
   );
