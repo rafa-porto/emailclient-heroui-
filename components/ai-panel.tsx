@@ -117,6 +117,13 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
     setOrganizationStartTime(null);
   };
 
+  const handleDoneOrganization = () => {
+    // Clear the organization summary to return to default interface
+    // but keep the inbox organized state
+    setOrganizationSummary(null);
+    setOrganizationStartTime(null);
+  };
+
   const handleQuickAction = (action: string) => {
     if (action === "Organize my inbox") {
       handleOrganizeInbox();
@@ -327,6 +334,7 @@ const AiPanel: React.FC<AiPanelProps> = ({ onClose: _onClose }) => {
               size="sm"
               startContent={<CheckCircleIcon size={16} />}
               variant="flat"
+              onClick={handleDoneOrganization}
             >
               Done
             </Button>

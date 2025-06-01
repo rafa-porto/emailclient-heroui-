@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Chip } from "@heroui/chip";
+import { Progress } from "@heroui/progress";
 import {
   SendIcon,
   PaperclipIcon,
@@ -125,14 +126,47 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
 
   // Selected contacts for visual chips
   const [selectedContacts, setSelectedContacts] = useState<
-    (typeof PREDEFINED_CONTACTS)[]
+    (typeof PREDEFINED_CONTACTS)[0][]
   >([]);
   const [selectedCcContacts, setSelectedCcContacts] = useState<
-    (typeof PREDEFINED_CONTACTS)[]
+    (typeof PREDEFINED_CONTACTS)[0][]
   >([]);
   const [selectedBccContacts, setSelectedBccContacts] = useState<
-    (typeof PREDEFINED_CONTACTS)[]
+    (typeof PREDEFINED_CONTACTS)[0][]
   >([]);
+
+  // AI Assistant states
+  const [showAiAssistant, setShowAiAssistant] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState<{
+    subjects: string[];
+    templates: string[];
+    tones: { name: string; description: string }[];
+  }>({
+    subjects: [],
+    templates: [],
+    tones: [
+      { name: "Professional", description: "Formal and business-appropriate" },
+      { name: "Casual", description: "Relaxed and friendly" },
+      { name: "Friendly", description: "Warm and approachable" },
+      { name: "Urgent", description: "Direct and time-sensitive" },
+    ],
+  });
+  const [selectedTone, setSelectedTone] = useState<string>("");
+  const [isGeneratingContent, setIsGeneratingContent] = useState(false);
+  const [isGeneratingSubject, setIsGeneratingSubject] = useState(false);
+  const [aiProgress, setAiProgress] = useState(0);
+
+  // Reset AI assistant state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setShowAiAssistant(false);
+      setAiSuggestions((prev) => ({ ...prev, subjects: [], templates: [] }));
+      setSelectedTone("");
+      setIsGeneratingContent(false);
+      setIsGeneratingSubject(false);
+      setAiProgress(0);
+    }
+  }, [isOpen]);
 
   // Handle contact selection
   const selectContact = (contact: (typeof PREDEFINED_CONTACTS)[0]) => {
@@ -296,13 +330,71 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  // Função para gerar conteúdo com AI
-  const handleGenerateContent = () => {
-    // Implementar lógica de geração de conteúdo com AI
-    // Por exemplo, baseado no assunto ou recipient
-    const generatedContent = `<p>Hello,</p><p><br></p><p>I hope this email finds you well.</p><p><br></p><p>Best regards,</p>`;
+  // AI Assistant Functions
+  const generateSubjectSuggestions = async () => {
+    setIsGeneratingSubject(true);
+    setAiProgress(0);
 
-    setContent(generatedContent);
+    // Simulate AI processing
+    const progressInterval = setInterval(() => {
+      setAiProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + 10;
+      });
+    }, 100);
+
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const suggestions = [
+      "Meeting Follow-up: Next Steps",
+      "Quick Question About Project Timeline",
+      "Collaboration Opportunity",
+      "Weekly Status Update",
+      "Proposal Review Request",
+    ];
+
+    setAiSuggestions((prev) => ({ ...prev, subjects: suggestions }));
+    setAiProgress(100);
+    setIsGeneratingSubject(false);
+  };
+
+  const generateEmailTemplate = async (tone: string) => {
+    setIsGeneratingContent(true);
+    setSelectedTone(tone);
+    setAiProgress(0);
+
+    const progressInterval = setInterval(() => {
+      setAiProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + 10;
+      });
+    }, 100);
+
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    const templates = {
+      Professional: `<p>Dear [Recipient],</p><p><br></p><p>I hope this email finds you well. I am writing to discuss [topic/purpose].</p><p><br></p><p>[Main content here]</p><p><br></p><p>Please let me know if you have any questions or require additional information.</p><p><br></p><p>Best regards,<br>[Your name]</p>`,
+      Casual: `<p>Hi there!</p><p><br></p><p>Hope you're doing well! I wanted to reach out about [topic/purpose].</p><p><br></p><p>[Main content here]</p><p><br></p><p>Let me know what you think!</p><p><br></p><p>Thanks,<br>[Your name]</p>`,
+      Friendly: `<p>Hello!</p><p><br></p><p>I hope you're having a great day! I wanted to connect with you regarding [topic/purpose].</p><p><br></p><p>[Main content here]</p><p><br></p><p>Looking forward to hearing from you soon!</p><p><br></p><p>Warm regards,<br>[Your name]</p>`,
+      Urgent: `<p>Subject: URGENT - [Topic]</p><p><br></p><p>Hello,</p><p><br></p><p>This requires immediate attention: [topic/purpose]</p><p><br></p><p>[Main content here]</p><p><br></p><p>Please respond by [deadline] if possible.</p><p><br></p><p>Thank you,<br>[Your name]</p>`,
+    };
+
+    setContent(
+      templates[tone as keyof typeof templates] || templates.Professional
+    );
+    setAiProgress(100);
+    setIsGeneratingContent(false);
+  };
+
+  const handleGenerateContent = () => {
+    setShowAiAssistant(true);
   };
 
   // Função para fechar modal e resetar estado
@@ -350,10 +442,10 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
           <>
             {/* Custom Header */}
             <ModalHeader
-              className={`flex items-center justify-between bg-gradient-to-r from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-800 border-b border-gray-200 dark:border-neutral-700 px-6 py-4 ${isExpanded ? "rounded-t-xl" : "rounded-t-2xl"}`}
+              className={`flex items-center justify-between bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-700 px-6 py-4 ${isExpanded ? "rounded-t-xl" : "rounded-t-2xl"}`}
             >
               <div className="flex items-center gap-3">
-                <span className="text-lg font-semibold text-gray-800 dark:text-white">
+                <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   New Message{" "}
                   {isExpanded && (
                     <span className="text-sm font-normal text-gray-500 dark:text-neutral-400">
@@ -367,14 +459,27 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                 <Button
                   isIconOnly
                   size="sm"
+                  variant="flat"
+                  onPress={() => setShowAiAssistant(!showAiAssistant)}
+                  className={`${
+                    showAiAssistant
+                      ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                      : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
+                  } transition-colors`}
+                >
+                  <AIIcon size={16} />
+                </Button>
+                <Button
+                  isIconOnly
+                  size="sm"
                   variant="light"
                   onPress={() => setIsExpanded(!isExpanded)}
-                  className="text-gray-500 hover:bg-gray-200 dark:hover:bg-neutral-700 hover:text-gray-700 dark:hover:text-white"
+                  className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-gray-700 dark:hover:text-neutral-200 transition-colors"
                 >
                   {isExpanded ? (
-                    <MinimizeIcon size={18} />
+                    <MinimizeIcon size={16} />
                   ) : (
-                    <MaximizeIcon size={18} />
+                    <MaximizeIcon size={16} />
                   )}
                 </Button>
                 <Button
@@ -382,16 +487,121 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                   size="sm"
                   variant="light"
                   onPress={handleClose}
-                  className="text-gray-500 hover:bg-gray-200 dark:hover:bg-neutral-700 hover:text-gray-700 dark:hover:text-white"
+                  className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 hover:text-gray-700 dark:hover:text-neutral-200 transition-colors"
                 >
-                  <XIcon size={18} />
+                  <XIcon size={16} />
                 </Button>
               </div>
             </ModalHeader>
 
-            <ModalBody className="p-0 overflow-hidden flex flex-col bg-white dark:bg-neutral-900">
+            <ModalBody className="p-0 overflow-hidden flex flex-row bg-white dark:bg-neutral-900">
+              {/* AI Assistant Panel */}
+              {showAiAssistant && (
+                <div className="w-80 border-r border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 flex flex-col">
+                  {/* AI Panel Header */}
+                  <div className="p-4 border-b border-gray-200 dark:border-neutral-700">
+                    <div className="flex items-center gap-2 mb-3">
+                      <AIIcon
+                        size={20}
+                        className="text-blue-600 dark:text-blue-400"
+                      />
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                        AI Assistant
+                      </h3>
+                    </div>
+                    <p className="text-xs text-gray-600 dark:text-neutral-400">
+                      Get help with writing, tone, and suggestions
+                    </p>
+                  </div>
+
+                  {/* AI Panel Content */}
+                  <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+                    {/* Subject Suggestions */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                          Subject Suggestions
+                        </h4>
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          onPress={generateSubjectSuggestions}
+                          isLoading={isGeneratingSubject}
+                          className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-xs px-2 py-1 h-6"
+                        >
+                          Generate
+                        </Button>
+                      </div>
+
+                      {isGeneratingSubject && (
+                        <Progress
+                          value={aiProgress}
+                          className="mb-2"
+                          color="primary"
+                          size="sm"
+                        />
+                      )}
+
+                      {aiSuggestions.subjects.length > 0 && (
+                        <div className="space-y-2">
+                          {aiSuggestions.subjects.map((suggestion, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setSubject(suggestion)}
+                              className="w-full text-left p-2 text-xs bg-white dark:bg-neutral-700 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-neutral-600 transition-colors"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Tone Selection */}
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                        Email Tone
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {aiSuggestions.tones.map((tone) => (
+                          <Button
+                            key={tone.name}
+                            size="sm"
+                            variant="flat"
+                            onPress={() => generateEmailTemplate(tone.name)}
+                            isLoading={
+                              isGeneratingContent && selectedTone === tone.name
+                            }
+                            className={`${
+                              selectedTone === tone.name
+                                ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
+                                : "bg-white dark:bg-neutral-700 text-gray-700 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-neutral-600"
+                            } text-xs px-2 py-2 h-auto flex-col items-start border border-gray-200 dark:border-neutral-600`}
+                          >
+                            <span className="font-medium">{tone.name}</span>
+                            <span className="text-xs opacity-70">
+                              {tone.description}
+                            </span>
+                          </Button>
+                        ))}
+                      </div>
+
+                      {isGeneratingContent && (
+                        <Progress
+                          value={aiProgress}
+                          className="mt-2"
+                          color="primary"
+                          size="sm"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Main Compose Area */}
               <div
-                className={`flex flex-col bg-white dark:bg-neutral-900 ${isExpanded ? "h-[calc(100vh-180px)]" : "h-[550px]"}`}
+                className={`flex flex-col bg-white dark:bg-neutral-900 ${isExpanded ? "h-[calc(100vh-180px)]" : "h-[550px]"} ${showAiAssistant ? "flex-1" : "w-full"}`}
               >
                 {/* Recipients Section */}
                 <div className="p-6 space-y-4 border-b border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
@@ -443,7 +653,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                             setTo(e.target.value);
                             filterContacts(e.target.value);
                           }}
-                          onKeyPress={handleToKeyPress}
+                          onKeyDown={handleToKeyPress}
                           onFocus={() => {
                             if (to.trim()) {
                               filterContacts(to);
@@ -456,7 +666,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                           variant="flat"
                           classNames={{
                             inputWrapper:
-                              "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                              "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
                             input:
                               "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                           }}
@@ -567,7 +777,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                             variant="flat"
                             classNames={{
                               inputWrapper:
-                                "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                                "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
                               input:
                                 "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                             }}
@@ -671,7 +881,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                             variant="flat"
                             classNames={{
                               inputWrapper:
-                                "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                                "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
                               input:
                                 "text-sm text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                             }}
@@ -736,7 +946,7 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                       variant="flat"
                       classNames={{
                         inputWrapper:
-                          "bg-gray-50 dark:bg-neutral-800 border-none shadow-none",
+                          "bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 shadow-none hover:border-gray-300 dark:hover:border-neutral-600 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors",
                         input:
                           "text-sm font-medium text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-neutral-400",
                       }}
@@ -756,8 +966,8 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-700 bg-gray-50 dark:bg-neutral-800 flex-shrink-0">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex-shrink-0">
+                  <div className="flex items-center gap-3">
                     <Button
                       size="sm"
                       color="primary"
@@ -768,38 +978,40 @@ const ComposeModal: React.FC<ComposeModalProps> = ({ isOpen, onClose }) => {
                         recipients.length === 0 &&
                         selectedContacts.length === 0
                       }
-                      className="font-medium"
+                      className="font-medium px-4 py-2"
                     >
                       Send
                     </Button>
                     <Button
                       size="sm"
-                      variant="light"
-                      className="text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
+                      variant="flat"
+                      className="bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700 px-4 py-2"
                     >
                       Save Draft
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="light"
-                      startContent={<AIIcon size={16} />}
-                      onPress={handleGenerateContent}
-                      className="text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                    >
-                      Generate
-                    </Button>
+                    {!showAiAssistant && (
+                      <Button
+                        size="sm"
+                        variant="flat"
+                        startContent={<AIIcon size={16} />}
+                        onPress={handleGenerateContent}
+                        className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 border border-blue-200/60 dark:border-blue-700/40 px-4 py-2"
+                      >
+                        AI Assistant
+                      </Button>
+                    )}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <Button
                       isIconOnly
                       size="sm"
-                      variant="light"
-                      className="text-gray-500 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
+                      variant="flat"
+                      className="bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
                     >
                       <PaperclipIcon size={16} />
                     </Button>
-                    <span className="text-xs text-gray-500 dark:text-neutral-400">
+                    <span className="text-xs text-gray-500 dark:text-neutral-400 font-medium">
                       {content.length} characters
                     </span>
                   </div>
