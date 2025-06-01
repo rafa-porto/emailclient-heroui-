@@ -44,6 +44,10 @@ interface EmailContextType {
   markAsRead: (emailId: string) => void;
   markAsUnread: (emailId: string) => void;
   isEmailRead: (emailId: string) => boolean;
+  // Email summaries functionality
+  emailSummaries: Record<string, string>;
+  generateEmailSummary: (emailId: string, content: string) => Promise<string>;
+  getEmailSummary: (emailId: string) => string | null;
   // New email functionality
   newEmails: EmailData[];
   addNewEmail: (email: EmailData) => void;
@@ -93,6 +97,11 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
   const [readEmails, setReadEmails] = usePersistentState({
     key: "readEmails",
     defaultValue: [] as string[],
+  });
+
+  const [emailSummaries, setEmailSummaries] = usePersistentState({
+    key: "emailSummaries",
+    defaultValue: {} as Record<string, string>,
   });
 
   // New email functionality
@@ -248,6 +257,130 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
 
   const isEmailRead = (emailId: string) => readEmails.includes(emailId);
 
+  // Email summaries functionality
+  const generateEmailSummary = async (
+    emailId: string,
+    content: string
+  ): Promise<string> => {
+    // Check if summary already exists
+    if (emailSummaries[emailId]) {
+      return emailSummaries[emailId];
+    }
+
+    // Simulate AI processing delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    // Generate a smart summary based on content
+    const summary = generateSmartSummary(content);
+
+    // Store the summary
+    setEmailSummaries((prev) => ({
+      ...prev,
+      [emailId]: summary,
+    }));
+
+    return summary;
+  };
+
+  const getEmailSummary = (emailId: string): string | null => {
+    return emailSummaries[emailId] || null;
+  };
+
+  // Helper function to generate smart summaries
+  const generateSmartSummary = (content: string): string => {
+    // Remove HTML tags
+    const cleanContent = content
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    // Extract key information patterns
+    const patterns = {
+      meeting: /(?:meeting|call|appointment|schedule|discuss)/i,
+      deadline: /(?:deadline|due|urgent|asap|immediately)/i,
+      action: /(?:please|need|require|request|action|complete)/i,
+      offer: /(?:offer|opportunity|position|job|interview)/i,
+      payment: /(?:payment|invoice|bill|receipt|charge)/i,
+      security: /(?:security|verify|sign-in|password|account)/i,
+      shipping: /(?:order|ship|delivery|tracking|package)/i,
+      collaboration: /(?:project|team|collaboration|workspace)/i,
+    };
+
+    let summary = "";
+
+    // Determine email type and generate appropriate summary
+    if (patterns.offer.test(cleanContent)) {
+      summary = "📋 Job/Business Opportunity: ";
+      if (cleanContent.toLowerCase().includes("interview")) {
+        summary += "Interview invitation or job opportunity discussion.";
+      } else if (cleanContent.toLowerCase().includes("offer")) {
+        summary += "Job offer or business proposal with compensation details.";
+      } else {
+        summary += "Professional opportunity requiring review and response.";
+      }
+    } else if (patterns.meeting.test(cleanContent)) {
+      summary = "📅 Meeting/Appointment: ";
+      if (patterns.deadline.test(cleanContent)) {
+        summary += "Urgent meeting request requiring immediate response.";
+      } else {
+        summary += "Meeting invitation or scheduling request.";
+      }
+    } else if (patterns.payment.test(cleanContent)) {
+      summary = "💳 Financial: ";
+      if (cleanContent.toLowerCase().includes("receipt")) {
+        summary += "Payment confirmation or receipt notification.";
+      } else if (cleanContent.toLowerCase().includes("invoice")) {
+        summary += "Invoice or billing statement requiring attention.";
+      } else {
+        summary += "Payment-related communication.";
+      }
+    } else if (patterns.security.test(cleanContent)) {
+      summary = "🔒 Security: ";
+      if (cleanContent.toLowerCase().includes("verify")) {
+        summary += "Account verification or security confirmation required.";
+      } else {
+        summary += "Security notification or account-related alert.";
+      }
+    } else if (patterns.shipping.test(cleanContent)) {
+      summary = "📦 Order/Shipping: ";
+      if (cleanContent.toLowerCase().includes("tracking")) {
+        summary += "Package tracking information and delivery updates.";
+      } else {
+        summary += "Order confirmation or shipping notification.";
+      }
+    } else if (patterns.collaboration.test(cleanContent)) {
+      summary = "🤝 Collaboration: ";
+      summary += "Team project or collaboration invitation.";
+    } else if (
+      patterns.action.test(cleanContent) ||
+      patterns.deadline.test(cleanContent)
+    ) {
+      summary = "⚡ Action Required: ";
+      if (patterns.deadline.test(cleanContent)) {
+        summary += "Urgent action needed with time-sensitive deadline.";
+      } else {
+        summary += "Response or action requested from recipient.";
+      }
+    } else {
+      summary = "📧 General: ";
+      // Extract first meaningful sentence
+      const sentences = cleanContent
+        .split(/[.!?]+/)
+        .filter((s) => s.trim().length > 10);
+      if (sentences.length > 0) {
+        const firstSentence = sentences[0].trim();
+        summary +=
+          firstSentence.length > 80
+            ? firstSentence.substring(0, 80) + "..."
+            : firstSentence + ".";
+      } else {
+        summary += "General communication requiring review.";
+      }
+    }
+
+    return summary;
+  };
+
   return (
     <EmailContext.Provider
       value={{
@@ -281,6 +414,9 @@ export const EmailProvider = ({ children }: { children: ReactNode }) => {
         markAsRead,
         markAsUnread,
         isEmailRead,
+        emailSummaries,
+        generateEmailSummary,
+        getEmailSummary,
         newEmails,
         addNewEmail,
         animatingEmails,

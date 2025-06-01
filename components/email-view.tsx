@@ -20,6 +20,7 @@ import {
   FileIcon,
   ArchiveIcon,
   TrashIcon,
+  ZapIcon,
 } from "lucide-react";
 
 import { EmailAttachment } from "@/types";
@@ -47,16 +48,42 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(
     null
   );
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
 
   // Get context functions
-  const { toggleStarEmail, archiveEmail, deleteEmail, isEmailStarred } =
-    useEmailContext();
+  const {
+    toggleStarEmail,
+    archiveEmail,
+    deleteEmail,
+    isEmailStarred,
+    generateEmailSummary,
+    getEmailSummary,
+  } = useEmailContext();
 
   const isStarred = isEmailStarred(email.id);
+  const existingSummary = getEmailSummary(email.id);
 
   // Handler functions
   const handleStarToggle = () => {
     toggleStarEmail(email.id);
+  };
+
+  const handleGenerateSummary = async () => {
+    if (existingSummary) {
+      setShowSummary(!showSummary);
+      return;
+    }
+
+    setIsGeneratingSummary(true);
+    try {
+      await generateEmailSummary(email.id, email.content);
+      setShowSummary(true);
+    } catch (error) {
+      console.error("Error generating summary:", error);
+    } finally {
+      setIsGeneratingSummary(false);
+    }
   };
 
   const handleArchive = () => {
@@ -233,6 +260,23 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           <Button
             isIconOnly
             className={`${
+              existingSummary && showSummary
+                ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40"
+                : "text-gray-500 dark:text-neutral-400"
+            }`}
+            size="sm"
+            variant="light"
+            onPress={handleGenerateSummary}
+            isLoading={isGeneratingSummary}
+            title={
+              existingSummary ? "Toggle Summary" : "Generate Quick Summary"
+            }
+          >
+            <ZapIcon size={18} />
+          </Button>
+          <Button
+            isIconOnly
+            className={`${
               isStarred
                 ? "text-yellow-500"
                 : "text-gray-500 dark:text-neutral-400"
@@ -284,6 +328,26 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
               <span className="text-sm font-medium text-red-700 dark:text-red-300">
                 This email is considered as very important
               </span>
+            </div>
+          </div>
+        )}
+
+        {/* Quick Summary */}
+        {showSummary && existingSummary && (
+          <div className="mb-4 mx-2">
+            <div className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200/60 dark:border-blue-700/40">
+              <div className="flex items-center gap-2 mb-2">
+                <ZapIcon
+                  className="text-blue-600 dark:text-blue-400"
+                  size={16}
+                />
+                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
+                  Quick Summary
+                </span>
+              </div>
+              <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                {existingSummary}
+              </p>
             </div>
           </div>
         )}

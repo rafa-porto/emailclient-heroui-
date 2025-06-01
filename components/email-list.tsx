@@ -31,6 +31,7 @@ interface EmailItemProps extends EmailData {
   onPermanentDelete?: (id: string) => void;
   onNotSpam?: (id: string) => void;
   onMarkAsSpam?: (id: string) => void;
+  onQuickSummary?: (id: string, content: string) => void;
   isAnimating?: boolean;
   isSpamPage?: boolean;
 }
@@ -57,6 +58,7 @@ const EmailItem: React.FC<EmailItemProps> = ({
   onPermanentDelete,
   onNotSpam,
   onMarkAsSpam,
+  onQuickSummary,
   isAnimating,
   isSpamPage,
 }) => {
