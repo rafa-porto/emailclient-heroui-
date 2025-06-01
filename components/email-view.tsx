@@ -7,20 +7,26 @@ import { Input } from "@heroui/input";
 import Image from "next/image";
 import {
   PrinterIcon,
-  InfoIcon,
-  StarIcon,
-  PlusIcon,
-  PaperclipIcon,
-  MicIcon,
-  SendIcon,
   XIcon,
-  SparklesIcon,
-  CheckIcon,
   DownloadIcon,
   FileIcon,
   ArchiveIcon,
   TrashIcon,
   ZapIcon,
+  ReplyIcon,
+  ReplyAllIcon,
+  ForwardIcon,
+  LanguagesIcon,
+  HeartIcon,
+  AlertTriangleIcon,
+  BrainIcon,
+  PaperclipIcon,
+  StarIcon,
+  InfoIcon,
+  SparklesIcon,
+  SendIcon,
+  CheckIcon,
+  PlusIcon,
 } from "lucide-react";
 
 import { EmailAttachment } from "@/types";
@@ -30,6 +36,7 @@ interface EmailViewProps {
   email: {
     id: string;
     sender: string;
+    senderEmail?: string;
     avatarUrl: string;
     subject: string;
     content: string;
@@ -44,12 +51,19 @@ interface EmailViewProps {
 }
 
 const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
-  const [replyText, setReplyText] = useState("");
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
+  const [sentiment, setSentiment] = useState<string | null>(null);
+  const [isAnalyzingSentiment, setIsAnalyzingSentiment] = useState(false);
+  const [priority, setPriority] = useState<string | null>(null);
+  const [isAnalyzingPriority, setIsAnalyzingPriority] = useState(false);
+  const [translation, setTranslation] = useState<string | null>(null);
+  const [isTranslating, setIsTranslating] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(
     null
   );
-  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
-  const [showSummary, setShowSummary] = useState(false);
+  const [replyText, setReplyText] = useState("");
+  const [showComposeInput, setShowComposeInput] = useState(false);
 
   // Get context functions
   const {
@@ -94,6 +108,73 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
   const handleDelete = () => {
     deleteEmail(email.id);
     onClose();
+  };
+
+  // AI Feature Handlers
+  const handleSentimentAnalysis = async () => {
+    if (sentiment) {
+      setSentiment(null);
+      return;
+    }
+
+    setIsAnalyzingSentiment(true);
+    try {
+      // Simulate AI sentiment analysis
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const sentiments = [
+        "Positive",
+        "Neutral",
+        "Negative",
+        "Urgent",
+        "Friendly",
+      ];
+      const randomSentiment =
+        sentiments[Math.floor(Math.random() * sentiments.length)];
+      setSentiment(randomSentiment);
+    } catch (error) {
+      console.error("Error analyzing sentiment:", error);
+    } finally {
+      setIsAnalyzingSentiment(false);
+    }
+  };
+
+  const handlePriorityAnalysis = async () => {
+    if (priority) {
+      setPriority(null);
+      return;
+    }
+
+    setIsAnalyzingPriority(true);
+    try {
+      // Simulate AI priority analysis
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const priorities = ["High", "Medium", "Low", "Critical"];
+      const randomPriority =
+        priorities[Math.floor(Math.random() * priorities.length)];
+      setPriority(randomPriority);
+    } catch (error) {
+      console.error("Error analyzing priority:", error);
+    } finally {
+      setIsAnalyzingPriority(false);
+    }
+  };
+
+  const handleTranslation = async () => {
+    if (translation) {
+      setTranslation(null);
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      // Simulate AI translation
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setTranslation("This email has been translated to English using AI.");
+    } catch (error) {
+      console.error("Error translating:", error);
+    } finally {
+      setIsTranslating(false);
+    }
   };
 
   // Generate AI-powered response suggestions based on email content
@@ -161,36 +242,6 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
       ];
     }
 
-    // Shipping/Orders
-    if (
-      subject.includes("order") ||
-      subject.includes("ship") ||
-      content.includes("delivery") ||
-      content.includes("tracking")
-    ) {
-      return [
-        "Thanks for the update!",
-        "When can I expect delivery?",
-        "Could you provide tracking information?",
-        "Perfect, looking forward to receiving it",
-      ];
-    }
-
-    // Collaboration/Project related
-    if (
-      subject.includes("project") ||
-      subject.includes("collaboration") ||
-      content.includes("team") ||
-      content.includes("workspace")
-    ) {
-      return [
-        "Excited to collaborate!",
-        "I'll review and get back to you",
-        "Could we schedule a quick sync?",
-        "Thanks for adding me to the project",
-      ];
-    }
-
     // Default professional responses
     return [
       "Thank you for reaching out",
@@ -202,37 +253,35 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
 
   const suggestions = useMemo(() => generateSuggestions(email), [email]);
 
+  // Handle suggestion selection
+  const handleSuggestionClick = (suggestion: string) => {
+    setSelectedSuggestion(suggestion);
+    setReplyText(suggestion);
+    setShowComposeInput(true);
+  };
+
+  // Handle sending reply
+  const handleSendReply = () => {
+    // Implement send logic here
+    console.log("Sending reply:", replyText);
+    setReplyText("");
+    setSelectedSuggestion(null);
+    setShowComposeInput(false);
+  };
+
   // Função para formatar a data/hora
   const formatTimestamp = (timestamp: string) => {
     return timestamp;
   };
 
-  // Função para lidar com resposta rápida
-  const handleQuickReply = (replyText: string) => {
-    setReplyText(replyText);
-    setSelectedSuggestion(replyText);
-  };
-
-  // Função para enviar resposta
-  const handleSendReply = () => {
-    // Implementar lógica de envio de resposta
-    setReplyText("");
-    setSelectedSuggestion(null);
-  };
-
-  // Função para sugerir resposta
-  const handleSuggestReply = () => {
-    // Implementar lógica de sugestão de resposta
-  };
-
   return (
     <div className="flex flex-col h-full overflow-hidden overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between bg-gray-50 dark:bg-neutral-900/50 px-4 py-3 flex-shrink-0">
+      <div className="flex items-center justify-between bg-gray-50/80 dark:bg-neutral-900/30 px-4 py-4 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Button
             isIconOnly
-            className="text-gray-500 dark:text-neutral-400"
+            className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
             size="sm"
             variant="light"
             onPress={onClose}
@@ -241,28 +290,70 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           </Button>
           <Button
             isIconOnly
-            className="text-gray-500 dark:text-neutral-400"
+            className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
             size="sm"
             variant="light"
           >
             <PrinterIcon size={18} />
           </Button>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center gap-1">
+          {/* AI Features */}
           <Button
             isIconOnly
-            className="text-gray-500 dark:text-neutral-400"
+            className={`transition-all duration-200 ${
+              sentiment
+                ? "text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-950/40"
+                : "text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
+            }`}
             size="sm"
             variant="light"
+            onPress={handleSentimentAnalysis}
+            isLoading={isAnalyzingSentiment}
+            title={sentiment ? `Sentiment: ${sentiment}` : "Analyze Sentiment"}
           >
-            <InfoIcon size={18} />
+            <HeartIcon size={16} />
           </Button>
+
           <Button
             isIconOnly
-            className={`${
+            className={`transition-all duration-200 ${
+              priority
+                ? "text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/40"
+                : "text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
+            }`}
+            size="sm"
+            variant="light"
+            onPress={handlePriorityAnalysis}
+            isLoading={isAnalyzingPriority}
+            title={priority ? `Priority: ${priority}` : "Analyze Priority"}
+          >
+            <AlertTriangleIcon size={16} />
+          </Button>
+
+          <Button
+            isIconOnly
+            className={`transition-all duration-200 ${
+              translation
+                ? "text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/40"
+                : "text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
+            }`}
+            size="sm"
+            variant="light"
+            onPress={handleTranslation}
+            isLoading={isTranslating}
+            title={translation ? "Hide Translation" : "Translate Email"}
+          >
+            <LanguagesIcon size={16} />
+          </Button>
+
+          <Button
+            isIconOnly
+            className={`transition-all duration-200 ${
               existingSummary && showSummary
                 ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40"
-                : "text-gray-500 dark:text-neutral-400"
+                : "text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
             }`}
             size="sm"
             variant="light"
@@ -272,14 +363,16 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
               existingSummary ? "Toggle Summary" : "Generate Quick Summary"
             }
           >
-            <ZapIcon size={18} />
+            <ZapIcon size={16} />
           </Button>
+
+          {/* Standard Actions */}
           <Button
             isIconOnly
-            className={`${
+            className={`transition-all duration-200 ${
               isStarred
-                ? "text-yellow-500"
-                : "text-gray-500 dark:text-neutral-400"
+                ? "text-yellow-500 bg-yellow-50 dark:bg-yellow-950/40"
+                : "text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800"
             }`}
             size="sm"
             variant="light"
@@ -287,26 +380,28 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           >
             <StarIcon
               className={isStarred ? "fill-yellow-500" : ""}
-              size={18}
+              size={16}
             />
           </Button>
+
           <Button
             isIconOnly
-            className="text-gray-500 dark:text-neutral-400"
+            className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
             size="sm"
             variant="light"
             onPress={handleArchive}
           >
-            <ArchiveIcon size={18} />
+            <ArchiveIcon size={16} />
           </Button>
+
           <Button
             isIconOnly
-            className="text-gray-500 dark:text-neutral-400"
+            className="text-gray-500 dark:text-neutral-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200"
             size="sm"
             variant="light"
             onPress={handleDelete}
           >
-            <TrashIcon size={18} />
+            <TrashIcon size={16} />
           </Button>
         </div>
       </div>
@@ -323,7 +418,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         {/* Important Email Badge */}
         {email.isImportant && (
           <div className="mb-4 mx-2">
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200/60 dark:border-red-700/40">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 dark:bg-red-950/40 transition-all duration-200">
               <InfoIcon className="text-red-600 dark:text-red-400" size={16} />
               <span className="text-sm font-medium text-red-700 dark:text-red-300">
                 This email is considered as very important
@@ -332,30 +427,90 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
           </div>
         )}
 
-        {/* Quick Summary */}
-        {showSummary && existingSummary && (
-          <div className="mb-4 mx-2">
-            <div className="p-4 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 border border-blue-200/60 dark:border-blue-700/40">
-              <div className="flex items-center gap-2 mb-2">
-                <ZapIcon
-                  className="text-blue-600 dark:text-blue-400"
-                  size={16}
-                />
-                <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
-                  Quick Summary
-                </span>
+        {/* AI Analysis Results */}
+        {(showSummary && existingSummary) ||
+        sentiment ||
+        priority ||
+        translation ? (
+          <div className="mb-4 mx-2 space-y-3">
+            {/* Quick Summary */}
+            {showSummary && existingSummary && (
+              <div className="p-4 rounded-lg bg-blue-50/80 dark:bg-blue-950/30 transition-all duration-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <ZapIcon
+                    className="text-blue-600 dark:text-blue-400"
+                    size={16}
+                  />
+                  <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">
+                    Quick Summary
+                  </span>
+                </div>
+                <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                  {existingSummary}
+                </p>
               </div>
-              <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                {existingSummary}
-              </p>
-            </div>
+            )}
+
+            {/* Sentiment Analysis */}
+            {sentiment && (
+              <div className="p-3 rounded-lg bg-pink-50/80 dark:bg-pink-950/30 transition-all duration-200">
+                <div className="flex items-center gap-2">
+                  <HeartIcon
+                    className="text-pink-600 dark:text-pink-400"
+                    size={16}
+                  />
+                  <span className="text-sm font-semibold text-pink-700 dark:text-pink-300">
+                    Sentiment Analysis:
+                  </span>
+                  <span className="text-sm text-pink-800 dark:text-pink-200 font-medium">
+                    {sentiment}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Priority Analysis */}
+            {priority && (
+              <div className="p-3 rounded-lg bg-orange-50/80 dark:bg-orange-950/30 transition-all duration-200">
+                <div className="flex items-center gap-2">
+                  <AlertTriangleIcon
+                    className="text-orange-600 dark:text-orange-400"
+                    size={16}
+                  />
+                  <span className="text-sm font-semibold text-orange-700 dark:text-orange-300">
+                    Priority Level:
+                  </span>
+                  <span className="text-sm text-orange-800 dark:text-orange-200 font-medium">
+                    {priority}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Translation */}
+            {translation && (
+              <div className="p-4 rounded-lg bg-purple-50/80 dark:bg-purple-950/30 transition-all duration-200">
+                <div className="flex items-center gap-2 mb-2">
+                  <LanguagesIcon
+                    className="text-purple-600 dark:text-purple-400"
+                    size={16}
+                  />
+                  <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                    Translation
+                  </span>
+                </div>
+                <p className="text-sm text-purple-800 dark:text-purple-200 leading-relaxed">
+                  {translation}
+                </p>
+              </div>
+            )}
           </div>
-        )}
+        ) : null}
 
         {/* Sender Info */}
-        <div className="py-3 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-3 mb-4">
+        <div className="py-4 flex items-center bg-gray-50/50 dark:bg-neutral-900/30 rounded-lg mx-2 px-4 mb-4 transition-all duration-200">
           {email.isBrand ? (
-            <div className="mr-3 flex-shrink-0 w-9 h-9 flex items-center justify-center">
+            <div className="mr-4 flex-shrink-0 w-10 h-10 flex items-center justify-center">
               <Image
                 alt={email.sender}
                 className={`w-full h-full object-contain ${
@@ -370,14 +525,14 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                           ? "dark:invert dark:brightness-0 dark:contrast-100"
                           : ""
                 }`}
-                height={36}
+                height={40}
                 src={email.avatarUrl}
-                width={36}
+                width={40}
               />
             </div>
           ) : (
             <Avatar
-              className="mr-3"
+              className="mr-4"
               classNames={{
                 base: "bg-transparent",
               }}
@@ -386,20 +541,31 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
               src={email.avatarUrl}
             />
           )}
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <span className="font-medium text-black dark:text-white">
-                {email.sender}
-              </span>
-              {email.isAIGenerated && !email.isImportant && (
-                <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-medium">
-                  <SparklesIcon size={10} />
-                  AI
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="font-semibold text-gray-900 dark:text-white text-base">
+                    {email.sender}
+                  </span>
+                  {email.isAIGenerated && !email.isImportant && (
+                    <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-medium">
+                      <SparklesIcon size={10} />
+                      AI
+                    </div>
+                  )}
                 </div>
-              )}
-              <span className="text-xs text-gray-500 dark:text-neutral-500 ml-auto">
-                {formatTimestamp(email.timestamp)}
-              </span>
+                {email.senderEmail && (
+                  <div className="text-sm text-gray-600 dark:text-neutral-400 truncate">
+                    {email.senderEmail}
+                  </div>
+                )}
+              </div>
+              <div className="flex-shrink-0 ml-4">
+                <span className="text-sm text-gray-500 dark:text-neutral-500">
+                  {formatTimestamp(email.timestamp)}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -428,7 +594,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
               {email.attachments.map((attachment) => (
                 <div
                   key={attachment.id}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-neutral-700 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                  className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-neutral-800/50 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
                 >
                   <div className="flex-shrink-0">
                     <FileIcon
@@ -446,7 +612,7 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                   </div>
                   <Button
                     isIconOnly
-                    className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30"
+                    className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all duration-200"
                     size="sm"
                     variant="light"
                   >
@@ -459,8 +625,8 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
         )}
 
         {/* AI Response Suggestions */}
-        <div className="py-4 px-1">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="py-4 px-2">
+          <div className="flex items-center gap-2 mb-4">
             <SparklesIcon
               className="text-blue-600 dark:text-blue-400"
               size={16}
@@ -469,24 +635,15 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
               AI Suggested Responses
             </span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-4">
             {suggestions.map((suggestion, index) => (
               <Button
                 key={index}
-                className={`
-                  bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 
-                  border border-blue-200/60 dark:border-blue-700/40 
-                  text-blue-700 dark:text-blue-300 
-                  hover:bg-gradient-to-r hover:from-blue-100 hover:to-indigo-100 
-                  dark:hover:from-blue-900/50 dark:hover:to-indigo-900/50 
-                  hover:border-blue-300/80 dark:hover:border-blue-600/60
-                  transition-all duration-200 shadow-sm hover:shadow-md
-                  ${
-                    selectedSuggestion === suggestion
-                      ? "ring-2 ring-blue-400 dark:ring-blue-500 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/60 dark:to-indigo-900/60"
-                      : ""
-                  }
-                `}
+                className={`transition-all duration-200 ${
+                  selectedSuggestion === suggestion
+                    ? "bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-200"
+                    : "bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-blue-700 dark:hover:text-blue-300"
+                }`}
                 radius="lg"
                 size="sm"
                 startContent={
@@ -497,80 +654,110 @@ const EmailView: React.FC<EmailViewProps> = ({ email, onClose }) => {
                   )
                 }
                 variant="flat"
-                onPress={() => handleQuickReply(suggestion)}
+                onPress={() => handleSuggestionClick(suggestion)}
               >
                 {suggestion}
               </Button>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Reply Composer - Fixed Footer */}
-      <div className="bg-gray-50/80 dark:bg-neutral-900/60 rounded-xl p-4 m-4 backdrop-blur-sm flex-shrink-0">
-        <div className="flex items-start">
-          <Avatar
-            className="mr-3 mt-1"
-            classNames={{
-              base: "bg-transparent",
-            }}
-            color="primary"
-            name="E"
-            size="sm"
-          />
-          <div className="flex-1">
-            <Input
-              fullWidth
-              classNames={{
-                inputWrapper:
-                  "bg-white/50 dark:bg-neutral-800/50 border-none shadow-none rounded-lg",
-                input: "min-h-[80px]",
-              }}
-              placeholder="Compose a draft and ask me to improve it..."
-              radius="lg"
-              size="sm"
-              value={replyText}
-              variant="flat"
-              onChange={(e) => setReplyText(e.target.value)}
-            />
-          </div>
+          {/* Compose Input Field */}
+          {showComposeInput && (
+            <div className="bg-gray-50/80 dark:bg-neutral-900/30 rounded-xl p-4 transition-all duration-200 animate-in slide-in-from-top-2">
+              <div className="flex items-start gap-3">
+                <Avatar
+                  className="mt-1 flex-shrink-0"
+                  classNames={{
+                    base: "bg-transparent",
+                  }}
+                  color="primary"
+                  name="E"
+                  size="sm"
+                />
+                <div className="flex-1">
+                  <Input
+                    fullWidth
+                    classNames={{
+                      inputWrapper:
+                        "bg-white dark:bg-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-700 focus-within:bg-white dark:focus-within:bg-neutral-700 transition-all duration-200",
+                      input: "min-h-[80px]",
+                    }}
+                    placeholder="Edit your response or type a new one..."
+                    radius="lg"
+                    size="sm"
+                    value={replyText}
+                    variant="flat"
+                    onChange={(e) => setReplyText(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-3">
+                <div className="flex items-center gap-1">
+                  <Button
+                    isIconOnly
+                    className="text-gray-500 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
+                    size="sm"
+                    variant="light"
+                  >
+                    <PaperclipIcon size={16} />
+                  </Button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    className="text-gray-600 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-all duration-200"
+                    size="sm"
+                    variant="light"
+                    onPress={() => setShowComposeInput(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-blue-600 dark:bg-blue-600 text-white hover:bg-blue-700 dark:hover:bg-blue-700 transition-all duration-200"
+                    endContent={<SendIcon size={14} />}
+                    isDisabled={!replyText.trim()}
+                    size="sm"
+                    onPress={handleSendReply}
+                  >
+                    Send
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex justify-between mt-2">
-          <div className="flex items-center gap-2">
-            <Button
-              isIconOnly
-              className="text-gray-500 dark:text-neutral-400"
-              size="sm"
-              variant="light"
-            >
-              <PaperclipIcon size={16} />
-            </Button>
-            <Button
-              isIconOnly
-              className="text-gray-500 dark:text-neutral-400"
-              size="sm"
-              variant="light"
-            >
-              <MicIcon size={16} />
-            </Button>
+
+        {/* Reply Actions */}
+        <div className="py-4 px-2">
+          <div className="flex items-center gap-2 mb-4">
+            <BrainIcon className="text-gray-600 dark:text-gray-400" size={16} />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Quick Actions
+            </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button
-              className="text-primary"
+              className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all duration-200"
               size="sm"
-              variant="light"
-              onPress={handleSuggestReply}
+              startContent={<ReplyIcon size={14} />}
+              variant="flat"
             >
-              Suggest a reply
+              Reply
             </Button>
             <Button
-              color="primary"
-              endContent={<SendIcon size={14} />}
-              isDisabled={!replyText.trim()}
+              className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all duration-200"
               size="sm"
-              onPress={handleSendReply}
+              startContent={<ReplyAllIcon size={14} />}
+              variant="flat"
             >
-              Send
+              Reply All
+            </Button>
+            <Button
+              className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-all duration-200"
+              size="sm"
+              startContent={<ForwardIcon size={14} />}
+              variant="flat"
+            >
+              Forward
             </Button>
           </div>
         </div>

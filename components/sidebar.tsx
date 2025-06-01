@@ -373,7 +373,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full font-medium ${
                 pathname === "/dashboard"
                   ? "bg-white/20 text-white"
-                  : "bg-blue-100 dark:bg-neutral-700 text-blue-800 dark:text-neutral-200"
+                  : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
               }`}
             >
               {unreadInboxCount}
@@ -396,7 +396,7 @@ const Sidebar = ({
             className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
               pathname === "/dashboard/all"
                 ? "bg-white/20 text-white"
-                : "bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-neutral-200"
+                : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
             }`}
           >
             {allCount}
@@ -419,7 +419,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/starred"
                   ? "bg-white/20 text-white"
-                  : "bg-yellow-100 dark:bg-neutral-700 text-yellow-700 dark:text-neutral-200"
+                  : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
               }`}
             >
               {starredCount}
@@ -443,7 +443,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/archived"
                   ? "bg-white/20 text-white"
-                  : "bg-purple-100 dark:bg-neutral-700 text-purple-700 dark:text-neutral-200"
+                  : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
               }`}
             >
               {archivedCount}
@@ -491,7 +491,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/sent"
                   ? "bg-white/20 text-white"
-                  : "bg-green-100 dark:bg-neutral-700 text-green-700 dark:text-neutral-200"
+                  : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
               }`}
             >
               {sentCount}
@@ -515,7 +515,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/trash"
                   ? "bg-white/20 text-white"
-                  : "bg-red-100 dark:bg-neutral-700 text-red-700 dark:text-neutral-200"
+                  : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
               }`}
             >
               {trashCount}
@@ -539,7 +539,7 @@ const Sidebar = ({
               className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                 pathname === "/dashboard/spam"
                   ? "bg-white/20 text-white"
-                  : "bg-orange-100 dark:bg-neutral-700 text-orange-700 dark:text-neutral-200"
+                  : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
               }`}
             >
               {spamCount}
@@ -580,7 +580,7 @@ const Sidebar = ({
                     className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                       pathname === "/dashboard/work"
                         ? "bg-white/20 text-white"
-                        : "bg-blue-100 dark:bg-neutral-700 text-blue-700 dark:text-neutral-200"
+                        : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
                     }`}
                   >
                     {workEmails.length}
@@ -618,7 +618,7 @@ const Sidebar = ({
                     className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                       pathname === "/dashboard/promotions"
                         ? "bg-white/20 text-white"
-                        : "bg-orange-100 dark:bg-neutral-700 text-orange-700 dark:text-neutral-200"
+                        : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
                     }`}
                   >
                     {promotionEmails.length}
@@ -653,7 +653,7 @@ const Sidebar = ({
                     className={`ml-auto text-xs px-1.5 py-0.5 rounded-full ${
                       pathname === "/dashboard/bills"
                         ? "bg-white/20 text-white"
-                        : "bg-amber-100 dark:bg-neutral-700 text-amber-700 dark:text-neutral-200"
+                        : "bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-neutral-300"
                     }`}
                   >
                     {billsEmails.length}
