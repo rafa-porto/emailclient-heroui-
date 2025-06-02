@@ -26,12 +26,14 @@ import {
   StarIcon,
   Trash2Icon,
   UserIcon,
+  BookOpenIcon,
 } from "lucide-react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Avatar } from "@heroui/avatar";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useEmailContext } from "@/components/email-context";
+import { useOnboardingContext } from "@/components/onboarding";
 import { siteConfig } from "@/config/site";
 import { spamEmails as mockSpamEmails } from "@/data/spamEmails";
 import { EMAIL_CATEGORIES } from "@/utils/emailClassification";
@@ -63,6 +65,8 @@ const Sidebar = ({
     getEmailsByCategory,
     newEmails,
   } = useEmailContext();
+
+  const { startOnboarding } = useOnboardingContext();
 
   // Check if we're on settings page
   const isSettingsPage = pathname.startsWith("/dashboard/settings");
@@ -334,6 +338,13 @@ const Sidebar = ({
             </Button>
           </DropdownTrigger>
           <DropdownMenu aria-label="User Actions" className="w-48">
+            <DropdownItem
+              key="onboarding"
+              startContent={<BookOpenIcon size={16} />}
+              onPress={startOnboarding}
+            >
+              Take Tour
+            </DropdownItem>
             <DropdownItem
               key="settings"
               startContent={<SettingsIcon size={16} />}
