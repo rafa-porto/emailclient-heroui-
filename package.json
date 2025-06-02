@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:safe": "SKIP_ENV_VALIDATION=1 next build",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix --max-warnings=1000",
+    "lint:check": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@heroui/button": "2.2.19",
