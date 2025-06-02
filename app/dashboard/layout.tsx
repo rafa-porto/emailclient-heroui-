@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import Sidebar from "@/components/sidebar";
@@ -183,9 +183,11 @@ export default function DashboardLayout({
 
   return (
     <EmailProvider>
-      <DashboardContent loginProvider={loginProvider} userEmail={userEmail}>
-        {children}
-      </DashboardContent>
+      <Suspense fallback={null}>
+        <DashboardContent loginProvider={loginProvider} userEmail={userEmail}>
+          {children}
+        </DashboardContent>
+      </Suspense>
     </EmailProvider>
   );
 }
