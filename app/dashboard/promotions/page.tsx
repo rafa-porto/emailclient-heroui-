@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { TagIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -56,24 +56,26 @@ const PromotionsPage = () => {
   };
 
   return (
-    <EmailList
-      emails={promotionEmails}
-      title="Promotions"
-      searchPlaceholder="Search promotions..."
-      emptyIcon={<TagIcon className="mb-4" size={48} />}
-      emptyTitle="No promotions"
-      emptyDescription="Offers and promotions will appear here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      onEmailClick={handleEmailClick}
-      onStar={handleStarEmail}
-      onArchive={handleArchiveEmail}
-      onDelete={handleDeleteEmail}
-      onMarkAsSpam={handleMarkAsSpam}
-      animatingEmails={animatingEmails}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={promotionEmails}
+        title="Promotions"
+        searchPlaceholder="Search promotions..."
+        emptyIcon={<TagIcon className="mb-4" size={48} />}
+        emptyTitle="No promotions"
+        emptyDescription="Offers and promotions will appear here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        onEmailClick={handleEmailClick}
+        onStar={handleStarEmail}
+        onArchive={handleArchiveEmail}
+        onDelete={handleDeleteEmail}
+        onMarkAsSpam={handleMarkAsSpam}
+        animatingEmails={animatingEmails}
+      />
+    </Suspense>
   );
 };
 

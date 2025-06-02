@@ -143,11 +143,7 @@ function DashboardContent({
   );
 }
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function ClientWrapper({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   const [userEmail, setUserEmail] = useState("user@example.com");
   const [loginProvider, setLoginProvider] = useState<
@@ -182,11 +178,21 @@ export default function DashboardLayout({
   }, [searchParams]);
 
   return (
+    <DashboardContent loginProvider={loginProvider} userEmail={userEmail}>
+      {children}
+    </DashboardContent>
+  );
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
     <EmailProvider>
       <Suspense fallback={null}>
-        <DashboardContent loginProvider={loginProvider} userEmail={userEmail}>
-          {children}
-        </DashboardContent>
+        <ClientWrapper>{children}</ClientWrapper>
       </Suspense>
     </EmailProvider>
   );

@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { Trash2Icon } from "lucide-react";
 import { Button } from "@heroui/button";
 
@@ -49,33 +49,35 @@ const TrashPage = () => {
   };
 
   return (
-    <EmailList
-      emails={deletedEmailsData}
-      title="Trash"
-      searchPlaceholder="Search trash..."
-      emptyIcon={<Trash2Icon className="mb-4" size={48} />}
-      emptyTitle="Trash is empty"
-      emptyDescription="Deleted emails will appear here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      additionalHeaderButtons={
-        deletedEmailsData.length > 0 && (
-          <Button
-            className="text-red-600 dark:text-red-400"
-            size="sm"
-            variant="light"
-            onPress={handleEmptyTrash}
-          >
-            Empty Trash
-          </Button>
-        )
-      }
-      onEmailClick={handleEmailClick}
-      onRestore={handleRestoreEmail}
-      onPermanentDelete={handlePermanentlyDeleteEmail}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={deletedEmailsData}
+        title="Trash"
+        searchPlaceholder="Search trash..."
+        emptyIcon={<Trash2Icon className="mb-4" size={48} />}
+        emptyTitle="Trash is empty"
+        emptyDescription="Deleted emails will appear here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        additionalHeaderButtons={
+          deletedEmailsData.length > 0 && (
+            <Button
+              className="text-red-600 dark:text-red-400"
+              size="sm"
+              variant="light"
+              onPress={handleEmptyTrash}
+            >
+              Empty Trash
+            </Button>
+          )
+        }
+        onEmailClick={handleEmailClick}
+        onRestore={handleRestoreEmail}
+        onPermanentDelete={handlePermanentlyDeleteEmail}
+      />
+    </Suspense>
   );
 };
 

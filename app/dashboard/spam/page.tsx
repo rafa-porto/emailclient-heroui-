@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { AlertOctagonIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -48,22 +48,24 @@ const SpamPage = () => {
   };
 
   return (
-    <EmailList
-      emails={spamEmailsData}
-      title="Spam"
-      searchPlaceholder="Search spam emails..."
-      emptyIcon={<AlertOctagonIcon className="mb-4" size={48} />}
-      emptyTitle="No spam emails"
-      emptyDescription="Spam emails will appear here"
-      showComposeButton={false}
-      showAiButton={false}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      isSpamPage={true}
-      onEmailClick={handleEmailClick}
-      onNotSpam={handleNotSpam}
-      onDelete={handleDeleteForever}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={spamEmailsData}
+        title="Spam"
+        searchPlaceholder="Search spam emails..."
+        emptyIcon={<AlertOctagonIcon className="mb-4" size={48} />}
+        emptyTitle="No spam emails"
+        emptyDescription="Spam emails will appear here"
+        showComposeButton={false}
+        showAiButton={false}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        isSpamPage={true}
+        onEmailClick={handleEmailClick}
+        onNotSpam={handleNotSpam}
+        onDelete={handleDeleteForever}
+      />
+    </Suspense>
   );
 };
 

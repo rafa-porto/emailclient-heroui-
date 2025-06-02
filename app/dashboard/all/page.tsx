@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { MailIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -44,23 +44,25 @@ const AllPage = () => {
   };
 
   return (
-    <EmailList
-      emails={allEmailsData}
-      title="All Mail"
-      searchPlaceholder="Search all emails..."
-      emptyIcon={<MailIcon className="mb-4" size={48} />}
-      emptyTitle="No emails"
-      emptyDescription="All emails will appear here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      onEmailClick={handleEmailClick}
-      onStar={handleStarEmail}
-      onArchive={handleArchiveEmail}
-      onDelete={handleDeleteEmail}
-      animatingEmails={animatingEmails}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={allEmailsData}
+        title="All Mail"
+        searchPlaceholder="Search all emails..."
+        emptyIcon={<MailIcon className="mb-4" size={48} />}
+        emptyTitle="No emails"
+        emptyDescription="All emails will appear here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        onEmailClick={handleEmailClick}
+        onStar={handleStarEmail}
+        onArchive={handleArchiveEmail}
+        onDelete={handleDeleteEmail}
+        animatingEmails={animatingEmails}
+      />
+    </Suspense>
   );
 };
 

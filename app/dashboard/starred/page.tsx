@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { StarIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -52,22 +52,24 @@ const StarredPage = () => {
   };
 
   return (
-    <EmailList
-      emails={starredEmailsData}
-      title="Starred"
-      searchPlaceholder="Search starred emails..."
-      emptyIcon={<StarIcon className="mb-4" size={48} />}
-      emptyTitle="No starred emails"
-      emptyDescription="Star emails to see them here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      onEmailClick={handleEmailClick}
-      onStar={handleStarEmail}
-      onArchive={handleArchiveEmail}
-      onDelete={handleDeleteEmail}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={starredEmailsData}
+        title="Starred"
+        searchPlaceholder="Search starred emails..."
+        emptyIcon={<StarIcon className="mb-4" size={48} />}
+        emptyTitle="No starred emails"
+        emptyDescription="Star emails to see them here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        onEmailClick={handleEmailClick}
+        onStar={handleStarEmail}
+        onArchive={handleArchiveEmail}
+        onDelete={handleDeleteEmail}
+      />
+    </Suspense>
   );
 };
 

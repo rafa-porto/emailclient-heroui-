@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@heroui/button";
 import { Switch } from "@heroui/switch";
@@ -20,7 +20,7 @@ import {
 
 import { GmailIcon, OutlookIcon, AppleIcon } from "@/components/icons";
 
-export default function SettingsPage() {
+const SettingsPage = () => {
   const searchParams = useSearchParams();
   const [activeSection, setActiveSection] = useState("general");
 
@@ -446,45 +446,49 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="h-full w-full bg-gray-50 dark:bg-neutral-900 p-3 overflow-y-auto">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-          Settings
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-neutral-400">
-          Manage your account settings and preferences
-        </p>
-      </div>
+    <Suspense fallback={null}>
+      <div className="h-full w-full bg-gray-50 dark:bg-neutral-900 p-3 overflow-y-auto">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+            Settings
+          </h1>
+          <p className="text-sm text-gray-600 dark:text-neutral-400">
+            Manage your account settings and preferences
+          </p>
+        </div>
 
-      {/* Main Content */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm">
-        {renderSectionContent()}
-      </div>
+        {/* Main Content */}
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm">
+          {renderSectionContent()}
+        </div>
 
-      {/* Save Button - Only show for sections that need saving */}
-      {activeSection !== "connections" &&
-        activeSection !== "delete-account" && (
-          <div className="mt-3 flex justify-end">
-            <div className="flex gap-2">
-              <Button
-                variant="flat"
-                color="default"
-                size="sm"
-                className="bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600"
-              >
-                Reset to Defaults
-              </Button>
-              <Button
-                color="primary"
-                size="sm"
-                startContent={<CheckIcon size={14} />}
-              >
-                Save Changes
-              </Button>
+        {/* Save Button - Only show for sections that need saving */}
+        {activeSection !== "connections" &&
+          activeSection !== "delete-account" && (
+            <div className="mt-3 flex justify-end">
+              <div className="flex gap-2">
+                <Button
+                  variant="flat"
+                  color="default"
+                  size="sm"
+                  className="bg-gray-100 dark:bg-neutral-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-600"
+                >
+                  Reset to Defaults
+                </Button>
+                <Button
+                  color="primary"
+                  size="sm"
+                  startContent={<CheckIcon size={14} />}
+                >
+                  Save Changes
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
-    </div>
+          )}
+      </div>
+    </Suspense>
   );
-}
+};
+
+export default SettingsPage;

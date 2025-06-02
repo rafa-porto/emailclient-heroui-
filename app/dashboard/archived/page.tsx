@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { ArchiveIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -47,22 +47,24 @@ const ArchivedPage = () => {
   };
 
   return (
-    <EmailList
-      emails={archivedEmailsData}
-      title="Archive"
-      searchPlaceholder="Search archived emails..."
-      emptyIcon={<ArchiveIcon className="mb-4" size={48} />}
-      emptyTitle="No archived emails"
-      emptyDescription="Archived emails will appear here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      onEmailClick={handleEmailClick}
-      onStar={handleStarEmail}
-      onUnarchive={handleUnarchiveEmail}
-      onDelete={handleDeleteEmail}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={archivedEmailsData}
+        title="Archive"
+        searchPlaceholder="Search archived emails..."
+        emptyIcon={<ArchiveIcon className="mb-4" size={48} />}
+        emptyTitle="No archived emails"
+        emptyDescription="Archived emails will appear here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        onEmailClick={handleEmailClick}
+        onStar={handleStarEmail}
+        onUnarchive={handleUnarchiveEmail}
+        onDelete={handleDeleteEmail}
+      />
+    </Suspense>
   );
 };
 

@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { BriefcaseIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -56,24 +56,26 @@ const WorkPage = () => {
   };
 
   return (
-    <EmailList
-      emails={workEmails}
-      title="Work"
-      searchPlaceholder="Search work emails..."
-      emptyIcon={<BriefcaseIcon className="mb-4" size={48} />}
-      emptyTitle="No work emails"
-      emptyDescription="Work-related emails will appear here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      onEmailClick={handleEmailClick}
-      onStar={handleStarEmail}
-      onArchive={handleArchiveEmail}
-      onDelete={handleDeleteEmail}
-      onMarkAsSpam={handleMarkAsSpam}
-      animatingEmails={animatingEmails}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={workEmails}
+        title="Work"
+        searchPlaceholder="Search work emails..."
+        emptyIcon={<BriefcaseIcon className="mb-4" size={48} />}
+        emptyTitle="No work emails"
+        emptyDescription="Work-related emails will appear here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        onEmailClick={handleEmailClick}
+        onStar={handleStarEmail}
+        onArchive={handleArchiveEmail}
+        onDelete={handleDeleteEmail}
+        onMarkAsSpam={handleMarkAsSpam}
+        animatingEmails={animatingEmails}
+      />
+    </Suspense>
   );
 };
 

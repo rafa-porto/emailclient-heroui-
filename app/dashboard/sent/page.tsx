@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 import EmailList from "@/components/email-list";
 import { useEmailContext } from "@/components/email-context";
@@ -16,17 +16,19 @@ export default function SentPage() {
   };
 
   return (
-    <div className="h-full w-full">
-      <EmailList
-        emails={sentEmails}
-        title="Sent"
-        emptyTitle="No sent emails"
-        emptyDescription="No sent emails yet. Compose and send your first email!"
-        emptyIcon="📤"
-        isInboxOrganized={isInboxOrganized}
-        onEmailClick={handleEmailClick}
-        showFilterButtons={false}
-      />
-    </div>
+    <Suspense fallback={null}>
+      <div className="h-full w-full">
+        <EmailList
+          emails={sentEmails}
+          title="Sent"
+          emptyTitle="No sent emails"
+          emptyDescription="No sent emails yet. Compose and send your first email!"
+          emptyIcon="📤"
+          isInboxOrganized={isInboxOrganized}
+          onEmailClick={handleEmailClick}
+          showFilterButtons={false}
+        />
+      </div>
+    </Suspense>
   );
 }

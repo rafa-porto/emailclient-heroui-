@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { CreditCardIcon } from "lucide-react";
 
 import { useEmailContext } from "@/components/email-context";
@@ -56,24 +56,26 @@ const BillsPage = () => {
   };
 
   return (
-    <EmailList
-      emails={billsEmails}
-      title="Bills"
-      searchPlaceholder="Search bills and invoices..."
-      emptyIcon={<CreditCardIcon className="mb-4" size={48} />}
-      emptyTitle="No bills"
-      emptyDescription="Bills and invoices will appear here"
-      showComposeButton={true}
-      showAiButton={true}
-      showFilterButtons={false}
-      isInboxOrganized={isInboxOrganized}
-      onEmailClick={handleEmailClick}
-      onStar={handleStarEmail}
-      onArchive={handleArchiveEmail}
-      onDelete={handleDeleteEmail}
-      onMarkAsSpam={handleMarkAsSpam}
-      animatingEmails={animatingEmails}
-    />
+    <Suspense fallback={null}>
+      <EmailList
+        emails={billsEmails}
+        title="Bills"
+        searchPlaceholder="Search bills and invoices..."
+        emptyIcon={<CreditCardIcon className="mb-4" size={48} />}
+        emptyTitle="No bills"
+        emptyDescription="Bills and invoices will appear here"
+        showComposeButton={true}
+        showAiButton={true}
+        showFilterButtons={false}
+        isInboxOrganized={isInboxOrganized}
+        onEmailClick={handleEmailClick}
+        onStar={handleStarEmail}
+        onArchive={handleArchiveEmail}
+        onDelete={handleDeleteEmail}
+        onMarkAsSpam={handleMarkAsSpam}
+        animatingEmails={animatingEmails}
+      />
+    </Suspense>
   );
 };
 
