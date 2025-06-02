@@ -122,7 +122,7 @@ export function MainLayoutWrapper({ children }: { children: React.ReactNode }) {
 
           <div className="border-t border-divider mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-default-500 text-sm">
-              © 2023 Dove Mail. All rights reserved.
+              © 2023 HeroMail. All rights reserved.
             </p>
             <div className="flex gap-4 mt-4 md:mt-0">
               <Link

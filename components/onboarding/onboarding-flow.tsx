@@ -54,7 +54,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
   const steps: OnboardingStep[] = [
     {
       id: "welcome",
-      title: "Welcome to Dove Mail",
+      title: "Welcome to HeroMail",
       description: "Your AI-powered email experience starts here",
       icon: <MailIcon className="text-blue-600 dark:text-blue-400" size={32} />,
       content: (
@@ -328,7 +328,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
     {
       id: "customization",
       title: "Personalization",
-      description: "Make Dove Mail work the way you do",
+      description: "Make HeroMail work the way you do",
       icon: (
         <SettingsIcon
           className="text-emerald-600 dark:text-emerald-400"
@@ -347,7 +347,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
               Customize Your Experience
             </h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              Personalize Dove Mail to match your workflow and preferences.
+              Personalize HeroMail to match your workflow and preferences.
             </p>
           </div>
           <div className="space-y-4">
@@ -418,7 +418,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
               Welcome to Your New Email Experience
             </h3>
             <p className="text-gray-600 dark:text-neutral-400">
-              You're ready to start using Dove Mail's powerful features. Your
+              You're ready to start using HeroMail's powerful features. Your
               inbox is waiting!
             </p>
           </div>

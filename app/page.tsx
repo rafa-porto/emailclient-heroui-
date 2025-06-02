@@ -428,7 +428,7 @@ export default function Home() {
             </h2>
             <p className="text-lg text-gray-600 dark:text-neutral-400 max-w-3xl mx-auto">
               Join thousands of professionals who have transformed their email
-              workflow with Dove Mail.
+              workflow with HeroMail.
             </p>
           </div>
 
@@ -623,7 +623,7 @@ export default function Home() {
 
           <p className="text-xl text-gray-600 dark:text-neutral-400 mb-8 max-w-2xl mx-auto">
             Join thousands of professionals who have already made the switch to
-            smarter, more efficient email management with Dove Mail.
+            smarter, more efficient email management with HeroMail.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto mb-8">

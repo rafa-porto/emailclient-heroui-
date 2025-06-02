@@ -58,7 +58,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white">
               <MailIcon size={20} />
             </div>
-            <h2 className="text-2xl font-bold">Dove Mail</h2>
+            <h2 className="text-2xl font-bold">HeroMail</h2>
           </div>
 
           <h1 className={title({ color: "blue", size: "md" })}>Welcome Back</h1>
