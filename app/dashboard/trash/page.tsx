@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import React from "react";
 import { Trash2Icon } from "lucide-react";
 import { Button } from "@heroui/button";
