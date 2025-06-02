@@ -104,66 +104,66 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
       ),
       interactive: true,
       content: (
-        <div className="space-y-6">
-          <div className="text-center mb-6">
+        <div className="space-y-4">
+          <div className="text-center mb-4">
             <AIIcon
-              className="text-purple-600 dark:text-purple-400 mx-auto mb-4"
-              size={48}
+              className="text-purple-600 dark:text-purple-400 mx-auto mb-3"
+              size={40}
             />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               AI Features at Your Fingertips
             </h3>
-            <p className="text-gray-600 dark:text-neutral-400">
+            <p className="text-sm text-gray-600 dark:text-neutral-400">
               Explore the intelligent features that make email management
               effortless.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 dark:bg-blue-950/40 p-4 rounded-lg transition-all duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-lg transition-all duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/50 cursor-pointer">
               <ZapIcon
                 className="text-blue-600 dark:text-blue-400 mb-2"
-                size={24}
+                size={20}
               />
-              <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm">
                 Smart Summarization
               </h4>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-xs text-gray-600 dark:text-neutral-400">
                 Get instant summaries of long emails and threads.
               </p>
             </div>
-            <div className="bg-orange-50 dark:bg-orange-950/40 p-4 rounded-lg transition-all duration-200 hover:bg-orange-100 dark:hover:bg-orange-900/50 cursor-pointer">
+            <div className="bg-orange-50 dark:bg-orange-950/40 p-3 rounded-lg transition-all duration-200 hover:bg-orange-100 dark:hover:bg-orange-900/50 cursor-pointer">
               <AlertTriangleIcon
                 className="text-orange-600 dark:text-orange-400 mb-2"
-                size={24}
+                size={20}
               />
-              <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm">
                 Priority Detection
               </h4>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-xs text-gray-600 dark:text-neutral-400">
                 Automatically identify urgent emails.
               </p>
             </div>
-            <div className="bg-pink-50 dark:bg-pink-950/40 p-4 rounded-lg transition-all duration-200 hover:bg-pink-100 dark:hover:bg-pink-900/50 cursor-pointer">
+            <div className="bg-pink-50 dark:bg-pink-950/40 p-3 rounded-lg transition-all duration-200 hover:bg-pink-100 dark:hover:bg-pink-900/50 cursor-pointer">
               <HeartIcon
                 className="text-pink-600 dark:text-pink-400 mb-2"
-                size={24}
+                size={20}
               />
-              <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm">
                 Sentiment Analysis
               </h4>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-xs text-gray-600 dark:text-neutral-400">
                 Understand the emotional tone of emails.
               </p>
             </div>
-            <div className="bg-green-50 dark:bg-green-950/40 p-4 rounded-lg transition-all duration-200 hover:bg-green-100 dark:hover:bg-green-900/50 cursor-pointer">
+            <div className="bg-green-50 dark:bg-green-950/40 p-3 rounded-lg transition-all duration-200 hover:bg-green-100 dark:hover:bg-green-900/50 cursor-pointer">
               <ReplyIcon
                 className="text-green-600 dark:text-green-400 mb-2"
-                size={24}
+                size={20}
               />
-              <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-1 text-sm">
                 Smart Replies
               </h4>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-xs text-gray-600 dark:text-neutral-400">
                 Get contextual reply suggestions.
               </p>
             </div>
@@ -180,31 +180,31 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
       ),
       interactive: true,
       content: (
-        <div className="space-y-6">
-          <div className="text-center mb-6">
+        <div className="space-y-4">
+          <div className="text-center mb-4">
             <FolderIcon
-              className="text-teal-600 dark:text-teal-400 mx-auto mb-4"
-              size={48}
+              className="text-teal-600 dark:text-teal-400 mx-auto mb-3"
+              size={40}
             />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Smart Organization System
             </h3>
-            <p className="text-gray-600 dark:text-neutral-400">
+            <p className="text-sm text-gray-600 dark:text-neutral-400">
               AI automatically categorizes your emails for better organization.
             </p>
           </div>
-          <div className="space-y-4">
-            <div className="bg-gray-50 dark:bg-neutral-800 p-4 rounded-lg">
-              <div className="flex items-center gap-3 mb-3">
+          <div className="space-y-3">
+            <div className="bg-gray-50 dark:bg-neutral-800 p-3 rounded-lg">
+              <div className="flex items-center gap-3 mb-2">
                 <TagIcon
                   className="text-purple-600 dark:text-purple-400"
-                  size={20}
+                  size={18}
                 />
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900 dark:text-white text-sm">
                   Auto-Categorization
                 </span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-neutral-400 mb-3">
+              <p className="text-xs text-gray-600 dark:text-neutral-400 mb-2">
                 Emails are automatically sorted into categories like Work,
                 Bills, and Promotions.
               </p>
@@ -220,17 +220,17 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
                 </span>
               </div>
             </div>
-            <div className="bg-gray-50 dark:bg-neutral-800 p-4 rounded-lg">
-              <div className="flex items-center gap-3 mb-3">
+            <div className="bg-gray-50 dark:bg-neutral-800 p-3 rounded-lg">
+              <div className="flex items-center gap-3 mb-2">
                 <InboxIcon
                   className="text-blue-600 dark:text-blue-400"
-                  size={20}
+                  size={18}
                 />
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900 dark:text-white text-sm">
                   Unified Inbox
                 </span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-neutral-400">
+              <p className="text-xs text-gray-600 dark:text-neutral-400">
                 Manage all your email accounts in one place with consistent
                 organization.
               </p>
@@ -525,9 +525,9 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="2xl"
+      size="4xl"
       classNames={{
-        base: "bg-white dark:bg-neutral-900",
+        base: "bg-white dark:bg-neutral-900 max-h-[90vh]",
         backdrop: "bg-black/50 backdrop-blur-sm",
         closeButton: "hidden",
       }}
@@ -535,12 +535,12 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
       isDismissable={false}
       isKeyboardDismissDisabled
     >
-      <ModalContent>
+      <ModalContent className="max-h-[90vh]">
         <ModalBody className="p-0">
-          <div className="flex flex-col h-[600px]">
+          <div className="flex flex-col h-full max-h-[85vh]">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 bg-gray-50/80 dark:bg-neutral-800/50">
-              <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between p-4 bg-gray-50/80 dark:bg-neutral-800/50 flex-shrink-0">
+              <div className="flex items-center gap-3">
                 <div className="bg-blue-50 dark:bg-blue-950/40 p-2 rounded-lg">
                   {steps[currentStep].icon}
                 </div>
@@ -565,7 +565,7 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
             </div>
 
             {/* Progress Bar */}
-            <div className="px-6 py-4">
+            <div className="px-4 py-3 flex-shrink-0">
               <div className="flex items-center gap-4 mb-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-neutral-300">
                   Step {currentStep + 1} of {steps.length}
@@ -609,13 +609,13 @@ const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
 
             {/* Content */}
             <div
-              className={`flex-1 p-6 transition-all duration-200 ${isAnimating ? "opacity-50 scale-95" : "opacity-100 scale-100"}`}
+              className={`flex-1 overflow-y-auto p-4 transition-all duration-200 ${isAnimating ? "opacity-50 scale-95" : "opacity-100 scale-100"}`}
             >
               {steps[currentStep].content}
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between p-6 bg-gray-50/80 dark:bg-neutral-800/50">
+            <div className="flex items-center justify-between p-4 bg-gray-50/80 dark:bg-neutral-800/50 flex-shrink-0">
               <Button
                 className="text-gray-600 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-neutral-700 transition-all duration-200"
                 variant="light"
