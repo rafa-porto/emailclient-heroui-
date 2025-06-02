@@ -99,7 +99,7 @@ export const Navbar = () => {
           ))}
         </div>
       </NavbarMenu>
-      <NavbarContent className="hidden lg:flex gap-4 ml-10">
+      <NavbarContent className="hidden lg:flex gap-4 ml-10" justify="start">
         <NavbarItem>
           <a
             href="https://github.com/rafa-porto/emailclient-heroui-"
