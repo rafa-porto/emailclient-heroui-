@@ -47,7 +47,7 @@ export default function Home() {
               />
             </div>
             <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
-              Atom Mail
+              HeroMail
             </span>
           </div>
 
